@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Temporary renders, scratch work, and QA artefacts.
+tmp/
+work/
+
+# Keep data/source and user-facing data outputs trackable.

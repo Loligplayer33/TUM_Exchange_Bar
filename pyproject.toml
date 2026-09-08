@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tumexchange-bars"
+version = "0.2.0"
+description = "Extract calibrated, comparable chance bars from TUMexchange PDFs"
+requires-python = ">=3.10"
+dependencies = [
+  "pdfplumber>=0.11,<0.12",
+]
+
+[project.scripts]
+tumexchange = "tumexchange.cli:main"
+
+[dependency-groups]
+dev = [
+  "pypdf>=6,<7",
+]
+
+[tool.setuptools.packages.find]
+include = ["tumexchange*"]

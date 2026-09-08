@@ -1,0 +1,395 @@
+{
+  "calibration_id": "calibration:sha256:da2cfe6dc34b3610:brazil-2025",
+  "method": "explicit known-full reference plus repeated annual track widths",
+  "formula": "bar_fraction = raw_width_pt / full_width_pt; score_percent = 100 * bar_fraction; widths within tolerance of full are snapped to 1.0",
+  "units": "PDF points (pt)",
+  "full_width_pt": 60.11997975,
+  "full_width_pt_by_year": {
+    "2023": 59.2799835,
+    "2024": 60.11997975,
+    "2025": 60.11997975
+  },
+  "reference_country": "Brazil",
+  "reference_year": 2025,
+  "reference_bars": [
+    {
+      "country": "Brazil",
+      "university": "Universidade Federal do Rio de Janeiro (UFRJ)",
+      "year": 2025,
+      "page": 1,
+      "row_index": 18,
+      "raw_width_pt": 60.11997975,
+      "bar_bbox": [
+        486.48001124999996,
+        607.0799975,
+        546.599991,
+        612.599987
+      ]
+    }
+  ],
+  "tolerance_pt": 0.001,
+  "tolerance_verification": {
+    "verified_equal": true,
+    "reference_count": 1,
+    "observed_min_pt": 60.11997975,
+    "observed_max_pt": 60.11997975,
+    "spread_pt": 0.0
+  },
+  "annual_track_width_evidence": {
+    "2023": {
+      "full_width_pt": 59.2799835,
+      "repeated_bar_count": 29,
+      "observed_max_pt": 59.2799835
+    },
+    "2024": {
+      "full_width_pt": 60.11997975,
+      "repeated_bar_count": 29,
+      "observed_max_pt": 60.1200255
+    },
+    "2025": {
+      "full_width_pt": 60.11997975,
+      "repeated_bar_count": 24,
+      "observed_max_pt": 60.11997975
+    }
+  },
+  "geometry": {
+    "coordinate_system": "pdfplumber top-left page coordinates",
+    "column_x0_pt": {
+      "2023": 352.92,
+      "2024": 419.28,
+      "2025": 486.48
+    },
+    "reference_bar_height_pt": 5.5199895,
+    "numeric_bar_rectangles_only": true,
+    "status_box_geometry_excluded_from_numeric_calibration": true
+  },
+  "status_assumptions": {
+    "no_applications": "treated as 100% under the project assumption; its padded text box is not a numeric bar",
+    "no_cooperation": "excluded as not available",
+    "no_places": "excluded as not available",
+    "bar_absent": "excluded as unavailable or unrecognised"
+  },
+  "status_box_examples": [
+    {
+      "country": "Brazil",
+      "university": "Universidade Estadual de Campinas (UNICAMP)",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.4799655,
+      "status_box_bbox": [
+        351.48001125,
+        577.56000875,
+        413.75999475,
+        587.03997425
+      ]
+    },
+    {
+      "country": "Brazil",
+      "university": "Universidade Estadual Paulista 'Júlio de Mesquita Filho' (UNESP)",
+      "year": 2024,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.4800105,
+      "status_box_bbox": [
+        417.83999625,
+        586.9199945,
+        480.96002175,
+        596.400005
+      ]
+    },
+    {
+      "country": "China",
+      "university": "Huazhong University of Science and Technology",
+      "year": 2024,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48,
+      "status_box_bbox": [
+        417.83999625,
+        139.0799975,
+        480.96002175,
+        148.5599975
+      ]
+    },
+    {
+      "country": "China",
+      "university": "Huazhong University of Science and Technology",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48,
+      "status_box_bbox": [
+        485.03997825,
+        139.0799975,
+        548.16000375,
+        148.5599975
+      ]
+    },
+    {
+      "country": "China",
+      "university": "The University of Hong Kong",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.4800105,
+      "status_box_bbox": [
+        351.48001125,
+        204.59998700000006,
+        413.75999475,
+        214.0799975
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Guwahati (IIT Guwahati)",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.47996475,
+      "status_box_bbox": [
+        351.48001125,
+        449.6400110000001,
+        413.75999475,
+        459.11997575000004
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Guwahati (IIT Guwahati)",
+      "year": 2024,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.47996475,
+      "status_box_bbox": [
+        417.83999625,
+        449.6400110000001,
+        480.96002175,
+        459.11997575000004
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Kanpur (IIT Kanpur)",
+      "year": 2024,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        417.83999625,
+        458.999996,
+        480.96002175,
+        468.48000724999997
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Kharagpur (IIT Kharagpur)",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        351.48001125,
+        468.35998099999995,
+        413.75999475,
+        477.83999225
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Kharagpur (IIT Kharagpur)",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        468.35998099999995,
+        548.16000375,
+        477.83999225
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Mandi (IIT Mandi)",
+      "year": 2024,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        417.83999625,
+        487.07999750000005,
+        480.96002175,
+        496.56000875
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Mandi (IIT Mandi)",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        487.07999750000005,
+        548.16000375,
+        496.56000875
+      ]
+    },
+    {
+      "country": "India",
+      "university": "Indian Institute of Technology Roorkee (IIT Roorkee)",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        496.43998325,
+        548.16000375,
+        505.9199945
+      ]
+    },
+    {
+      "country": "Indonesia",
+      "university": "Universitas Indonesia",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.4799655,
+      "status_box_bbox": [
+        351.48001125,
+        537.96001775,
+        413.75999475,
+        547.4399832500001
+      ]
+    },
+    {
+      "country": "Indonesia",
+      "university": "Universitas Indonesia",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.4799655,
+      "status_box_bbox": [
+        485.03997825,
+        537.96001775,
+        548.16000375,
+        547.4399832500001
+      ]
+    },
+    {
+      "country": "Israel",
+      "university": "Hebrew University of Jerusalem",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        570.1199757500001,
+        548.16000375,
+        579.599987
+      ]
+    },
+    {
+      "country": "Israel",
+      "university": "Tel Aviv University",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        588.83999225,
+        548.16000375,
+        598.3200035
+      ]
+    },
+    {
+      "country": "UK",
+      "university": "The University of Edinburgh",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        351.48001125,
+        586.4399832500001,
+        413.75999475,
+        595.9199945
+      ]
+    },
+    {
+      "country": "Vietnam",
+      "university": "RMIT International University Vietnam",
+      "year": 2023,
+      "status": "no_applications",
+      "status_box_width_pt": 62.2799835,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        351.48001125,
+        791.15999975,
+        413.75999475,
+        800.640011
+      ]
+    },
+    {
+      "country": "Vietnam",
+      "university": "Vietnam National University of Hanoi - University of Science",
+      "year": 2025,
+      "status": "no_applications",
+      "status_box_width_pt": 63.1200255,
+      "status_box_height_pt": 9.48001125,
+      "status_box_bbox": [
+        485.03997825,
+        800.51998475,
+        548.16000375,
+        809.999996
+      ]
+    }
+  ],
+  "source_sha256": "da2cfe6dc34b36102a4b7a788e7c83e721cdcfea53cbbb960e32096bf73f5285",
+  "source_filename": "TUMexchange_Chances_2026.pdf",
+  "source_document_id": "sha256:da2cfe6dc34b3610",
+  "source_release_year": 2026,
+  "extraction_version": "0.2.0-adaptive-vector-layout",
+  "year_columns": {
+    "2023": {
+      "x0": 352.92,
+      "x1": 410.5338666477132,
+      "center": 401.66541574771315,
+      "track_x0": 352.92,
+      "header_x0": 392.7969648477132,
+      "bar_height": 5.519989500000065
+    },
+    "2024": {
+      "x0": 419.28,
+      "x1": 477.3738628977132,
+      "center": 468.50541199771317,
+      "track_x0": 419.28,
+      "header_x0": 459.6369610977132,
+      "bar_height": 5.519989500000008
+    },
+    "2025": {
+      "x0": 486.48,
+      "x1": 544.5738906477131,
+      "center": 535.7054397477132,
+      "track_x0": 486.48,
+      "header_x0": 526.8369888477132,
+      "bar_height": 5.519989500000065
+    }
+  },
+  "methodology": {
+    "reference_selection": "measured row country='Brazil', university='Universidade Federal do Rio de Janeiro (UFRJ)', year=2025",
+    "normalisation": "the known-full reference anchors the scale; each annual column uses its own width only when at least three bars repeat at that track maximum",
+    "score_interpretation": "normalized bar length under the user's linear chance assumption, not an independently estimated admission probability"
+  },
+  "record_count": 378,
+  "measured_count": 336,
+  "no_applications_count": 20,
+  "unavailable_count": 22,
+  "university_count": 126
+}
