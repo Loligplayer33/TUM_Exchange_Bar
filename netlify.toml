@@ -1,0 +1,15 @@
+# Continuous deployment: Netlify publishes this folder on every push to `main`.
+# Set the production branch to `main` when you import the GitHub repo.
+
+[build]
+  publish = "data/output/combined"
+
+[[redirects]]
+  from = "/"
+  to = "/combined-report.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
