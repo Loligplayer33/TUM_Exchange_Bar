@@ -419,6 +419,24 @@ class ReportTests(unittest.TestCase):
         self.assertTrue(_search_matches(ufrj["search_text"], "ufrj brazil"))
         self.assertFalse(_search_matches(ufrj["search_text"], "ufrj tokyo"))
 
+    def test_mobile_layout_stacks_rows_and_keeps_header_sorts(self) -> None:
+        html = report._build_html(self.normalized, self.calibration)
+        self.assertIn('viewport-fit=cover', html)
+        self.assertIn('overflow-x: clip', html)
+        self.assertIn("@media (max-width: 960px)", html)
+        self.assertIn("tr.university-row > td::before", html)
+        self.assertIn("class=\"mobile-sort\"", html)
+        self.assertIn('aria-label="Sort this list"', html)
+        self.assertIn('data-label="Country"', html)
+        self.assertIn('data-label="Years scored"', html)
+        self.assertIn('data-label="Mean score"', html)
+        self.assertIn('data-label="Source"', html)
+        self.assertIn("const mobileSortButtons", html)
+        self.assertIn('querySelector(".mobile-sort")', html)
+        self.assertIn("[hidden] { display: none !important; }", html)
+        self.assertIn("font-size: 16px", html)
+        self.assertNotIn(">Sort universities</label>", html)
+
 
 def _fold_search(value: str) -> str:
     text = unicodedata.normalize("NFKD", value)

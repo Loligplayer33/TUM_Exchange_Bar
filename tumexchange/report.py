@@ -784,13 +784,13 @@ def _render_annual_row(
     )
     return f"""
           <tr class="annual-data-row" data-annual-index="{annual_index}">
-            <td class="numeric">{_escaped(normalized.get("year"))}</td>
-            <td><span class="status-pill status-{html.escape(category, quote=True)}">{html.escape(_CATEGORY_LABELS.get(category, "N/A"), quote=True)}</span></td>
-            <td class="score-cell"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_text, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
-            <td class="source-cell">{_source_cell(normalized)}</td>
-            <td class="annual-status-reason">{html.escape(_status_key(normalized.get("status")), quote=True)}</td>
-            <td class="calibration-cell">{_escaped(normalized.get("calibration_id"), "Not recorded")}</td>
-            <td class="details-cell"><button class="detail-toggle annual-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View details</button></td>
+            <td class="numeric" data-label="Year">{_escaped(normalized.get("year"))}</td>
+            <td data-label="Status"><span class="status-pill status-{html.escape(category, quote=True)}">{html.escape(_CATEGORY_LABELS.get(category, "N/A"), quote=True)}</span></td>
+            <td class="score-cell" data-label="Normalized score"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_text, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+            <td class="source-cell" data-label="Source">{_source_cell(normalized)}</td>
+            <td class="annual-status-reason" data-label="Raw status">{html.escape(_status_key(normalized.get("status")), quote=True)}</td>
+            <td class="calibration-cell" data-label="Calibration">{_escaped(normalized.get("calibration_id"), "Not recorded")}</td>
+            <td class="details-cell" data-label="Measurement"><button class="detail-toggle annual-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View details</button></td>
           </tr>
           <tr id="{detail_id}" class="annual-detail-row" hidden><td colspan="7">{_render_details(normalized, annual_index)}</td></tr>
     """
@@ -844,13 +844,13 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
         roster_note = f'<span class="roster-note">{html.escape(label, quote=True)}</span>'
     return f"""
       <tr class="data-row university-row" data-group-index="{group_index}">
-        <td class="university-cell"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}</span><span class="expand-label">View annual rows</span></button></td>
-        <td>{_escaped(group.get("country"))}</td>
-        <td class="numeric years-cell"><strong>{scored} of {total}</strong><span>years scored</span></td>
-        <td><div class="status-list">{_render_status_pills(group.get("categories") or [])}</div></td>
-        <td class="score-cell"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' mean of full bar') if score is not None else 'N/A; no scored years', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
-        <td class="source-cell source-summary-cell">{_source_summary(group)}</td>
-        <td class="details-cell"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View annual rows</button></td>
+        <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}</span><span class="expand-label">View annual rows</span></button></td>
+        <td data-label="Country">{_escaped(group.get("country"))}</td>
+        <td class="numeric years-cell" data-label="Years scored"><strong>{scored} of {total}</strong><span>years scored</span></td>
+        <td data-label="Annual statuses"><div class="status-list">{_render_status_pills(group.get("categories") or [])}</div></td>
+        <td class="score-cell" data-label="Mean score"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' mean of full bar') if score is not None else 'N/A; no scored years', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+        <td class="source-cell source-summary-cell" data-label="Source releases">{_source_summary(group)}</td>
+        <td class="details-cell" data-label="Annual rows"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View annual rows</button></td>
       </tr>
       <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="7"><div class="annual-panel"><div class="annual-heading"><strong>Annual entries, newest first</strong><span>{scored} of {total} years contribute to the mean · {source_count} source release{'s' if source_count != 1 else ''}</span></div><table class="annual-table"><thead><tr><th scope="col">Year</th><th scope="col">Status</th><th scope="col">Normalized score</th><th scope="col">Source release / document</th><th scope="col">Raw status</th><th scope="col">Calibration</th><th scope="col"><span class="visually-hidden">Measurement details</span></th></tr></thead><tbody>{annual_rows}</tbody></table></div></td></tr>
     """
@@ -1059,7 +1059,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
   <title>TUMexchange bar comparison</title>
   <style>
@@ -1082,11 +1082,17 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       background: var(--wash);
     }
     * { box-sizing: border-box; }
-    body { margin: 0; min-width: 320px; background: var(--wash); line-height: 1.45; }
+    html { overflow-x: clip; }
+    body {
+      margin: 0; min-width: 320px; background: var(--wash); line-height: 1.45;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
     a { color: var(--blue-deep); text-underline-offset: .18em; }
     button, input, select { font: inherit; }
     button, select { cursor: pointer; }
+    button, a, input, select { touch-action: manipulation; }
     :focus-visible { outline: 3px solid #6eaee0; outline-offset: 2px; }
+    [hidden] { display: none !important; }
     .shell { width: min(1440px, calc(100% - 48px)); margin: 0 auto; }
     .utility {
       display: flex; align-items: center; justify-content: space-between; gap: 24px;
@@ -1112,9 +1118,10 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     h1, h2, h3, p { margin-top: 0; }
     h1 {
       max-width: 760px; margin-bottom: 12px; font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(2.2rem, 4vw, 3.7rem); font-weight: 400;
-      letter-spacing: -.04em; line-height: 1;
+      font-size: clamp(1.85rem, 7vw, 3.7rem); font-weight: 400;
+      letter-spacing: -.04em; line-height: 1.05;
     }
+    .filter-heading { margin-bottom: 10px; font-size: 1.05rem; font-weight: 650; }
     .lede { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: .98rem; }
     .method-card {
       padding: 20px 22px; background: var(--ink); color: #fff;
@@ -1143,7 +1150,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .field { min-width: 0; }
     .field label { display: block; margin: 0 0 7px; color: var(--muted); font-size: .77rem; font-weight: 650; }
     .field input, .field select {
-      width: 100%; min-height: 42px; padding: 9px 11px;
+      width: 100%; min-height: 44px; padding: 9px 11px; font-size: 16px;
       border: 1px solid #c6d5df; border-radius: 2px; background: var(--paper); color: var(--ink);
     }
     .search-field input { min-height: 46px; padding: 10px 12px; }
@@ -1152,12 +1159,13 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .label-with-help label { margin-bottom: 0; }
     .help { position: relative; display: inline-flex; }
     .help-trigger {
-      display: grid; place-items: center; width: 18px; height: 18px;
+      position: relative; display: grid; place-items: center; width: 18px; height: 18px;
       padding: 0; border: 1px solid #91adc0; border-radius: 50%;
       background: var(--paper); color: var(--blue-deep); font-size: .68rem; font-weight: 700;
     }
+    .help-trigger::before { position: absolute; inset: -13px; content: ""; }
     .help-tooltip {
-      position: absolute; z-index: 10; top: 27px; right: 0; width: 255px;
+      position: absolute; z-index: 10; top: 40px; right: 0; width: min(255px, calc(100vw - 40px));
       margin: 0; padding: 10px 11px; border: 1px solid var(--line);
       background: var(--paper); color: var(--muted); box-shadow: var(--shadow);
       font-size: .77rem; font-weight: 400; opacity: 0; pointer-events: none;
@@ -1167,9 +1175,10 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .help-trigger:focus-visible + .help-tooltip,
     .help:focus-within .help-tooltip { opacity: 1; pointer-events: auto; visibility: visible; }
     .reset-button {
-      min-height: 42px; padding: 8px 13px; border: 1px solid var(--blue);
+      min-height: 44px; padding: 8px 13px; border: 1px solid var(--blue);
       border-radius: 2px; background: var(--paper); color: var(--blue-deep); font-weight: 650;
     }
+    .mobile-sort { display: none; }
     .reset-button:hover { background: var(--blue-soft); }
     .result-line {
       display: flex; justify-content: space-between; gap: 16px; margin-bottom: 12px;
@@ -1207,7 +1216,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .university-name { display: block; color: var(--ink); font-weight: 680; }
     .roster-note { display: block; margin-top: 3px; color: var(--amber); font-size: .7rem; font-weight: 650; }
     .university-toggle {
-      display: flex; align-items: baseline; gap: 10px; padding: 0;
+      display: flex; align-items: baseline; gap: 10px; width: 100%; padding: 0;
       border: 0; background: transparent; color: inherit; text-align: left;
     }
     .university-toggle:hover .university-name,
@@ -1246,7 +1255,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .score-fill { display: block; height: 100%; background: var(--blue); }
     .details-cell { width: 112px; text-align: right; }
     .detail-toggle {
-      padding: 5px 0; border: 0; border-bottom: 1px solid #91adc0;
+      min-height: 44px; padding: 8px 0; border: 0; border-bottom: 1px solid #91adc0;
       background: transparent; color: var(--blue-deep); font-size: .82rem; font-weight: 650;
     }
     .detail-toggle:hover { border-bottom-color: var(--blue-deep); }
@@ -1289,34 +1298,90 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       .controls { grid-template-columns: repeat(3, minmax(145px, 1fr)); }
       .search-field { grid-column: 1 / -1; }
     }
+    @media (max-width: 960px) {
+      .shell { width: min(100% - 28px, 1440px); }
+      .hero { grid-template-columns: 1fr; gap: 22px; padding: 28px 0 18px; }
+      .utility { align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px 0; }
+      .downloads { gap: 12px; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .summary dd { white-space: normal; }
+      .controls { grid-template-columns: 1fr 1fr; }
+      .search-field, .reset-button { grid-column: 1 / -1; }
+      .result-line, footer, .annual-heading, .detail-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .mobile-sort {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+        margin: 0 0 12px; color: var(--muted); font-size: .77rem;
+      }
+      .mobile-sort-label { margin-right: 2px; font-weight: 650; }
+      .mobile-sort-button {
+        display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 12px;
+        border: 1px solid #c6d5df; border-radius: 2px; background: var(--paper);
+        color: var(--blue-deep); font-size: .78rem; font-weight: 650;
+      }
+      .mobile-sort-button.is-active { border-color: var(--blue); background: var(--blue-soft); }
+      .mobile-sort-button .sort-indicator { min-width: .7em; color: var(--blue-deep); }
+      .table-frame { overflow: visible; background: transparent; border: 0; box-shadow: none; }
+      #report-table, .annual-table { min-width: 0; }
+      #report-table > thead { display: none; }
+      #report-table, #report-table > tbody, .annual-table, .annual-table > tbody { display: block; width: 100%; }
+      #report-table > tbody { display: grid; gap: 10px; }
+      tr.university-row, tr.annual-data-row {
+        display: grid; grid-template-columns: 1fr; gap: 8px 12px;
+        padding: 14px; border: 1px solid var(--line); background: var(--paper);
+      }
+      tr.university-row { box-shadow: var(--shadow); }
+      tr.university-detail-row, tr.annual-detail-row, tr.empty-row { display: block; }
+      tr.university-detail-row > td, tr.annual-detail-row > td, tr.empty-row > td {
+        display: block; width: 100%;
+      }
+      tr.university-row > td, tr.annual-data-row > td {
+        display: grid; grid-template-columns: minmax(7.2rem, 32%) minmax(0, 1fr);
+        align-items: start; gap: 8px; width: 100%; min-width: 0; padding: 0; border: 0;
+      }
+      tr.university-row > td::before, tr.annual-data-row > td::before {
+        color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .06em;
+        text-transform: uppercase; content: attr(data-label);
+      }
+      tr.university-row > .university-cell { grid-template-columns: 1fr; }
+      tr.university-row > .university-cell::before { display: none; }
+      tr.university-row > .details-cell { display: none; }
+      .university-toggle { align-items: flex-start; justify-content: space-between; min-height: 44px; gap: 12px; }
+      .expand-label { flex: 0 0 auto; padding-top: 2px; color: var(--blue-deep); font-weight: 650; }
+      .university-cell, .score-cell, .source-summary-cell, .source-cell-inner, .details-cell { width: auto; min-width: 0; }
+      .years-cell span { display: none; }
+      .university-row .source-document { display: none; }
+      .summary > div:last-child { grid-column: 1 / -1; }
+      .score-cell, .score-track, .source-document, .source-cell-inner { max-width: none; }
+      .source-document { white-space: normal; }
+      .annual-panel { padding: 12px 4px 4px; }
+      .annual-table { border: 0; }
+      .annual-table > thead { display: none; }
+      .annual-table > tbody { display: grid; gap: 8px; }
+      tr.annual-data-row { background: #fbfdfe; }
+      tr.annual-data-row > .annual-status-reason, tr.annual-data-row > .calibration-cell { display: none; }
+      .details-cell { text-align: left; }
+    }
     @media (max-width: 840px) {
       .hero { grid-template-columns: 1fr; gap: 24px; }
       .detail-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
     }
     @media (max-width: 620px) {
-      .shell { width: min(100% - 28px, 1440px); }
-      .utility { align-items: flex-start; flex-direction: column; gap: 10px; padding: 16px 0; }
-      .downloads { gap: 12px; }
-      .hero { padding: 30px 0 20px; }
-      h1 { font-size: 2.55rem; }
-      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .controls { grid-template-columns: 1fr; }
-      .search-field { grid-column: auto; }
-      .result-line, footer { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .summary { grid-template-columns: 1fr 1fr; }
       .detail-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
       .detail-grid { grid-template-columns: 1fr; }
+      .detail-grid div { border-right: 0; padding-right: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
     @media print {
       body { background: #fff; }
-      .utility, .controls, .detail-toggle, footer { display: none; }
+      .utility, .controls, .mobile-sort, .detail-toggle, footer { display: none; }
       .shell { width: 100%; }
       .hero { padding: 20px 0; }
       .table-frame { overflow: visible; box-shadow: none; }
       table { min-width: 0; }
-      .university-detail-row[hidden], .annual-detail-row[hidden] { display: table-row; }
+      .university-detail-row[hidden], .annual-detail-row[hidden] { display: table-row !important; }
     }
   </style>
 </head>
@@ -1363,6 +1428,13 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         <button class="reset-button" type="button" id="reset-filters">Reset filters</button>
       </div>
       <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@UNIVERSITIES@@</strong> universit@@UNIVERSITY_SUFFIX@@ shown</span><span>Means include measured and assigned 100% years; N/A years are excluded.</span></div>
+      <div class="mobile-sort" role="group" aria-label="Sort this list">
+        <span class="mobile-sort-label">Sort</span>
+        <button type="button" class="mobile-sort-button" data-sort-column="university" aria-pressed="false">University<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="country" aria-pressed="false">Country<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="scored" aria-pressed="false">Years scored<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="score" aria-pressed="false">Mean score<span class="sort-indicator" aria-hidden="true"></span></button>
+      </div>
     </section>
     <div class="table-frame">
       <table id="report-table">
@@ -1387,6 +1459,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       const resetButton = document.getElementById("reset-filters");
       const resultCount = document.getElementById("result-count");
       const sortHeaders = Array.from(document.querySelectorAll("#report-table thead th[data-sort-column]"));
+      const mobileSortButtons = Array.from(document.querySelectorAll(".mobile-sort [data-sort-column]"));
       const sortColumns = {
         university: { asc: "university-asc", desc: "university-desc", first: "asc" },
         country: { asc: "country-asc", desc: "country-desc", first: "asc" },
@@ -1450,6 +1523,15 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
           if (column && state.sort === column.asc) value = "ascending";
           if (column && state.sort === column.desc) value = "descending";
           header.setAttribute("aria-sort", value);
+        });
+        mobileSortButtons.forEach((button) => {
+          const column = sortColumns[button.dataset.sortColumn];
+          const active = Boolean(column && (state.sort === column.asc || state.sort === column.desc));
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+          const indicator = button.querySelector(".sort-indicator");
+          if (!indicator || !column) return;
+          indicator.textContent = state.sort === column.asc ? "▲" : state.sort === column.desc ? "▼" : "";
         });
       };
       const cycleSort = (columnName) => {
@@ -1542,6 +1624,10 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       document.querySelector("#report-table thead").addEventListener("click", (event) => {
         const header = event.target.closest("th[data-sort-column]");
         if (header) cycleSort(header.dataset.sortColumn);
+      });
+      document.querySelector(".mobile-sort").addEventListener("click", (event) => {
+        const button = event.target.closest("[data-sort-column]");
+        if (button) cycleSort(button.dataset.sortColumn);
       });
       resetButton.addEventListener("click", reset);
       const tableFrame = document.querySelector(".table-frame");
