@@ -67,6 +67,60 @@ their averages. A status match means at least one annual entry has that status.
 Hover over or focus the status help control for the meaning of Assigned 100%.
 The CSV, JSON, and database retain the individual annual entries.
 
+## University profiles from MoveON
+
+The combined report can be enriched with the public university profiles from
+TUM's MoveON directory. Fetch the saved catalog when the source needs a
+refresh:
+
+```sh
+uv run tumexchange fetch-profiles \
+  --output data/source/moveon/catalog.json
+```
+
+The importer checks the complete catalog against the source's current relation
+count, so additions and removals can be handled on later refreshes. The saved
+catalog keeps all public fields, source identifiers, schema version and retrieval
+timestamp, exact degree-level and subject-area values, and empty values where the
+source is silent (shown as `Unknown`), plus links for further information. Profile data is kept
+separate from historical score records: refreshing it does not recalculate
+bars or averages, and the published report does not need to fetch MoveON at
+runtime.
+
+Generate the report with a reviewed matching file:
+
+```sh
+uv run tumexchange report \
+  data/output/combined/bars.sqlite \
+  --output data/output/combined \
+  --profiles data/source/moveon/catalog.json \
+  --profile-matches data/source/moveon/matches.json
+```
+
+The matching file records reviewed aliases. Ambiguous names are left
+unmatched rather than being silently fuzzy-matched. A profile can therefore
+appear without historical score rows; historical rows remain available even
+when a university is absent from the latest profile catalog. Refreshing the
+catalog and rebuilding the report are separate operations, so reviewed
+matches persist across source updates. A refresh reports added, removed,
+changed and unchanged relation IDs. A validated import replaces the catalog
+atomically. Check changes without replacing the saved file with:
+
+```sh
+uv run tumexchange fetch-profiles --output data/source/moveon/catalog.json --check
+```
+
+Fact sheets that TUM serves through JavaScript link back to its directory and
+retain their document IDs in the catalog. Ordinary external links are preserved.
+
+For a local preview of the already-built combined report:
+
+```sh
+npx --yes live-server data/output/combined \
+  --host=127.0.0.1 --port=8080 --no-browser \
+  --entry-file=combined-report.html
+```
+
 ## What the score means
 
 The numeric value is a normalized bar score under the working assumption that

@@ -389,11 +389,20 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertIn("<title>TUMexchange bar comparison</title>", text)
         self.assertNotIn("@@UNIVERSITIES@@", text)
         self.assertNotIn("@@ANNUAL@@", text)
+        payload = _report_data(parser)
+        groups = payload["groups"]
+        historical_groups = [group for group in groups if group.get("records")]
+        self.assertEqual(len(historical_groups), 133)
+        for group in groups:
+            if not group.get("records"):
+                self.assertTrue(group.get("profiles"))
+                self.assertIsNone(group.get("mean_score"))
+                self.assertEqual(group.get("scored_count"), 0)
         self.assertEqual(
             text.count('class="data-row university-row"'),
-            133,
+            len(groups),
         )
-        self.assertEqual(text.count('class="university-detail-row"'), 133)
+        self.assertEqual(text.count('class="university-detail-row"'), len(groups))
         self.assertEqual(text.count('class="annual-data-row"'), 517)
         self.assertEqual(text.count('class="annual-detail-row"'), 517)
         self.assertIn('class="annual-table"', text)
@@ -413,7 +422,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertIsInstance(payload, dict)
         groups = payload.get("groups")
         self.assertIsInstance(groups, list)
-        self.assertEqual(len(groups), 133)
+        self.assertGreaterEqual(len(groups), 133)
 
         annual_records: list[dict[str, Any]] = []
         for group in groups:

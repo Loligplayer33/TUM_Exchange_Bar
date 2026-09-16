@@ -141,6 +141,16 @@ def _cmd_import(args: argparse.Namespace) -> int:
 
 
 def _cmd_report(args: argparse.Namespace) -> int:
+    profiles = None
+    if args.profiles:
+        from .profiles import load_profiles
+
+        profiles = load_profiles(Path(args.profiles))
+        if args.profile_matches:
+            with Path(args.profile_matches).open(encoding="utf-8") as handle:
+                profiles["matches"] = json.load(handle)
+    elif args.profile_matches:
+        raise ValueError("--profile-matches requires --profiles")
     output = Path(args.output).expanduser()
     output.mkdir(parents=True, exist_ok=True)
     records = read_current_records(args.database)
@@ -148,7 +158,10 @@ def _cmd_report(args: argparse.Namespace) -> int:
     write_rows_csv(records, output / "rows.csv")
     write_calibration_json(calibration, output / "calibration.json")
     report_path = output / "combined-report.html"
-    _write_report(records, calibration, report_path)
+    if profiles is None:
+        _write_report(records, calibration, report_path)
+    else:
+        write_report(records, calibration, report_path, profiles=profiles)
     print(
         json.dumps(
             {
@@ -162,6 +175,50 @@ def _cmd_report(args: argparse.Namespace) -> int:
         )
     )
     return 0
+
+
+def _cmd_fetch_profiles(args: argparse.Namespace) -> int:
+    from .moveon import fetch_catalog, write_catalog
+
+    catalog = fetch_catalog()
+    output = Path(args.output)
+    previous = None
+    if output.exists():
+        with output.open(encoding="utf-8") as handle:
+            previous = json.load(handle)
+    changes = _profile_changes(previous, catalog)
+    if not args.check:
+        write_catalog(catalog, output)
+    print(json.dumps({
+        "output": str(output.resolve()),
+        "written": not args.check,
+        "profiles": len(catalog["profiles"]),
+        "retrieved_at": catalog["retrieved_at"],
+        "source_url": catalog["source_url"],
+        "changes": changes,
+    }, indent=2))
+    return 0
+
+
+def _profile_changes(previous: Mapping[str, Any] | None, current: Mapping[str, Any]) -> dict[str, Any]:
+    """Compare source content by stable relation ID, ignoring retrieval timestamps."""
+    def index(catalog: Mapping[str, Any] | None) -> dict[str, dict[str, Any]]:
+        if catalog is None:
+            return {}
+        return {
+            str(profile["relation_id"]): {
+                key: value for key, value in profile.items() if key != "retrieved_at"
+            }
+            for profile in catalog["profiles"]
+        }
+
+    old, new = index(previous), index(current)
+    return {
+        "added": sorted(new.keys() - old.keys()),
+        "removed": sorted(old.keys() - new.keys()),
+        "changed": sorted(key for key in old.keys() & new.keys() if old[key] != new[key]),
+        "unchanged": sum(old[key] == new[key] for key in old.keys() & new.keys()),
+    }
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -218,7 +275,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     report_parser.add_argument("database", type=Path)
     report_parser.add_argument("--output", "-o", required=True, help="output directory")
+    report_parser.add_argument("--profiles", type=Path, help="saved MoveON university profile catalog")
+    report_parser.add_argument("--profile-matches", type=Path, help="reviewed university-to-relation matching overrides")
     report_parser.set_defaults(handler=_cmd_report)
+
+    profiles_parser = commands.add_parser(
+        "fetch-profiles", help="save all public MoveON exchange profiles with a coverage check",
+    )
+    profiles_parser.add_argument("--output", "-o", type=Path, required=True, help="destination profile catalog JSON")
+    profiles_parser.add_argument("--check", action="store_true", help="show source changes without replacing the saved catalog")
+    profiles_parser.set_defaults(handler=_cmd_fetch_profiles)
     return parser
 
 

@@ -24,6 +24,9 @@ import unicodedata
 from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
+
+from .profiles import attach_profiles
 
 
 CANONICAL_FIELDS = (
@@ -294,6 +297,191 @@ def _compact_value(value: Any) -> str:
     if isinstance(value, (list, tuple, dict)):
         return _safe_json(value)
     return str(value)
+
+
+_PROFILE_LEVELS = ("bachelor", "master")
+_PROFILE_LEVEL_LABELS = {
+    "bachelor": "Bachelor",
+    "master": "Master",
+    "unknown": "Unknown level",
+}
+
+
+def _safe_profile_url(value: Any) -> str | None:
+    """Allow only absolute HTTP(S) profile links in generated markup."""
+
+    if value is None:
+        return None
+    url = _text(value).strip()
+    if not url or any(char in url for char in "\r\n\t"):
+        return None
+    try:
+        parsed = urlsplit(url)
+    except ValueError:
+        return None
+    if parsed.scheme.casefold() not in {"http", "https"} or not parsed.netloc:
+        return None
+    return url
+
+
+def _profile_levels(profile: Mapping[str, Any]) -> list[str]:
+    values: list[str] = []
+    raw = profile.get("levels")
+    if isinstance(raw, str):
+        raw = [raw]
+    if isinstance(raw, Iterable) and not isinstance(raw, (bytes, bytearray, Mapping)):
+        for value in raw:
+            key = _canonical_text(value)
+            if key in _PROFILE_LEVELS and key not in values:
+                values.append(key)
+    return [level for level in _PROFILE_LEVELS if level in values]
+
+
+def _profile_subjects(profile: Mapping[str, Any]) -> list[str]:
+    raw = profile.get("subject_areas")
+    if isinstance(raw, str):
+        raw = [raw]
+    values: list[str] = []
+    if isinstance(raw, Iterable) and not isinstance(raw, (bytes, bytearray, Mapping)):
+        for value in raw:
+            text = _text(value).strip()
+            if text and text not in values:
+                values.append(text)
+    return values
+
+
+def _profile_links(value: Any) -> list[dict[str, str]]:
+    """Normalize field links without allowing unsafe schemes into the UI."""
+
+    if not isinstance(value, Iterable) or isinstance(value, (str, bytes, bytearray, Mapping)):
+        return []
+    links: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, Mapping):
+            continue
+        url = _safe_profile_url(item.get("url") or item.get("href"))
+        if url is None:
+            continue
+        label = _text(item.get("label") or item.get("text") or url).strip() or url
+        links.append({"label": label, "url": url})
+    return links
+
+
+def _profile_fields(profile: Mapping[str, Any]) -> list[dict[str, Any]]:
+    raw = profile.get("fields")
+    if not isinstance(raw, Iterable) or isinstance(raw, (str, bytes, bytearray, Mapping)):
+        return []
+    fields: list[dict[str, Any]] = []
+    for item in raw:
+        if not isinstance(item, Mapping):
+            continue
+        label = _text(item.get("label")).strip()
+        text = _text(item.get("text")).strip()
+        links = _profile_links(item.get("links"))
+        if not label and not text and not links:
+            continue
+        fields.append({"label": label or "Additional information", "text": text, "links": links})
+    return fields
+
+
+def _profile_payload(profile: Mapping[str, Any], catalog_meta: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Return the small, escaped-at-render-time profile contract embedded in HTML."""
+
+    levels = _profile_levels(profile)
+    subjects = _profile_subjects(profile)
+    source_url = _safe_profile_url(profile.get("source_url"))
+    details_url = _safe_profile_url(profile.get("details_url"))
+    retrieved_at = _text(profile.get("retrieved_at") or (catalog_meta or {}).get("retrieved_at")).strip()
+    return {
+        "institution_id": _text(profile.get("institution_id")),
+        "relation_id": _text(profile.get("relation_id")),
+        "name": _text(profile.get("name")),
+        "country": _text(profile.get("country")),
+        "city": _text(profile.get("city")).strip(),
+        "levels": levels,
+        "subject_areas": subjects,
+        "fields": _profile_fields(profile),
+        "source_url": source_url,
+        "details_url": details_url,
+        "retrieved_at": retrieved_at or None,
+    }
+
+
+def _profile_catalog_meta(catalog: Any) -> Mapping[str, Any]:
+    return catalog if isinstance(catalog, Mapping) else {}
+
+
+def _profile_records(catalog: Any) -> list[Mapping[str, Any]]:
+    if isinstance(catalog, Mapping):
+        catalog = catalog.get("profiles")
+    if not isinstance(catalog, Iterable) or isinstance(catalog, (str, bytes, bytearray, Mapping)):
+        return []
+    return [item for item in catalog if isinstance(item, Mapping)]
+
+
+def _profile_group_defaults(group: Mapping[str, Any], catalog_meta: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Normalize helper output and make old/no-profile groups explicit."""
+
+    result = dict(group)
+    profiles = [
+        _profile_payload(profile, catalog_meta)
+        for profile in (group.get("profiles") or [])
+        if isinstance(profile, Mapping)
+    ]
+    result["profiles"] = profiles
+    levels: list[str] = []
+    subjects: list[str] = []
+    cities: list[str] = []
+    for profile in profiles:
+        for level in profile.get("levels") or []:
+            if level not in levels:
+                levels.append(level)
+        for subject in profile.get("subject_areas") or []:
+            if subject not in subjects:
+                subjects.append(subject)
+        city = _text(profile.get("city")).strip()
+        if city and city not in cities:
+            cities.append(city)
+    # The helper's unions are authoritative when supplied, but sanitizing them
+    # here keeps hand-authored catalogs and older helper versions compatible.
+    result["profile_levels"] = [
+        level for level in _PROFILE_LEVELS
+        if level in set(result.get("profile_levels") or levels)
+    ]
+    result["profile_subjects"] = [
+        _text(value).strip() for value in (result.get("profile_subjects") or subjects)
+        if _text(value).strip()
+    ]
+    result["profile_cities"] = [
+        _text(value).strip() for value in (result.get("profile_cities") or cities)
+        if _text(value).strip()
+    ]
+    search_parts = [_text(result.get("search_text"))]
+    for profile in profiles:
+        search_parts.extend(
+            [
+                profile.get("name", ""),
+                profile.get("country", ""),
+                profile.get("city", ""),
+                " ".join(profile.get("levels") or []),
+                " ".join(profile.get("subject_areas") or []),
+            ]
+        )
+        for field in profile.get("fields") or []:
+            search_parts.extend([field.get("label", ""), field.get("text", "")])
+            search_parts.extend(link.get("label", "") for link in field.get("links") or [])
+    result["search_text"] = " ".join(_text(value) for value in search_parts).casefold()
+    return result
+
+
+def _attach_profile_catalog(groups: Sequence[Mapping[str, Any]], catalog: Any) -> list[dict[str, Any]]:
+    """Attach profile relations while keeping the renderer tolerant of no catalog."""
+
+    if catalog is None:
+        return [_profile_group_defaults(group) for group in groups]
+    attached = attach_profiles(groups, catalog)
+    meta = _profile_catalog_meta(catalog)
+    return [_profile_group_defaults(group, meta) for group in attached]
 
 
 def _score_class(record: Mapping[str, Any], score: float | None) -> str:
@@ -819,6 +1007,167 @@ def _source_summary(group: Mapping[str, Any]) -> str:
     )
 
 
+def _render_profile_badges(
+    levels: Iterable[str], *, compact: bool = False
+) -> str:
+    values = list(levels)
+    if not values:
+        return '<span class="profile-badge profile-badge-unknown">Unknown level</span>'
+    return "".join(
+        f'<span class="profile-badge profile-badge-{html.escape(level, quote=True)}">'
+        f'{html.escape(_PROFILE_LEVEL_LABELS.get(level, level.title()), quote=True)}</span>'
+        for level in values
+    )
+
+
+def _render_profile_summary(group: Mapping[str, Any]) -> str:
+    profiles = group.get("profiles") or []
+    levels = group.get("profile_levels") or []
+    cities = group.get("profile_cities") or []
+    pieces: list[str] = []
+    if profiles:
+        pieces.append(_render_profile_badges(levels, compact=True))
+        if cities:
+            pieces.append(
+                f'<span class="profile-city">{html.escape(", ".join(map(str, cities)), quote=True)}</span>'
+            )
+        if group.get("profile_subjects"):
+            pieces.append(
+                f'<span class="profile-subject-count">{len(group["profile_subjects"])} subject areas</span>'
+            )
+    else:
+        pieces.append('<span class="profile-missing">No profile data</span>')
+    return '<span class="profile-summary">' + "".join(pieces) + "</span>"
+
+
+def _render_profile_text(value: Any) -> str:
+    text = _text(value).strip()
+    if not text:
+        return '<span class="profile-empty">No text supplied</span>'
+    return html.escape(text.replace("||", "\n"), quote=True).replace("\n", "<br>")
+
+
+def _render_profile_links(links: Iterable[Mapping[str, Any]]) -> str:
+    rendered: list[str] = []
+    for link in links:
+        url = _safe_profile_url(link.get("url")) if isinstance(link, Mapping) else None
+        if url is None:
+            continue
+        label = _text(link.get("label") or url).strip() or url
+        rendered.append(
+            f'<a href="{html.escape(url, quote=True)}" target="_blank" '
+            f'rel="noopener noreferrer">{html.escape(label, quote=True)}</a>'
+        )
+    if not rendered:
+        return ""
+    return '<div class="profile-links" aria-label="Related links">' + "".join(rendered) + "</div>"
+
+
+def _render_profile_card(profile: Mapping[str, Any], group_index: int, profile_index: int) -> str:
+    name = _text(profile.get("name")).strip() or "MoveON relation"
+    city = _text(profile.get("city")).strip()
+    country = _text(profile.get("country")).strip()
+    location = " · ".join(value for value in (city, country) if value)
+    levels = profile.get("levels") or []
+    subjects = profile.get("subject_areas") or []
+    relation_id = _text(profile.get("relation_id")).strip()
+    relation_meta = []
+    if location:
+        relation_meta.append(html.escape(location, quote=True))
+    summary_meta = " · ".join(relation_meta)
+    fields = profile.get("fields") or []
+    available_labels = {field.get("label") for field in fields if isinstance(field, Mapping)}
+    preview_topics = [short for label, short in (
+        ("Language Requirements", "languages"),
+        ("Application Deadlines at Host University", "deadlines"),
+        ("Semester Dates", "semester dates"),
+        ("Subject Area", "eligible subjects"),
+    ) if label in available_labels][:3]
+    preview = ", ".join(preview_topics)
+    expand_hint = f"Show {len(fields)} information sections"
+    if preview:
+        expand_hint += f": {preview} and more"
+    field_markup: list[str] = []
+    for field in fields:
+        if not isinstance(field, Mapping):
+            continue
+        label = _text(field.get("label")).strip() or "Additional information"
+        links = _render_profile_links(field.get("links") or [])
+        field_markup.append(
+            f'<div class="profile-field"><dt>{html.escape(label, quote=True)}</dt>'
+            f'<dd>{_render_profile_text(field.get("text"))}{links}</dd></div>'
+        )
+    if not field_markup:
+        field_markup.append(
+            '<div class="profile-field"><dt>Profile fields</dt>'
+            '<dd><span class="profile-empty">No structured details supplied</span></dd></div>'
+        )
+    direct_links: list[dict[str, str]] = []
+    source_url = _safe_profile_url(profile.get("source_url"))
+    details_url = _safe_profile_url(profile.get("details_url"))
+    if source_url:
+        direct_links.append({"label": "Official TUM directory", "url": source_url})
+    if details_url and details_url != source_url:
+        direct_links.append({"label": "Student experience reports", "url": details_url})
+    direct_markup = _render_profile_links(direct_links)
+    retrieved = _text(profile.get("retrieved_at")).strip()
+    retrieved_markup = (
+        f'<span class="profile-retrieved">Checked {html.escape(retrieved[:10], quote=True)}</span>'
+        if retrieved
+        else ""
+    )
+    subject_markup = (
+        '<span class="profile-subjects">'
+        + f"{len(subjects)} eligible subject areas, listed below"
+        + "</span>"
+        if subjects
+        else '<span class="profile-subjects profile-empty">Subject area not recorded</span>'
+    )
+    return f'''
+        <details class="profile-relation" id="profile-{group_index}-{profile_index}">
+          <summary>
+            <span class="profile-relation-title"><strong>{html.escape(name, quote=True)}</strong>
+            <span class="profile-relation-meta">{summary_meta}</span><span class="profile-open-hint"><span class="profile-hint-closed">{html.escape(expand_hint, quote=True)}</span><span class="profile-hint-open">Hide detailed information</span></span></span>
+            <span class="profile-relation-badges">{_render_profile_badges(levels)}</span>
+          </summary>
+          <div class="profile-relation-body">
+            <div class="profile-relation-context">{subject_markup}{retrieved_markup}</div>
+            <dl class="profile-fields">{"".join(field_markup)}</dl>
+            {direct_markup}
+          </div>
+        </details>
+    '''
+
+
+def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
+    profiles = group.get("profiles") or []
+    if not profiles:
+        return '''
+          <section class="profile-panel profile-panel-empty" aria-label="University profile">
+            <div class="profile-panel-heading">
+              <div><span class="detail-kicker">Partner profile</span><h3>No profile data available</h3></div>
+            </div>
+            <p class="profile-empty-copy">This institution is retained in the historical comparison, but no structured MoveON profile is available in the current catalogue.</p>
+          </section>
+        '''
+    relation_label = "relation" if len(profiles) == 1 else "relations"
+    subject_count = len(group.get("profile_subjects") or [])
+    subject_note = f" · {subject_count} subject areas" if subject_count else ""
+    cards = "".join(
+        _render_profile_card(profile, group_index, profile_index)
+        for profile_index, profile in enumerate(profiles)
+    )
+    return f'''
+        <section class="profile-panel" aria-label="University profile">
+          <div class="profile-panel-heading">
+            <div><span class="detail-kicker">Partner profile</span><h3>TUM partner details</h3></div>
+            <span class="profile-panel-meta">{len(profiles)} {relation_label}{subject_note}</span>
+          </div>
+          <div class="profile-relations">{cards}</div>
+        </section>
+    '''
+
+
 def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     score = group.get("mean_score")
     score_label = f"{score:.1f}%" if score is not None else "N/A"
@@ -826,12 +1175,25 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     detail_id = f"university-detail-{group_index}"
     scored = int(group.get("scored_count") or 0)
     total = int(group.get("total_count") or 0)
+    records = list(group.get("records") or [])
     annual_rows = "".join(
         _render_annual_row(record, group_index, annual_index)
-        for annual_index, record in enumerate(group.get("records") or [])
+        for annual_index, record in enumerate(records)
     )
-    if not annual_rows:
-        annual_rows = '<tr class="empty-row"><td colspan="7">No annual entries.</td></tr>'
+    if records:
+        annual_content = (
+            '<table class="annual-table"><thead><tr><th scope="col">Year</th><th scope="col">Status</th>'
+            '<th scope="col">Normalized score</th><th scope="col">Source release / document</th>'
+            '<th scope="col">Raw status</th><th scope="col">Calibration</th><th scope="col">'
+            '<span class="visually-hidden">Measurement details</span></th></tr></thead><tbody>'
+            + annual_rows
+            + "</tbody></table>"
+        )
+    else:
+        annual_content = (
+            '<div class="historical-empty"><strong>No historical data</strong>'
+            '<p>This institution is present in the current profile catalogue, but no extracted annual bar observations are available.</p></div>'
+        )
     source_count = int(group.get("source_count") or 0)
     roster_note = ""
     if not bool(group.get("is_latest_roster", True)):
@@ -844,15 +1206,15 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
         roster_note = f'<span class="roster-note">{html.escape(label, quote=True)}</span>'
     return f"""
       <tr class="data-row university-row" data-group-index="{group_index}">
-        <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}</span><span class="expand-label">View annual rows</span></button></td>
+        <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years scored"><strong>{scored} of {total}</strong><span>years scored</span></td>
         <td data-label="Annual statuses"><div class="status-list">{_render_status_pills(group.get("categories") or [])}</div></td>
         <td class="score-cell" data-label="Mean score"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' mean of full bar') if score is not None else 'N/A; no scored years', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="source-cell source-summary-cell" data-label="Source releases">{_source_summary(group)}</td>
-        <td class="details-cell" data-label="Annual rows"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View annual rows</button></td>
+        <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
-      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="7"><div class="annual-panel"><div class="annual-heading"><strong>Annual entries, newest first</strong><span>{scored} of {total} years contribute to the mean · {source_count} source release{'s' if source_count != 1 else ''}</span></div><table class="annual-table"><thead><tr><th scope="col">Year</th><th scope="col">Status</th><th scope="col">Normalized score</th><th scope="col">Source release / document</th><th scope="col">Raw status</th><th scope="col">Calibration</th><th scope="col"><span class="visually-hidden">Measurement details</span></th></tr></thead><tbody>{annual_rows}</tbody></table></div></td></tr>
+      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="7">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><strong>Historical annual entries, newest first</strong><span>{scored} of {total} years contribute to the mean · {source_count} source release{'s' if source_count != 1 else ''}</span></div>{annual_content}</section></td></tr>
     """
 
 
@@ -907,6 +1269,21 @@ def _select_options(
     options.extend(
         f'<option value="{html.escape(value, quote=True)}">{html.escape(label, quote=True)}</option>'
         for value, label in option_text
+    )
+    return "\n".join(options)
+
+
+def _profile_subject_options(groups: Iterable[Mapping[str, Any]]) -> str:
+    subjects = {
+        _text(subject).strip()
+        for group in groups
+        for subject in (group.get("profile_subjects") or [])
+        if _text(subject).strip()
+    }
+    options = ['<option value="">All subject areas</option>']
+    options.extend(
+        f'<option value="{html.escape(subject, quote=True)}">{html.escape(subject, quote=True)}</option>'
+        for subject in sorted(subjects, key=str.casefold)
     )
     return "\n".join(options)
 
@@ -1018,6 +1395,15 @@ def _group_payload(group: Mapping[str, Any], index: int) -> dict[str, Any]:
         "scored_count": group.get("scored_count"),
         "total_count": group.get("total_count"),
         "categories": list(group.get("categories") or []),
+        "source_only": bool(group.get("source_only")),
+        "profile_levels": list(group.get("profile_levels") or []),
+        "profile_subjects": list(group.get("profile_subjects") or []),
+        "profile_cities": list(group.get("profile_cities") or []),
+        "profiles": [
+            _profile_payload(profile)
+            for profile in (group.get("profiles") or [])
+            if isinstance(profile, Mapping)
+        ],
         "search_text": group.get("search_text", ""),
         "records": [
             {
@@ -1030,9 +1416,11 @@ def _group_payload(group: Mapping[str, Any], index: int) -> dict[str, Any]:
     }
 
 
-def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
+def _build_html(
+    records: Iterable[Mapping[str, Any]], calibration: Any, profiles: Any = None
+) -> str:
     prepared = _prepare_records(records, calibration)
-    groups = _group_records(prepared)
+    groups = _attach_profile_catalog(_group_records(prepared), profiles)
     current_records = [
         record for group in groups for record in (group.get("records") or [])
     ]
@@ -1055,6 +1443,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     data_payload = {
         "groups": [_group_payload(group, index) for index, group in enumerate(groups)]
     }
+    profile_subject_options = _profile_subject_options(groups)
     template = r"""<!doctype html>
 <html lang="en">
 <head>
@@ -1144,7 +1533,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       text-overflow: ellipsis; white-space: nowrap;
     }
     .controls {
-      display: grid; grid-template-columns: minmax(220px, 1.8fr) repeat(2, minmax(130px, 1fr)) auto;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px; align-items: end; margin-bottom: 15px;
     }
     .field { min-width: 0; }
@@ -1215,6 +1604,12 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     .university-cell { width: 23%; color: var(--ink); }
     .university-name { display: block; color: var(--ink); font-weight: 680; }
     .roster-note { display: block; margin-top: 3px; color: var(--amber); font-size: .7rem; font-weight: 650; }
+    .profile-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; margin-top: 7px; color: var(--muted); font-size: .72rem; }
+    .profile-badge { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 7px; border-radius: 999px; background: var(--blue-soft); color: var(--blue-deep); font-size: .68rem; font-weight: 700; white-space: nowrap; }
+    .profile-badge-master { background: var(--green-soft); color: var(--green); }
+    .profile-badge-unknown { background: #edf1f3; color: #60717b; }
+    .profile-city, .profile-subject-count { color: var(--muted); }
+    .profile-missing { color: var(--muted); font-style: italic; }
     .university-toggle {
       display: flex; align-items: baseline; gap: 10px; width: 100%; padding: 0;
       border: 0; background: transparent; color: inherit; text-align: left;
@@ -1260,6 +1655,39 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     }
     .detail-toggle:hover { border-bottom-color: var(--blue-deep); }
     .university-detail-row > td, .annual-detail-row > td { padding: 0; background: #f8fbfd; }
+    .profile-panel { padding: 20px 22px 18px; border-left: 4px solid #79b4df; background: var(--paper); }
+    .profile-panel-empty { border-left-color: #a9bac5; }
+    .profile-panel-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 13px; }
+    .profile-panel-heading h3 { margin: 0; font-family: Georgia, serif; font-size: 1.2rem; font-weight: 400; }
+    .profile-panel-meta, .profile-retrieved { color: var(--muted); font-size: .78rem; }
+    .profile-empty-copy { max-width: 720px; margin: 0; color: var(--muted); font-size: .84rem; }
+    .profile-relations { display: grid; gap: 8px; }
+    .profile-relation { border: 1px solid var(--line); background: #fbfdfe; }
+    .profile-relation > summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; cursor: pointer; list-style-position: inside; color: var(--ink); }
+    .profile-relation > summary::marker { color: var(--blue); }
+    .profile-relation > summary { position: relative; padding-right: 48px; }
+    .profile-relation > summary::after { content: "+"; position: absolute; right: 16px; top: 10px; color: var(--blue); font-size: 1.4rem; }
+    .profile-relation[open] > summary::after { content: "−"; }
+    .profile-open-hint { flex-basis: 100%; color: var(--blue); font-size: .75rem; }
+    .profile-hint-open, .profile-relation[open] .profile-hint-closed { display: none; }
+    .profile-relation[open] .profile-hint-open { display: inline; }
+    .profile-relation > summary:hover { background: var(--blue-soft); }
+    .profile-relation > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .profile-relation-title { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 5px 10px; min-width: 0; }
+    .profile-relation-meta { color: var(--muted); font-size: .76rem; font-weight: 400; }
+    .profile-relation-badges { display: inline-flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+    .profile-relation-body { padding: 2px 16px 16px; }
+    .profile-relation-context { display: flex; flex-wrap: wrap; gap: 5px 14px; margin: 0 0 12px; color: var(--muted); font-size: .78rem; }
+    .profile-subjects { color: var(--blue-deep); }
+    .profile-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; margin: 0; }
+    .profile-field { min-width: 0; padding-top: 8px; border-top: 1px solid var(--line); }
+    .profile-field dt { margin-bottom: 3px; color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .profile-field dd { margin: 0; color: #365264; font-size: .83rem; overflow-wrap: anywhere; }
+    .profile-links { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-top: 8px; font-size: .78rem; font-weight: 650; }
+    .profile-empty { color: var(--muted); font-style: italic; }
+    .historical-empty { padding: 23px 18px; border: 1px dashed var(--line); background: var(--paper); color: var(--muted); }
+    .historical-empty strong { display: block; margin-bottom: 3px; color: var(--ink); }
+    .historical-empty p { margin: 0; font-size: .83rem; }
     .annual-panel { padding: 14px 18px 18px; border-left: 4px solid var(--blue); }
     .annual-heading { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px; color: var(--muted); font-size: .8rem; }
     .annual-heading strong { color: var(--ink); }
@@ -1353,6 +1781,11 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       .summary > div:last-child { grid-column: 1 / -1; }
       .score-cell, .score-track, .source-document, .source-cell-inner { max-width: none; }
       .source-document { white-space: normal; }
+      .profile-panel { padding: 16px 14px 15px; }
+      .profile-panel-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .profile-relation > summary { align-items: flex-start; flex-direction: column; gap: 8px; }
+      .profile-relation-badges { justify-content: flex-start; }
+      .profile-fields { grid-template-columns: 1fr; gap: 8px; }
       .annual-panel { padding: 12px 4px 4px; }
       .annual-table { border: 0; }
       .annual-table > thead { display: none; }
@@ -1395,7 +1828,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       <div>
         <p class="eyebrow">Offline comparison report</p>
         <h1>TUMexchange bar comparison</h1>
-        <p class="lede">One current row per university and year, with annual source provenance and a transparent mean. Search by university, country, notes, release, or document.</p>
+        <p class="lede">Compare historical selection scores and explore TUM's partner requirements. Filter by degree and subject, or search for a university, city, or practical detail.</p>
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
         <p class="eyebrow">Interpretation</p>
@@ -1413,7 +1846,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
     <section aria-labelledby="filters-heading">
       <h2 id="filters-heading" class="filter-heading">Find a university</h2>
       <div class="controls">
-        <div class="field search-field"><label for="search">Search university, country, acronym, year, or source</label><input id="search" type="search" placeholder="UFRJ, São Paulo, Brazil, 2024" autocomplete="off" spellcheck="false"></div>
+        <div class="field search-field"><label for="search">Search university, country, city, subject, year, or source</label><input id="search" type="search" placeholder="UFRJ, São Paulo, Brazil, 2024" autocomplete="off" spellcheck="false"></div>
         <div class="field"><label for="country-filter">Country</label><select id="country-filter">@@COUNTRY_OPTIONS@@</select></div>
         <div class="field">
           <span class="label-with-help">
@@ -1425,6 +1858,8 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
           </span>
           <select id="status-filter">@@STATUS_OPTIONS@@</select>
         </div>
+        <div class="field"><label for="degree-filter">Degree level</label><select id="degree-filter"><option value="">All degree levels</option><option value="bachelor">Bachelor</option><option value="master">Master</option><option value="unknown">Unknown</option></select></div>
+        <div class="field"><label for="subject-filter">Subject area</label><select id="subject-filter">@@SUBJECT_OPTIONS@@</select></div>
         <button class="reset-button" type="button" id="reset-filters">Reset filters</button>
       </div>
       <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@UNIVERSITIES@@</strong> universit@@UNIVERSITY_SUFFIX@@ shown</span><span>Means include measured and assigned 100% years; N/A years are excluded.</span></div>
@@ -1456,6 +1891,8 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
       const search = document.getElementById("search");
       const countryFilter = document.getElementById("country-filter");
       const statusFilter = document.getElementById("status-filter");
+      const degreeFilter = document.getElementById("degree-filter");
+      const subjectFilter = document.getElementById("subject-filter");
       const resetButton = document.getElementById("reset-filters");
       const resultCount = document.getElementById("result-count");
       const sortHeaders = Array.from(document.querySelectorAll("#report-table thead th[data-sort-column]"));
@@ -1466,7 +1903,7 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         scored: { asc: "scored-asc", desc: "scored-desc", first: "desc" },
         score: { asc: "score-asc", desc: "score-desc", first: "desc" }
       };
-      const state = { search: "", country: "", status: "", sort: "source" };
+      const state = { search: "", country: "", status: "", degree: "", subject: "", sort: "source" };
       const text = (value) => value === null || value === undefined ? "" : String(value);
       const numeric = (value) => {
         if (value === null || value === undefined || value === "" || typeof value === "boolean") return null;
@@ -1484,9 +1921,24 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         return tokens.every((token) => haystack.includes(token));
       };
       const categoryMatches = (group) => !state.status || (group.categories || []).includes(state.status);
+      const profileMatches = (group) => {
+        if (!state.degree && !state.subject) return true;
+        const profiles = Array.isArray(group.profiles) ? group.profiles : [];
+        if (!profiles.length) return state.degree === "unknown" && !state.subject;
+        return profiles.some((profile) => {
+          const levels = Array.isArray(profile.levels) ? profile.levels.map((value) => text(value).toLowerCase()) : [];
+          const knownLevels = levels.filter((value) => value === "bachelor" || value === "master");
+          const degreeMatches = !state.degree
+            || (state.degree === "unknown" ? knownLevels.length === 0 : knownLevels.includes(state.degree));
+          const subjects = Array.isArray(profile.subject_areas) ? profile.subject_areas : [];
+          const subjectMatches = !state.subject || subjects.some((value) => text(value) === state.subject);
+          return degreeMatches && subjectMatches;
+        });
+      };
       const matches = (group) => {
         if (state.country && text(group.country) !== state.country) return false;
         if (!categoryMatches(group)) return false;
+        if (!profileMatches(group)) return false;
         return searchMatches(group);
       };
       const compareText = (a, b) => text(a).localeCompare(text(b), undefined, { sensitivity: "base", numeric: true });
@@ -1551,10 +2003,10 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         controls.forEach((item) => {
           item.setAttribute("aria-expanded", String(expanded));
           if (item.classList.contains("university-detail-toggle")) {
-            item.textContent = expanded ? "Hide annual rows" : "View annual rows";
+            item.textContent = expanded ? "Hide profile & history" : "View profile & history";
           } else if (item.classList.contains("university-toggle")) {
             const label = item.querySelector(".expand-label");
-            if (label) label.textContent = expanded ? "Hide annual rows" : "View annual rows";
+            if (label) label.textContent = expanded ? "Hide profile & history" : "View profile & history";
           } else {
             item.textContent = expanded ? "Hide details" : "View details";
           }
@@ -1608,16 +2060,22 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         state.search = "";
         state.country = "";
         state.status = "";
+        state.degree = "";
+        state.subject = "";
         state.sort = "source";
         search.value = "";
         countryFilter.value = "";
         statusFilter.value = "";
+        degreeFilter.value = "";
+        subjectFilter.value = "";
         render();
         search.focus();
       };
       search.addEventListener("input", () => { state.search = search.value; render(); });
       countryFilter.addEventListener("change", () => { state.country = countryFilter.value; render(); });
       statusFilter.addEventListener("change", () => { state.status = statusFilter.value; render(); });
+      degreeFilter.addEventListener("change", () => { state.degree = degreeFilter.value; render(); });
+      subjectFilter.addEventListener("change", () => { state.subject = subjectFilter.value; render(); });
       document.querySelector("#report-table thead").addEventListener("mousedown", (event) => {
         if (event.target.closest(".sort-button")) event.preventDefault();
       });
@@ -1676,21 +2134,24 @@ def _build_html(records: Iterable[Mapping[str, Any]], calibration: Any) -> str:
         "@@SOURCES@@": str(source_count),
         "@@CALIBRATIONS@@": str(len(catalog)),
         "@@CALIBRATION_LABEL@@": html.escape(calibration_label, quote=True),
-        "@@COUNTRY_OPTIONS@@": _select_options(current_records, "country", "All countries"),
+        "@@COUNTRY_OPTIONS@@": _select_options(groups, "country", "All countries"),
         "@@STATUS_OPTIONS@@": _select_options(current_records, "status", "All statuses"),
+        "@@SUBJECT_OPTIONS@@": profile_subject_options,
         "@@INITIAL_ROWS@@": initial_rows,
         "@@REPORT_DATA@@": _safe_json(data_payload),
         "@@UNIVERSITY_SUFFIX@@": "y" if len(groups) == 1 else "ies",
     }
     for marker, value in replacements.items():
         template = template.replace(marker, value)
-    return template
+    return "\n".join(line.rstrip() for line in template.split("\n"))
 
 
 def write_report(
     records: Sequence[Mapping[str, Any]] | Mapping[str, Any],
     calibration: Any,
     output_path: Path,
+    *,
+    profiles: Any = None,
 ) -> None:
     """Write only the self-contained HTML report.
 
@@ -1709,7 +2170,7 @@ def write_report(
         if calibration is None and isinstance(records.get("calibration"), Mapping):
             calibration = records["calibration"]
         records = payload_records
-    output_path.write_text(_build_html(records, calibration), encoding="utf-8")
+    output_path.write_text(_build_html(records, calibration, profiles), encoding="utf-8")
 
 
 __all__ = ["write_report"]
