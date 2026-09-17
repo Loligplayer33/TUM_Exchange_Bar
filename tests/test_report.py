@@ -86,7 +86,8 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(html.count('class="data-row university-row"'), 125)
         self.assertEqual(html.count('class="annual-data-row"'), 375)
         self.assertIn('class="annual-table"', html)
-        self.assertIn("Annual statuses", html)
+        self.assertIn("Average acceptance", html)
+        self.assertNotIn("Annual statuses", html)
         self.assertNotIn('id="year-filter"', html)
         self.assertNotIn("yearFilter", html)
         self.assertNotIn("__UNIVERSITIES__", html)
@@ -100,7 +101,7 @@ class ReportTests(unittest.TestCase):
     def test_status_categories_preserve_all_annual_statuses_for_filtering(self) -> None:
         html = report._build_html(self.normalized, self.calibration)
         self.assertIn('id="status-filter"', html)
-        self.assertIn("Assigned 100%", html)
+        self.assertIn("100% (No applicants)", html)
         self.assertIn('"status":"no_applications"', html)
         self.assertIn('"status":"no_cooperation"', html)
         self.assertIn('"status":"no_places"', html)
@@ -271,16 +272,13 @@ class ReportTests(unittest.TestCase):
             },
         ]
         rendered = report._build_html(records, calibrations)
-        self.assertIn("2 calibrations", rendered)
         self.assertIn("Release 2026", rendered)
         self.assertIn("Release 2027", rendered)
-        self.assertIn("Chances_2026.pdf", rendered)
-        self.assertIn("Chances_2027.pdf", rendered)
-        self.assertIn('href="calibration.json"', rendered)
+        self.assertNotIn("2 calibrations", rendered)
+        self.assertNotIn("calibration.json", rendered)
         self.assertNotIn("Show calibration and source-release metadata", rendered)
         self.assertNotIn("class=\"calibration-panel\"", rendered)
-        self.assertIn("not an individual admission probability", rendered)
-        self.assertIn("not a grade-based prediction yet", rendered)
+        self.assertIn("not an admission guarantee", rendered)
         self.assertIn("aria-describedby=\"assigned-help\"", rendered)
 
     def test_safe_escaping_and_report_does_not_mutate_records_or_exports(self) -> None:
@@ -342,7 +340,7 @@ class ReportTests(unittest.TestCase):
         self.assertIn("fragment.append(summary, detail)", html)
         self.assertIn('state.sort = "source"', html)
         self.assertIn('closest("tr.university-row")', html)
-        self.assertIn('closest("tr.annual-data-row")', html)
+        self.assertNotIn('closest("tr.annual-data-row")', html)
         self.assertIn("tableFrame.addEventListener", html)
 
         groups = [
@@ -428,8 +426,8 @@ class ReportTests(unittest.TestCase):
         self.assertIn("class=\"mobile-sort\"", html)
         self.assertIn('aria-label="Sort this list"', html)
         self.assertIn('data-label="Country"', html)
-        self.assertIn('data-label="Years scored"', html)
-        self.assertIn('data-label="Mean score"', html)
+        self.assertIn('data-label="Years recorded"', html)
+        self.assertIn('data-label="Average acceptance"', html)
         self.assertIn('data-label="Source"', html)
         self.assertIn("const mobileSortButtons", html)
         self.assertIn('querySelector(".mobile-sort")', html)

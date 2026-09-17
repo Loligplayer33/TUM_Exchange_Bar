@@ -386,7 +386,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
     def test_combined_html_embeds_grouped_current_annual_provenance(self) -> None:
         _, text, parser = _read_html(COMBINED_HTML)
         self.assertTrue(text.startswith("<!doctype html>"))
-        self.assertIn("<title>TUMexchange bar comparison</title>", text)
+        self.assertIn("<title>TUMexchange Acceptance Chances</title>", text)
         self.assertNotIn("@@UNIVERSITIES@@", text)
         self.assertNotIn("@@ANNUAL@@", text)
         payload = _report_data(parser)
@@ -404,10 +404,9 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         )
         self.assertEqual(text.count('class="university-detail-row"'), len(groups))
         self.assertEqual(text.count('class="annual-data-row"'), 517)
-        self.assertEqual(text.count('class="annual-detail-row"'), 517)
+        self.assertNotIn('class="annual-detail-row"', text)
         self.assertIn('class="annual-table"', text)
-        self.assertIn("Source release / document", text)
-        self.assertIn("Measurement / calibration / source provenance", text)
+        self.assertIn("Acceptance rate", text)
         self.assertIn("Release 2026", text)
         self.assertIn("Release 2027", text)
         self.assertIn("Not listed in release 2027", text)
@@ -462,25 +461,8 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
                     f"combined HTML annual record {key!r} differs in full_width_pt",
                 )
 
-        self.assertEqual(len(parser.raw_records), 517)
-        raw_by_key = _index_records(
-            _raw_records(parser),
-            "combined HTML raw details",
-        )
-        self.assertEqual(set(raw_by_key), set(self.current_by_key))
-        for key, current_record in self.current_by_key.items():
-            self._assert_fields(
-                current_record,
-                raw_by_key[key],
-                html_compare_fields,
-                f"combined HTML raw detail {key!r}",
-            )
-            if current_record.get("full_width_pt") is not None:
-                self.assertEqual(
-                    raw_by_key[key].get("full_width_pt"),
-                    current_record["full_width_pt"],
-                    f"combined HTML raw detail {key!r} differs in full_width_pt",
-                )
+        self.assertEqual(len(parser.raw_records), 0)
+        self.assertNotIn('class="raw-record"', text)
 
 
 if __name__ == "__main__":

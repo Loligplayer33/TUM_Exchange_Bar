@@ -45,20 +45,20 @@ CANONICAL_FIELDS = (
 )
 
 _STATUS_LABELS = {
-    "measured": "Measured",
-    "no_applications": "Assigned 100%",
+    "measured": "Recorded",
+    "no_applications": "100% (No applicants)",
     "ambiguous": "Ambiguous",
-    "missing": "N/A",
-    "no_cooperation": "N/A",
-    "no_places": "N/A",
-    "bar_absent": "N/A",
+    "missing": "No data",
+    "no_cooperation": "No cooperation",
+    "no_places": "No places",
+    "bar_absent": "No data",
 }
 
 _CATEGORY_LABELS = {
     "measured": "Measured",
-    "assigned": "Assigned 100%",
+    "assigned": "100% (No applicants)",
     "ambiguous": "Ambiguous",
-    "na": "N/A",
+    "na": "No active exchange",
 }
 
 _UNAVAILABLE_STATUSES = {
@@ -962,25 +962,32 @@ def _render_annual_row(
     normalized = _normalize_record(record, annual_index)
     score = _score_value(normalized)
     score_label = f"{score:.1f}%" if score is not None else "N/A"
-    score_unit = "of full bar" if score is not None else ""
     category = _status_category(normalized.get("status"))
-    detail_id = f"annual-detail-{group_index}-{annual_index}"
+    status_key = _status_key(normalized.get("status"))
+    if category == "assigned":
+        status_html = '<span class="status-pill status-assigned" title="No applications submitted this year">100% (No applicants)</span>'
+    elif category == "measured":
+        status_html = '<span class="status-pill status-measured">Recorded</span>'
+    elif category == "ambiguous":
+        status_html = '<span class="status-pill status-ambiguous">Ambiguous</span>'
+    else:
+        status_label = _STATUS_LABELS.get(status_key, "No active exchange")
+        status_html = f'<span class="status-pill status-na">{html.escape(status_label, quote=True)}</span>'
+
     track_text = (
-        f"{score_label} of a full reference bar"
+        f"{score_label} acceptance rate"
         if score is not None
-        else "N/A; bar not measured"
+        else "N/A; no active exchange"
     )
+    release = _release_year(normalized)
+    release_text = f"Release {release}" if release is not None else "—"
     return f"""
           <tr class="annual-data-row" data-annual-index="{annual_index}">
             <td class="numeric" data-label="Year">{_escaped(normalized.get("year"))}</td>
-            <td data-label="Status"><span class="status-pill status-{html.escape(category, quote=True)}">{html.escape(_CATEGORY_LABELS.get(category, "N/A"), quote=True)}</span></td>
-            <td class="score-cell" data-label="Normalized score"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_text, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
-            <td class="source-cell" data-label="Source">{_source_cell(normalized)}</td>
-            <td class="annual-status-reason" data-label="Raw status">{html.escape(_status_key(normalized.get("status")), quote=True)}</td>
-            <td class="calibration-cell" data-label="Calibration">{_escaped(normalized.get("calibration_id"), "Not recorded")}</td>
-            <td class="details-cell" data-label="Measurement"><button class="detail-toggle annual-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View details</button></td>
+            <td class="score-cell" data-label="Acceptance rate"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_text, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+            <td data-label="Status">{status_html}</td>
+            <td class="source-cell" data-label="Source"><span class="source-release">{html.escape(release_text, quote=True)}</span></td>
           </tr>
-          <tr id="{detail_id}" class="annual-detail-row" hidden><td colspan="7">{_render_details(normalized, annual_index)}</td></tr>
     """
 
 
@@ -1171,7 +1178,7 @@ def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
 def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     score = group.get("mean_score")
     score_label = f"{score:.1f}%" if score is not None else "N/A"
-    score_unit = "mean · full bar" if score is not None else "no scored years"
+    score_unit = "avg acceptance" if score is not None else "no recorded data"
     detail_id = f"university-detail-{group_index}"
     scored = int(group.get("scored_count") or 0)
     total = int(group.get("total_count") or 0)
@@ -1182,19 +1189,17 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     )
     if records:
         annual_content = (
-            '<table class="annual-table"><thead><tr><th scope="col">Year</th><th scope="col">Status</th>'
-            '<th scope="col">Normalized score</th><th scope="col">Source release / document</th>'
-            '<th scope="col">Raw status</th><th scope="col">Calibration</th><th scope="col">'
-            '<span class="visually-hidden">Measurement details</span></th></tr></thead><tbody>'
+            '<table class="annual-table"><thead><tr><th scope="col">Year</th>'
+            '<th scope="col">Acceptance rate</th><th scope="col">Status</th>'
+            '<th scope="col">Source</th></tr></thead><tbody>'
             + annual_rows
             + "</tbody></table>"
         )
     else:
         annual_content = (
             '<div class="historical-empty"><strong>No historical data</strong>'
-            '<p>This institution is present in the current profile catalogue, but no extracted annual bar observations are available.</p></div>'
+            '<p>This institution is present in the current partner catalogue, but no historical application records are available.</p></div>'
         )
-    source_count = int(group.get("source_count") or 0)
     roster_note = ""
     if not bool(group.get("is_latest_roster", True)):
         latest_release = group.get("latest_release_year")
@@ -1208,13 +1213,11 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
       <tr class="data-row university-row" data-group-index="{group_index}">
         <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td data-label="Country">{_escaped(group.get("country"))}</td>
-        <td class="numeric years-cell" data-label="Years scored"><strong>{scored} of {total}</strong><span>years scored</span></td>
-        <td data-label="Annual statuses"><div class="status-list">{_render_status_pills(group.get("categories") or [])}</div></td>
-        <td class="score-cell" data-label="Mean score"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' mean of full bar') if score is not None else 'N/A; no scored years', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
-        <td class="source-cell source-summary-cell" data-label="Source releases">{_source_summary(group)}</td>
+        <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
+        <td class="score-cell" data-label="Average acceptance"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' average acceptance') if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
-      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="7">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><strong>Historical annual entries, newest first</strong><span>{scored} of {total} years contribute to the mean · {source_count} source release{'s' if source_count != 1 else ''}</span></div>{annual_content}</section></td></tr>
+      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><strong>Historical acceptance by year</strong><span>{scored} of {total} years with active exchange data</span></div>{annual_content}</section></td></tr>
     """
 
 
@@ -1430,16 +1433,23 @@ def _build_html(
     if not initial_rows:
         initial_rows = (
             '<tr id="empty-state-row" class="empty-row">'
-            '<td colspan="7"><div class="empty-state"><strong>No extracted rows yet</strong>'
+            '<td colspan="5"><div class="empty-state"><strong>No extracted rows yet</strong>'
             "<p>Run the extractor to populate this report.</p></div></td></tr>"
         )
     catalog = _calibration_catalog(current_records, calibration)
-    source_keys = {
-        _source_descriptor(record)["key"] for record in current_records
+    years = sorted(
+        {
+            record.get("year")
+            for record in current_records
+            if record.get("year") is not None
+        }
+    )
+    year_span = f"{min(years)}–{max(years)}" if years else "—"
+    countries = {
+        group.get("country")
+        for group in groups
+        if group.get("country")
     }
-    source_count = len(source_keys)
-    scored_entries = sum(_score_value(record) is not None for record in current_records)
-    calibration_label = _calibration_label(catalog)
     data_payload = {
         "groups": [_group_payload(group, index) for index, group in enumerate(groups)]
     }
@@ -1450,7 +1460,7 @@ def _build_html(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
-  <title>TUMexchange bar comparison</title>
+  <title>TUMexchange Acceptance Chances</title>
   <style>
     :root {
       --ink: #182d3d;
@@ -1517,9 +1527,12 @@ def _build_html(
       border-left: 4px solid #79b4df; box-shadow: var(--shadow);
     }
     .method-card h2 { margin-bottom: 10px; font-size: 1.05rem; font-weight: 650; }
-    .method-card p { margin-bottom: 0; color: #d5e2eb; font-size: .86rem; }
+    .method-card p { margin-bottom: 8px; color: #d5e2eb; font-size: .86rem; }
+    .method-card p:last-child { margin-bottom: 0; }
+    .method-card strong { color: #fff; }
+    .method-note { margin-top: 10px; color: #a9bac5; font-size: .78rem; font-style: italic; }
     .summary {
-      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1px;
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px;
       margin: 0 0 24px; background: var(--line); border: 1px solid var(--line);
     }
     .summary div { min-width: 0; padding: 12px 15px; background: var(--paper); }
@@ -1554,7 +1567,7 @@ def _build_html(
     }
     .help-trigger::before { position: absolute; inset: -13px; content: ""; }
     .help-tooltip {
-      position: absolute; z-index: 10; top: 40px; right: 0; width: min(255px, calc(100vw - 40px));
+      position: absolute; z-index: 10; top: 40px; right: 0; width: min(280px, calc(100vw - 40px));
       margin: 0; padding: 10px 11px; border: 1px solid var(--line);
       background: var(--paper); color: var(--muted); box-shadow: var(--shadow);
       font-size: .77rem; font-weight: 400; opacity: 0; pointer-events: none;
@@ -1575,7 +1588,7 @@ def _build_html(
     }
     .result-line strong { color: var(--ink); }
     .table-frame { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow); }
-    table { width: 100%; min-width: 1120px; border-collapse: collapse; text-align: left; }
+    table { width: 100%; min-width: 860px; border-collapse: collapse; text-align: left; }
     th {
       padding: 14px 16px; border-bottom: 1px solid var(--line); background: #f7fafc;
       color: var(--muted); font-size: .72rem; font-weight: 700;
@@ -1600,8 +1613,8 @@ def _build_html(
     th[aria-sort="descending"] .sort-indicator::before { content: "▼"; }
     td { padding: 12px 16px; border-bottom: 1px solid #e7eef3; color: #365264; font-size: .9rem; vertical-align: middle; }
     tbody tr.data-row:hover, tbody tr.annual-data-row:hover { background: #fbfdfe; }
-    tr.university-row, tr.annual-data-row { cursor: pointer; }
-    .university-cell { width: 23%; color: var(--ink); }
+    tr.university-row { cursor: pointer; }
+    .university-cell { width: 38%; color: var(--ink); }
     .university-name { display: block; color: var(--ink); font-weight: 680; }
     .roster-note { display: block; margin-top: 3px; color: var(--amber); font-size: .7rem; font-weight: 650; }
     .profile-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; margin-top: 7px; color: var(--muted); font-size: .72rem; }
@@ -1617,13 +1630,11 @@ def _build_html(
     .university-toggle:hover .university-name,
     .university-toggle:focus-visible .university-name { color: var(--blue); }
     .expand-label { color: var(--muted); font-size: .72rem; font-weight: 500; white-space: nowrap; }
+    .years-cell { width: 18%; }
     .years-cell span { display: block; color: var(--muted); font-size: .72rem; }
     .numeric { font-variant-numeric: tabular-nums; }
     .source-cell { color: var(--muted); }
-    .source-cell-inner { display: grid; gap: 2px; min-width: 145px; }
     .source-release { color: var(--blue-deep); font-size: .74rem; font-weight: 700; white-space: nowrap; }
-    .source-document { display: block; max-width: 210px; overflow: hidden; color: var(--muted); font-size: .73rem; text-overflow: ellipsis; white-space: nowrap; }
-    .source-summary-cell { min-width: 170px; }
     .status-list { display: flex; flex-wrap: wrap; gap: 5px; }
     .status-pill {
       display: inline-flex; align-items: center; min-height: 26px; padding: 3px 8px;
@@ -1633,7 +1644,7 @@ def _build_html(
     .status-assigned { background: var(--green-soft); color: var(--green); }
     .status-na { background: #edf1f3; color: #60717b; }
     .status-ambiguous { background: var(--amber-soft); color: var(--amber); }
-    .score-cell { min-width: 220px; }
+    .score-cell { width: 28%; min-width: 180px; }
     .score-line { display: flex; align-items: baseline; gap: 7px; margin-bottom: 7px; }
     .score-value { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 720; }
     .score-unit { color: var(--muted); font-size: .73rem; }
@@ -1648,13 +1659,13 @@ def _build_html(
     .score-track.is-empty { background: repeating-linear-gradient(135deg, #e8eef1 0, #e8eef1 4px, #d5e0e5 4px, #d5e0e5 8px); }
     .score-track.is-empty::after { display: none; }
     .score-fill { display: block; height: 100%; background: var(--blue); }
-    .details-cell { width: 112px; text-align: right; }
+    .details-cell { width: 16%; text-align: right; }
     .detail-toggle {
       min-height: 44px; padding: 8px 0; border: 0; border-bottom: 1px solid #91adc0;
       background: transparent; color: var(--blue-deep); font-size: .82rem; font-weight: 650;
     }
     .detail-toggle:hover { border-bottom-color: var(--blue-deep); }
-    .university-detail-row > td, .annual-detail-row > td { padding: 0; background: #f8fbfd; }
+    .university-detail-row > td { padding: 0; background: #f8fbfd; }
     .profile-panel { padding: 20px 22px 18px; border-left: 4px solid #79b4df; background: var(--paper); }
     .profile-panel-empty { border-left-color: #a9bac5; }
     .profile-panel-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 13px; }
@@ -1691,26 +1702,9 @@ def _build_html(
     .annual-panel { padding: 14px 18px 18px; border-left: 4px solid var(--blue); }
     .annual-heading { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px; color: var(--muted); font-size: .8rem; }
     .annual-heading strong { color: var(--ink); }
-    .annual-table { min-width: 920px; border: 1px solid var(--line); box-shadow: none; }
+    .annual-table { width: 100%; min-width: 540px; border: 1px solid var(--line); box-shadow: none; }
     .annual-table th { padding: 9px 11px; font-size: .66rem; }
     .annual-table td { padding: 9px 11px; font-size: .82rem; }
-    .annual-status-reason { color: var(--muted); font: .72rem ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
-    .calibration-cell { max-width: 190px; overflow-wrap: anywhere; color: var(--muted); font-size: .72rem; }
-    .detail-panel { padding: 22px 24px 25px; border-left: 4px solid var(--blue); }
-    .detail-heading { display: flex; justify-content: space-between; gap: 24px; align-items: baseline; margin-bottom: 18px; }
-    .detail-heading h3 { margin-bottom: 0; font-family: Georgia, serif; font-size: 1.2rem; font-weight: 400; }
-    .detail-heading a { font-size: .82rem; font-weight: 650; white-space: nowrap; }
-    .detail-grid { display: grid; grid-template-columns: repeat(4, minmax(130px, 1fr)); gap: 12px; margin: 0 0 17px; }
-    .detail-grid div { min-width: 0; padding-right: 12px; border-right: 1px solid var(--line); }
-    .detail-grid dt { margin-bottom: 3px; color: var(--muted); font-size: .72rem; }
-    .detail-grid dd { margin: 0; color: var(--ink); font-size: .84rem; font-variant-numeric: tabular-nums; }
-    .technical-value { color: var(--muted); font-size: .72rem; }
-    .breakable { overflow-wrap: anywhere; }
-    .detail-note, .detail-formula { margin: 0 0 10px; color: #4d6472; font-size: .83rem; }
-    .detail-formula { color: var(--muted); font-style: italic; }
-    .raw-record-details { margin-top: 18px; border-top: 1px solid var(--line); }
-    .raw-record-details summary { padding-top: 13px; color: var(--blue-deep); cursor: pointer; font-size: .82rem; font-weight: 650; }
-    .raw-record { overflow: auto; max-height: 330px; margin: 12px 0 0; padding: 13px; background: #edf3f7; color: #27465a; font: .75rem/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     .empty-row td { border-bottom: 0; }
     .empty-state { padding: 50px 24px; text-align: center; }
     .empty-state strong { display: block; color: var(--ink); font-family: Georgia, serif; font-size: 1.35rem; font-weight: 400; }
@@ -1722,7 +1716,6 @@ def _build_html(
       overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
     }
     @media (max-width: 1120px) {
-      .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .controls { grid-template-columns: repeat(3, minmax(145px, 1fr)); }
       .search-field { grid-column: 1 / -1; }
     }
@@ -1731,11 +1724,11 @@ def _build_html(
       .hero { grid-template-columns: 1fr; gap: 22px; padding: 28px 0 18px; }
       .utility { align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px 0; }
       .downloads { gap: 12px; }
-      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       .summary dd { white-space: normal; }
       .controls { grid-template-columns: 1fr 1fr; }
       .search-field, .reset-button { grid-column: 1 / -1; }
-      .result-line, footer, .annual-heading, .detail-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .result-line, footer, .annual-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
       .mobile-sort {
         display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
         margin: 0 0 12px; color: var(--muted); font-size: .77rem;
@@ -1758,8 +1751,8 @@ def _build_html(
         padding: 14px; border: 1px solid var(--line); background: var(--paper);
       }
       tr.university-row { box-shadow: var(--shadow); }
-      tr.university-detail-row, tr.annual-detail-row, tr.empty-row { display: block; }
-      tr.university-detail-row > td, tr.annual-detail-row > td, tr.empty-row > td {
+      tr.university-detail-row, tr.empty-row { display: block; }
+      tr.university-detail-row > td, tr.empty-row > td {
         display: block; width: 100%;
       }
       tr.university-row > td, tr.annual-data-row > td {
@@ -1775,12 +1768,9 @@ def _build_html(
       tr.university-row > .details-cell { display: none; }
       .university-toggle { align-items: flex-start; justify-content: space-between; min-height: 44px; gap: 12px; }
       .expand-label { flex: 0 0 auto; padding-top: 2px; color: var(--blue-deep); font-weight: 650; }
-      .university-cell, .score-cell, .source-summary-cell, .source-cell-inner, .details-cell { width: auto; min-width: 0; }
+      .university-cell, .score-cell, .details-cell { width: auto; min-width: 0; }
       .years-cell span { display: none; }
-      .university-row .source-document { display: none; }
-      .summary > div:last-child { grid-column: 1 / -1; }
-      .score-cell, .score-track, .source-document, .source-cell-inner { max-width: none; }
-      .source-document { white-space: normal; }
+      .score-cell, .score-track { max-width: none; }
       .profile-panel { padding: 16px 14px 15px; }
       .profile-panel-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .profile-relation > summary { align-items: flex-start; flex-direction: column; gap: 8px; }
@@ -1791,18 +1781,13 @@ def _build_html(
       .annual-table > thead { display: none; }
       .annual-table > tbody { display: grid; gap: 8px; }
       tr.annual-data-row { background: #fbfdfe; }
-      tr.annual-data-row > .annual-status-reason, tr.annual-data-row > .calibration-cell { display: none; }
       .details-cell { text-align: left; }
     }
     @media (max-width: 840px) {
       .hero { grid-template-columns: 1fr; gap: 24px; }
-      .detail-grid { grid-template-columns: repeat(2, minmax(130px, 1fr)); }
     }
     @media (max-width: 620px) {
-      .summary { grid-template-columns: 1fr 1fr; }
-      .detail-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
-      .detail-grid { grid-template-columns: 1fr; }
-      .detail-grid div { border-right: 0; padding-right: 0; }
+      .summary { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
@@ -1814,46 +1799,45 @@ def _build_html(
       .hero { padding: 20px 0; }
       .table-frame { overflow: visible; box-shadow: none; }
       table { min-width: 0; }
-      .university-detail-row[hidden], .annual-detail-row[hidden] { display: table-row !important; }
+      .university-detail-row[hidden] { display: table-row !important; }
     }
   </style>
 </head>
 <body>
   <div class="shell">
-    <nav class="utility" aria-label="Report files">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">T</span><span>TUMexchange / bar register</span></div>
-      <div class="downloads"><a href="rows.csv" download>Download rows.csv</a><a href="calibration.json" download>Download calibration.json</a></div>
+    <nav class="utility" aria-label="Report navigation">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">T</span><span>TUMexchange Chances</span></div>
+      <div class="downloads"><a href="rows.csv" download>Download CSV data</a></div>
     </nav>
     <header class="hero">
       <div>
-        <p class="eyebrow">Offline comparison report</p>
-        <h1>TUMexchange bar comparison</h1>
-        <p class="lede">Compare historical selection scores and explore TUM's partner requirements. Filter by degree and subject, or search for a university, city, or practical detail.</p>
+        <h1>TUMexchange Acceptance Chances</h1>
+        <p class="lede">Explore historical admission chances and check partner university requirements for TUMexchange. Filter by country, degree level, or subject area.</p>
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
-        <p class="eyebrow">Interpretation</p>
+        <p class="eyebrow">How to read the bars</p>
         <h2 id="method-heading">What the bars mean</h2>
-        <p>This is a normalized historical selection-ratio indicator under a linear bar-width model. A full bar is assigned 100%; half the calibrated width is 50%. “No applications” is explicitly assigned 100%. This is not an individual admission probability and is not a grade-based prediction yet.</p>
+        <p><strong>Full bar (100%):</strong> All applicants were accepted (places exceeded applicants, or no one applied that year).</p>
+        <p><strong>Partial bar:</strong> Shows the percentage of applicants accepted (for example, 50% means half of applicants got a place).</p>
+        <p class="method-note">Competition fluctuates each semester based on applicant volume and student grades; past rates serve as a helpful guide, not an admission guarantee.</p>
       </aside>
     </header>
     <dl class="summary" aria-label="Report summary">
-      <div><dt>Universities</dt><dd id="stat-universities">@@UNIVERSITIES@@</dd></div>
-      <div><dt>Annual entries</dt><dd id="stat-annual">@@ANNUAL@@</dd></div>
-      <div><dt>Scored year entries</dt><dd id="stat-scored">@@SCORED@@</dd></div>
-      <div><dt>Source releases</dt><dd id="stat-sources">@@SOURCES@@</dd></div>
-      <div><dt>Calibrations</dt><dd id="stat-calibration" title="@@CALIBRATION_LABEL@@">@@CALIBRATIONS@@</dd></div>
+      <div><dt>Partner universities</dt><dd id="stat-universities">@@UNIVERSITIES@@</dd></div>
+      <div><dt>Countries</dt><dd id="stat-countries">@@COUNTRIES@@</dd></div>
+      <div><dt>Years covered</dt><dd id="stat-year-span">@@YEAR_SPAN@@</dd></div>
     </dl>
     <section aria-labelledby="filters-heading">
       <h2 id="filters-heading" class="filter-heading">Find a university</h2>
       <div class="controls">
-        <div class="field search-field"><label for="search">Search university, country, city, subject, year, or source</label><input id="search" type="search" placeholder="UFRJ, São Paulo, Brazil, 2024" autocomplete="off" spellcheck="false"></div>
+        <div class="field search-field"><label for="search">Search university, country, city, or subject</label><input id="search" type="search" placeholder="UFRJ, São Paulo, Brazil, 2024" autocomplete="off" spellcheck="false"></div>
         <div class="field"><label for="country-filter">Country</label><select id="country-filter">@@COUNTRY_OPTIONS@@</select></div>
         <div class="field">
           <span class="label-with-help">
             <label for="status-filter">Status</label>
             <span class="help">
-              <button class="help-trigger" type="button" aria-label="Explain assigned 100% status" aria-describedby="assigned-help">i</button>
-              <span class="help-tooltip" id="assigned-help" role="tooltip">Assigned 100% means no applications were reported; it is treated as 100% under the explicit project assumption. It is not a measured numeric bar width.</span>
+              <button class="help-trigger" type="button" aria-label="Explain 100% acceptance for unapplied years" aria-describedby="assigned-help">i</button>
+              <span class="help-tooltip" id="assigned-help" role="tooltip">Years with no applications are counted as 100% acceptance because any applicant would have secured a spot.</span>
             </span>
           </span>
           <select id="status-filter">@@STATUS_OPTIONS@@</select>
@@ -1862,23 +1846,29 @@ def _build_html(
         <div class="field"><label for="subject-filter">Subject area</label><select id="subject-filter">@@SUBJECT_OPTIONS@@</select></div>
         <button class="reset-button" type="button" id="reset-filters">Reset filters</button>
       </div>
-      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@UNIVERSITIES@@</strong> universit@@UNIVERSITY_SUFFIX@@ shown</span><span>Means include measured and assigned 100% years; N/A years are excluded.</span></div>
+      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@UNIVERSITIES@@</strong> universit@@UNIVERSITY_SUFFIX@@ shown</span><span>Averages reflect years with active exchange data</span></div>
       <div class="mobile-sort" role="group" aria-label="Sort this list">
         <span class="mobile-sort-label">Sort</span>
         <button type="button" class="mobile-sort-button" data-sort-column="university" aria-pressed="false">University<span class="sort-indicator" aria-hidden="true"></span></button>
         <button type="button" class="mobile-sort-button" data-sort-column="country" aria-pressed="false">Country<span class="sort-indicator" aria-hidden="true"></span></button>
-        <button type="button" class="mobile-sort-button" data-sort-column="scored" aria-pressed="false">Years scored<span class="sort-indicator" aria-hidden="true"></span></button>
-        <button type="button" class="mobile-sort-button" data-sort-column="score" aria-pressed="false">Mean score<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="scored" aria-pressed="false">Years recorded<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="score" aria-pressed="false">Average acceptance<span class="sort-indicator" aria-hidden="true"></span></button>
       </div>
     </section>
     <div class="table-frame">
       <table id="report-table">
-        <caption class="visually-hidden">TUMexchange universities with annual normalized bar scores and source provenance</caption>
-        <thead><tr><th scope="col" class="sortable" data-sort-column="university" aria-sort="none"><button type="button" class="sort-button">University<span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" class="sortable" data-sort-column="country" aria-sort="none"><button type="button" class="sort-button">Country<span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col" class="sortable" data-sort-column="scored" aria-sort="none"><button type="button" class="sort-button">Years scored<span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col">Annual statuses</th><th scope="col" class="sortable" data-sort-column="score" aria-sort="none"><button type="button" class="sort-button">Mean normalized score<span class="sort-indicator" aria-hidden="true"></span></button></th><th scope="col">Source releases</th><th scope="col"><span class="visually-hidden">Annual rows</span></th></tr></thead>
+        <caption class="visually-hidden">TUMexchange universities with historical acceptance rates and partner requirements</caption>
+        <thead><tr>
+          <th scope="col" class="sortable" data-sort-column="university" aria-sort="none"><button type="button" class="sort-button">University<span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="sortable" data-sort-column="country" aria-sort="none"><button type="button" class="sort-button">Country<span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="sortable" data-sort-column="scored" aria-sort="none"><button type="button" class="sort-button">Years recorded<span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="sortable" data-sort-column="score" aria-sort="none"><button type="button" class="sort-button">Average acceptance<span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col"><span class="visually-hidden">Details</span></th>
+        </tr></thead>
         <tbody id="rows-body">@@INITIAL_ROWS@@</tbody>
       </table>
     </div>
-    <footer><p>Report generated for visual bar comparison.</p><p>Calibration metadata is source-specific: @@CALIBRATION_LABEL@@</p></footer>
+    <footer><p>TUMexchange acceptance data compiled from official TUM publication releases.</p><p><a href="rows.csv" download>Download complete CSV dataset</a></p></footer>
   </div>
   <script id="report-data" type="application/json">@@REPORT_DATA@@</script>
   <script>
@@ -1920,83 +1910,92 @@ def _build_html(
         const haystack = foldSearch(group.search_text);
         return tokens.every((token) => haystack.includes(token));
       };
-      const categoryMatches = (group) => !state.status || (group.categories || []).includes(state.status);
       const profileMatches = (group) => {
         if (!state.degree && !state.subject) return true;
-        const profiles = Array.isArray(group.profiles) ? group.profiles : [];
-        if (!profiles.length) return state.degree === "unknown" && !state.subject;
+        const profiles = group.profiles || [];
+        if (!profiles.length) {
+          const degreeOk = !state.degree || (group.profile_levels || []).includes(state.degree);
+          const subjectOk = !state.subject || (group.profile_subjects || []).includes(state.subject);
+          return degreeOk && subjectOk;
+        }
         return profiles.some((profile) => {
-          const levels = Array.isArray(profile.levels) ? profile.levels.map((value) => text(value).toLowerCase()) : [];
-          const knownLevels = levels.filter((value) => value === "bachelor" || value === "master");
-          const degreeMatches = !state.degree
-            || (state.degree === "unknown" ? knownLevels.length === 0 : knownLevels.includes(state.degree));
-          const subjects = Array.isArray(profile.subject_areas) ? profile.subject_areas : [];
-          const subjectMatches = !state.subject || subjects.some((value) => text(value) === state.subject);
+          const degreeMatches = !state.degree || (profile.levels || []).includes(state.degree);
+          const subjectMatches = !state.subject || (profile.subject_areas || []).includes(state.subject);
           return degreeMatches && subjectMatches;
         });
       };
       const matches = (group) => {
         if (state.country && text(group.country) !== state.country) return false;
-        if (!categoryMatches(group)) return false;
-        if (!profileMatches(group)) return false;
-        return searchMatches(group);
+        if (state.status && !(group.categories || []).includes(state.status)) return false;
+        return searchMatches(group) && profileMatches(group);
       };
-      const compareText = (a, b) => text(a).localeCompare(text(b), undefined, { sensitivity: "base", numeric: true });
-      const compareNullable = (av, bv, descending) => {
-        if (av === null && bv !== null) return 1;
-        if (av !== null && bv === null) return -1;
-        if (av !== null && bv !== null && av !== bv) return descending ? bv - av : av - bv;
+      const compareNullable = (left, right, descending) => {
+        if (left === null && right !== null) return 1;
+        if (left !== null && right === null) return -1;
+        if (left !== null && right !== null && left !== right) {
+          return descending ? (left < right ? 1 : -1) : (left > right ? 1 : -1);
+        }
         return 0;
       };
-      const compareGroups = (a, b, sortKey) => {
-        const sourceOrder = Number(a.index) - Number(b.index);
-        if (sortKey === "source") return sourceOrder;
-        if (sortKey === "university-asc" || sortKey === "university-desc") {
-          const direction = sortKey === "university-desc" ? -1 : 1;
-          return direction * compareText(a.university, b.university) || sourceOrder;
-        }
-        if (sortKey === "country-asc" || sortKey === "country-desc") {
-          const direction = sortKey === "country-desc" ? -1 : 1;
-          return direction * compareText(a.country, b.country) || compareText(a.university, b.university) || sourceOrder;
-        }
-        if (sortKey === "scored-desc" || sortKey === "scored-asc") {
-          return compareNullable(numeric(a.scored_count), numeric(b.scored_count), sortKey === "scored-desc") || compareText(a.university, b.university) || sourceOrder;
-        }
-        if (sortKey === "score-desc" || sortKey === "score-asc") {
-          return compareNullable(numeric(a.mean_score), numeric(b.mean_score), sortKey === "score-desc") || compareText(a.university, b.university) || sourceOrder;
-        }
+      const compareGroups = (left, right, sortKey) => {
+        const sourceOrder = Number(left.index) - Number(right.index);
+        if (!sortKey || sortKey === "source") return sourceOrder;
+        if (sortKey === "university-asc") return text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "university-desc") return text(right.university).localeCompare(text(left.university)) || sourceOrder;
+        if (sortKey === "country-asc") return text(left.country).localeCompare(text(right.country)) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "country-desc") return text(right.country).localeCompare(text(left.country)) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "scored-desc") return compareNullable(numeric(left.scored_count), numeric(right.scored_count), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "scored-asc") return compareNullable(numeric(left.scored_count), numeric(right.scored_count), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "score-desc") return compareNullable(numeric(left.mean_score), numeric(right.mean_score), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "score-asc") return compareNullable(numeric(left.mean_score), numeric(right.mean_score), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
         return sourceOrder;
       };
-      const orderedGroups = () => groups.slice().sort((a, b) => compareGroups(a, b, state.sort));
+      const orderedGroups = () => {
+        const copy = groups.slice();
+        copy.sort((left, right) => compareGroups(left, right, state.sort));
+        return copy;
+      };
       const syncSortHeaders = () => {
-        sortHeaders.forEach((header) => {
-          const column = sortColumns[header.dataset.sortColumn];
-          let value = "none";
-          if (column && state.sort === column.asc) value = "ascending";
-          if (column && state.sort === column.desc) value = "descending";
-          header.setAttribute("aria-sort", value);
+        sortHeaders.forEach((th) => {
+          const column = th.dataset.sortColumn;
+          const config = sortColumns[column];
+          if (!config) return;
+          if (state.sort === config.asc) {
+            th.setAttribute("aria-sort", "ascending");
+          } else if (state.sort === config.desc) {
+            th.setAttribute("aria-sort", "descending");
+          } else {
+            th.setAttribute("aria-sort", "none");
+          }
         });
         mobileSortButtons.forEach((button) => {
-          const column = sortColumns[button.dataset.sortColumn];
-          const active = Boolean(column && (state.sort === column.asc || state.sort === column.desc));
+          const column = button.dataset.sortColumn;
+          const config = sortColumns[column];
+          const indicator = button.querySelector(".sort-indicator");
+          const active = Boolean(config && (state.sort === config.asc || state.sort === config.desc));
           button.classList.toggle("is-active", active);
           button.setAttribute("aria-pressed", String(active));
-          const indicator = button.querySelector(".sort-indicator");
-          if (!indicator || !column) return;
-          indicator.textContent = state.sort === column.asc ? "▲" : state.sort === column.desc ? "▼" : "";
+          if (!indicator) return;
+          if (state.sort === config.asc) {
+            indicator.textContent = "▲";
+          } else if (state.sort === config.desc) {
+            indicator.textContent = "▼";
+          } else {
+            indicator.textContent = "";
+          }
         });
       };
-      const cycleSort = (columnName) => {
-        const column = sortColumns[columnName];
-        if (!column) return;
-        const first = column[column.first];
-        const second = column.first === "asc" ? column.desc : column.asc;
+      const cycleSort = (column) => {
+        const config = sortColumns[column];
+        if (!config) return;
+        const first = config[config.first];
+        const second = config.first === "asc" ? config.desc : config.asc;
         state.sort = state.sort === first ? second : first;
         render();
       };
       const setExpanded = (button, detail, expanded) => {
         detail.hidden = !expanded;
-        const detailId = button.getAttribute("aria-controls");
+        const detailId = detail.id;
         const controls = detailId
           ? document.querySelectorAll('button[aria-controls="' + detailId + '"]')
           : [button];
@@ -2028,7 +2027,7 @@ def _build_html(
           row = document.createElement("tr");
           row.id = "empty-state-row";
           row.className = "empty-row";
-          row.innerHTML = "<td colspan=\"7\"><div class=\"empty-state\"><strong></strong><p></p><button class=\"reset-button\" type=\"button\" data-empty-reset>Reset filters</button></div></td>";
+          row.innerHTML = "<td colspan=\"5\"><div class=\"empty-state\"><strong></strong><p></p><button class=\"reset-button\" type=\"button\" data-empty-reset>Reset filters</button></div></td>";
           body.appendChild(row);
         }
         const title = row.querySelector("strong");
@@ -2097,11 +2096,6 @@ def _build_html(
         const emptyReset = event.target.closest("[data-empty-reset]");
         if (emptyReset) { reset(); return; }
         if (event.target.closest("a, summary, .help-trigger, .sort-button")) return;
-        const annualRow = event.target.closest("tr.annual-data-row");
-        if (annualRow) {
-          toggleFromRow(annualRow, ".annual-detail-toggle");
-          return;
-        }
         const universityRow = event.target.closest("tr.university-row");
         if (universityRow) toggleFromRow(universityRow, ".university-toggle, .university-detail-toggle");
       });
@@ -2129,17 +2123,13 @@ def _build_html(
 """
     replacements = {
         "@@UNIVERSITIES@@": str(len(groups)),
-        "@@ANNUAL@@": str(len(current_records)),
-        "@@SCORED@@": str(scored_entries),
-        "@@SOURCES@@": str(source_count),
-        "@@CALIBRATIONS@@": str(len(catalog)),
-        "@@CALIBRATION_LABEL@@": html.escape(calibration_label, quote=True),
+        "@@COUNTRIES@@": str(len(countries)),
+        "@@YEAR_SPAN@@": year_span,
         "@@COUNTRY_OPTIONS@@": _select_options(groups, "country", "All countries"),
         "@@STATUS_OPTIONS@@": _select_options(current_records, "status", "All statuses"),
         "@@SUBJECT_OPTIONS@@": profile_subject_options,
         "@@INITIAL_ROWS@@": initial_rows,
         "@@REPORT_DATA@@": _safe_json(data_payload),
-        "@@UNIVERSITY_SUFFIX@@": "y" if len(groups) == 1 else "ies",
     }
     for marker, value in replacements.items():
         template = template.replace(marker, value)
