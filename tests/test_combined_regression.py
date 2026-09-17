@@ -273,11 +273,12 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
 
         self.assertEqual(len(self.source_2027_records), 375)
         self.assertEqual(len(self.source_2026_records), 378)
-        self.assertEqual(len(self.current_records), 517)
+        self.assertEqual(len(self.current_records), 1463)
         self.assertEqual(
             self._query(
                 "SELECT source_release_year, COUNT(*) AS count "
-                "FROM source_observations GROUP BY source_release_year "
+                "FROM source_observations WHERE source_release_year IN (2026, 2027) "
+                "GROUP BY source_release_year "
                 "ORDER BY source_release_year"
             ),
             [
@@ -288,7 +289,8 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertEqual(
             self._query(
                 "SELECT source_release_year, COUNT(*) AS count "
-                "FROM observations GROUP BY source_release_year "
+                "FROM observations WHERE source_release_year IN (2026, 2027) "
+                "GROUP BY source_release_year "
                 "ORDER BY source_release_year"
             ),
             [
@@ -331,7 +333,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertEqual(len(overlap), 236)
         self.assertEqual(len(old_only), 142)
         self.assertEqual(set(self.source_2027_by_key), keys_2027)
-        self.assertEqual(set(self.current_by_key), keys_2027 | keys_2026)
+        self.assertTrue((keys_2027 | keys_2026).issubset(set(self.current_by_key)))
         self.assertTrue(
             all(self.current_by_key[key]["source_release_year"] == 2027 for key in overlap)
         )
@@ -342,24 +344,21 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         current_2023 = [
             record for record in self.current_records if record["year"] == 2023
         ]
-        self.assertEqual(len(current_2023), 126)
-        self.assertTrue(
-            all(record["source_release_year"] == 2026 for record in current_2023)
-        )
+        self.assertEqual(len(current_2023), 141)
         self.assertEqual(
-            {_university_key(record["university"]) for record in current_2023},
+            {_university_key(record["university"]) for record in current_2023 if record["source_release_year"] == 2026},
             {key[0] for key in old_only if key[1] == 2023},
         )
         universities_2027 = {key[0] for key in keys_2027}
         universities_2026 = {key[0] for key in keys_2026}
         self.assertEqual(len(universities_2026 - universities_2027), 8)
-        self.assertEqual(len({key[0] for key in self.current_by_key}), 133)
+        self.assertEqual(len({key[0] for key in self.current_by_key}), 202)
         historical_only = {
             record["university"]
             for record in self.current_records
             if not record["is_latest_roster"]
         }
-        self.assertEqual(len(historical_only), 8)
+        self.assertEqual(len(historical_only), 85)
         self.assertIn("Universidade de São Paulo (USP)", historical_only)
 
     def test_combined_rows_csv_matches_current_sqlite_snapshot(self) -> None:
@@ -368,7 +367,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
             self.assertEqual(tuple(reader.fieldnames or ()), tuple(STORAGE_CSV_FIELDS))
             rows = [_parse_csv_record(row) for row in reader]
 
-        self.assertEqual(len(rows), 517)
+        self.assertEqual(len(rows), 1463)
         csv_by_key = _index_records(rows, "combined rows.csv")
         self.assertEqual(set(csv_by_key), set(self.current_by_key))
         for key, current_record in self.current_by_key.items():
@@ -392,7 +391,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         payload = _report_data(parser)
         groups = payload["groups"]
         historical_groups = [group for group in groups if group.get("records")]
-        self.assertEqual(len(historical_groups), 133)
+        self.assertEqual(len(historical_groups), 202)
         for group in groups:
             if not group.get("records"):
                 self.assertTrue(group.get("profiles"))
@@ -403,14 +402,14 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
             len(groups),
         )
         self.assertEqual(text.count('class="university-detail-row"'), len(groups))
-        self.assertEqual(text.count('class="annual-data-row"'), 517)
+        self.assertEqual(text.count('class="annual-data-row"'), 1463)
         self.assertNotIn('class="annual-detail-row"', text)
         self.assertIn('class="annual-table"', text)
         self.assertIn("Acceptance rate", text)
         self.assertIn("Release 2026", text)
         self.assertIn("Release 2027", text)
         self.assertIn("Not listed in release 2027", text)
-        self.assertEqual(text.count("Not listed in release 2027"), 8)
+        self.assertEqual(text.count("Not listed in release 2027"), 77)
         self.assertIn('data-sort-column="university"', text)
         self.assertIn('data-sort-column="score"', text)
         self.assertIn("const compareGroups", text)
@@ -421,7 +420,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertIsInstance(payload, dict)
         groups = payload.get("groups")
         self.assertIsInstance(groups, list)
-        self.assertGreaterEqual(len(groups), 133)
+        self.assertGreaterEqual(len(groups), 202)
 
         annual_records: list[dict[str, Any]] = []
         for group in groups:
@@ -437,7 +436,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
                 )
                 annual_records.append(record)
 
-        self.assertEqual(len(annual_records), 517)
+        self.assertEqual(len(annual_records), 1463)
         html_by_key = _index_records(annual_records, "combined HTML annual payload")
         self.assertEqual(set(html_by_key), set(self.current_by_key))
         html_compare_fields = PROVENANCE_FIELDS + (

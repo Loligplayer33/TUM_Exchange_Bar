@@ -122,17 +122,36 @@ def _canonical_json(value: Any) -> str:
 
 def _university_key(value: Any) -> str:
     text = unicodedata.normalize("NFKC", str(value or "")).strip()
+    text = re.sub(r"[„“”\"\'‘’]", "", text)
+    text = re.sub(r"\s*[—–].*$", "", text)
+    text = re.sub(r"^(the|m\.v\.)\s+", "", text, flags=re.IGNORECASE)
     while True:
         match = re.search(r"\s*\(([^()]*)\)\s*$", text)
         if match is None:
             break
         qualifier = match.group(1).strip()
-        if not (
-            qualifier.casefold().startswith("planned transfer ")
-            or re.fullmatch(r"[A-Z0-9&.+-]{2,16}", qualifier)
+        if qualifier.casefold().startswith("planned transfer"):
+            text = text[: match.start()].rstrip()
+            continue
+        if any(
+            qualifier.casefold().startswith(prefix)
+            for prefix in [
+                "school",
+                "faculty",
+                "graduate school",
+                "department",
+                "college",
+                "campus",
+            ]
         ):
             break
-        text = text[: match.start()].rstrip()
+        if re.fullmatch(r"[A-Za-z0-9&.+ -]{2,24}", qualifier):
+            text = text[: match.start()].rstrip()
+        else:
+            break
+    text = "".join(c for c in unicodedata.normalize("NFD", text) if unicodedata.category(c) != "Mn")
+    text = re.sub(r"[,/]", " - ", text)
+    text = re.sub(r"\s*-\s*", " - ", text)
     text = text.casefold()
     return " ".join(text.split())
 
@@ -680,7 +699,15 @@ def _refresh_current_observations(connection: sqlite3.Connection) -> None:
             FROM source_observations AS newer
             WHERE newer.university_key = candidate.university_key
               AND newer.year = candidate.year
-              AND newer.source_release_year > candidate.source_release_year
+              AND (
+                  (CASE WHEN newer.score_basis IN ('measured_bar', 'visual_bar', 'exact_percentage', 'no_applications', 'no_applications_assumed_full') THEN 3 WHEN newer.score_basis = 'traffic_light' THEN 2 ELSE 1 END)
+                  > (CASE WHEN candidate.score_basis IN ('measured_bar', 'visual_bar', 'exact_percentage', 'no_applications', 'no_applications_assumed_full') THEN 3 WHEN candidate.score_basis = 'traffic_light' THEN 2 ELSE 1 END)
+                  OR (
+                      (CASE WHEN newer.score_basis IN ('measured_bar', 'visual_bar', 'exact_percentage', 'no_applications', 'no_applications_assumed_full') THEN 3 WHEN newer.score_basis = 'traffic_light' THEN 2 ELSE 1 END)
+                      = (CASE WHEN candidate.score_basis IN ('measured_bar', 'visual_bar', 'exact_percentage', 'no_applications', 'no_applications_assumed_full') THEN 3 WHEN candidate.score_basis = 'traffic_light' THEN 2 ELSE 1 END)
+                      AND newer.source_release_year > candidate.source_release_year
+                  )
+              )
         )
         """
     )

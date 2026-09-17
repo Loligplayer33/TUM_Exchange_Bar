@@ -173,18 +173,38 @@ def _university_identity(value: Any) -> str:
     """Match harmless release-to-release suffix changes without fuzzy aliases."""
 
     text = unicodedata.normalize("NFKC", _text(value)).strip()
+    text = re.sub(r"[„“”\"\'‘’]", "", text)
+    text = re.sub(r"\s*[—–].*$", "", text)
+    text = re.sub(r"^(the|m\.v\.)\s+", "", text, flags=re.IGNORECASE)
     while True:
         match = re.search(r"\s*\(([^()]*)\)\s*$", text)
         if match is None:
             break
         qualifier = match.group(1).strip()
-        if not (
-            qualifier.casefold().startswith("planned transfer ")
-            or re.fullmatch(r"[A-Z0-9&.+-]{2,16}", qualifier)
+        if qualifier.casefold().startswith("planned transfer"):
+            text = text[: match.start()].rstrip()
+            continue
+        if any(
+            qualifier.casefold().startswith(prefix)
+            for prefix in [
+                "school",
+                "faculty",
+                "graduate school",
+                "department",
+                "college",
+                "campus",
+            ]
         ):
             break
-        text = text[: match.start()].rstrip()
-    return " ".join(text.casefold().split())
+        if re.fullmatch(r"[A-Za-z0-9&.+ -]{2,24}", qualifier):
+            text = text[: match.start()].rstrip()
+        else:
+            break
+    text = "".join(c for c in unicodedata.normalize("NFD", text) if unicodedata.category(c) != "Mn")
+    text = re.sub(r"[,/]", " - ", text)
+    text = re.sub(r"\s*-\s*", " - ", text)
+    text = text.casefold()
+    return " ".join(text.split())
 
 
 def _status_key(value: Any) -> str:
@@ -956,6 +976,85 @@ def _render_status_pills(categories: Iterable[str]) -> str:
     )
 
 
+def _render_score_display(
+    normalized: Mapping[str, Any], score: float | None, track_text: str
+) -> str:
+    score_basis = normalized.get("score_basis")
+    tier = normalized.get("tier")
+    category = _status_category(normalized.get("status"))
+
+    if category == "assigned":
+        return (
+            f'<div class="score-stack">'
+            f'<div class="score-line"><span class="score-value">100%</span>'
+            f'<span class="basis-badge basis-assigned" tabindex="0" role="note" title="No applicants (100% placement): TUM recorded that places exceeded demand; all applicants secured placement.">No applicants'
+            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">No applicants (100% placement)</strong><span class="basis-tooltip-body">TUM recorded that places exceeded applicant demand; all applicants secured placement.</span></span></span></div>'
+            f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<span class="score-fill" style="width: 100%"></span></div></div>'
+        )
+
+    if score is None or category == "na":
+        return (
+            f'<div class="score-stack">'
+            f'<div class="score-line"><span class="score-na">—</span></div>'
+            f'<div class="score-track is-empty" aria-label="{html.escape(track_text, quote=True)}"></div></div>'
+        )
+
+    # 1. 4-tier Traffic Light Quartile
+    if score_basis == "traffic_light" or tier is not None:
+        if tier is None:
+            if score <= 25.0:
+                tier = 1
+            elif score <= 50.0:
+                tier = 2
+            elif score <= 75.0:
+                tier = 3
+            else:
+                tier = 4
+        range_label = normalized.get("score_range") or (
+            "≤ 25%" if tier == 1 else "26–50%" if tier == 2 else "51–75%" if tier == 3 else "≥ 76%"
+        )
+        tier_title = f"Quartile tier {tier}: {range_label}"
+        b1 = " filled" if tier >= 1 else ""
+        b2 = " filled" if tier >= 2 else ""
+        b3 = " filled" if tier >= 3 else ""
+        b4 = " filled" if tier >= 4 else ""
+        return (
+            f'<div class="score-stack">'
+            f'<div class="score-line">'
+            f'<span class="traffic-light-pill tier-{tier}" title="{html.escape(tier_title, quote=True)}">'
+            f'<span class="tier-blocks" aria-hidden="true">'
+            f'<span class="tier-block{b1}"></span><span class="tier-block{b2}"></span>'
+            f'<span class="tier-block{b3}"></span><span class="tier-block{b4}"></span></span>'
+            f'<span class="tier-label">{html.escape(range_label, quote=True)}</span></span>'
+            f'<span class="basis-badge basis-tier" tabindex="0" role="note" title="Quartile Tier (Releases 2018–2022): 4-tier placement rating published in historical TUM tables (≤25%, 26–50%, 51–75%, ≥76%).">Quartile'
+            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Quartile Tier (Releases 2018–2022)</strong><span class="basis-tooltip-body">4-tier placement rating from historical TUM tables: ≤25% (Red), 26–50% (Yellow), 51–75% (Light Green), or ≥76% (Dark Green).</span></span></span></div>'
+            f'<div class="score-track is-tier" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<span class="score-fill tier-{tier}-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
+        )
+
+    # 2. Exact Decimal Percentage
+    if score_basis == "exact_percentage":
+        return (
+            f'<div class="score-stack">'
+            f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
+            f'<span class="basis-badge basis-exact" tabindex="0" role="note" title="Exact % (Release 2017): Exact decimal admission percentage officially published in TUM\'s 2016/17 exchange statistics release.">Exact %'
+            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Exact Published % (Release 2017)</strong><span class="basis-tooltip-body">Exact decimal admission percentage officially published in TUM’s 2016/17 exchange statistics release.</span></span></span></div>'
+            f'<div class="score-track is-exact" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<span class="score-fill is-exact-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
+        )
+
+    # 3. Continuous Vector / Raster Bar
+    return (
+        f'<div class="score-stack">'
+        f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
+        f'<span class="basis-badge basis-bar" tabindex="0" role="note" title="Visual Bar (Releases 2025–2027): Continuous placement rate measured geometrically from TUM\'s vector/raster bar charts against calibrated anchors.">Visual Bar'
+        f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Visual Bar (Releases 2025–2027)</strong><span class="basis-tooltip-body">Continuous placement rate measured geometrically from TUM’s vector/raster bar charts against calibrated anchors.</span></span></span></div>'
+        f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
+        f'<span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
+    )
+
+
 def _render_annual_row(
     record: Mapping[str, Any], group_index: int, annual_index: int
 ) -> str:
@@ -964,6 +1063,7 @@ def _render_annual_row(
     score_label = f"{score:.1f}%" if score is not None else "N/A"
     category = _status_category(normalized.get("status"))
     status_key = _status_key(normalized.get("status"))
+    year = normalized.get("year")
     if category == "assigned":
         status_html = '<span class="status-pill status-assigned" title="No applications submitted this year">100% (No applicants)</span>'
     elif category == "measured":
@@ -981,10 +1081,11 @@ def _render_annual_row(
     )
     release = _release_year(normalized)
     release_text = f"Release {release}" if release is not None else "—"
+    score_content = _render_score_display(normalized, score, track_text)
     return f"""
-          <tr class="annual-data-row" data-annual-index="{annual_index}">
-            <td class="numeric" data-label="Year">{_escaped(normalized.get("year"))}</td>
-            <td class="score-cell" data-label="Acceptance rate"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_text, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+          <tr class="annual-data-row" data-annual-index="{annual_index}" data-year="{year}">
+            <td class="numeric" data-label="Year">{_escaped(year)}</td>
+            <td class="score-cell" data-label="Acceptance rate">{score_content}</td>
             <td data-label="Status">{status_html}</td>
             <td class="source-cell" data-label="Source"><span class="source-release">{html.escape(release_text, quote=True)}</span></td>
           </tr>
@@ -1152,7 +1253,7 @@ def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
         return '''
           <section class="profile-panel profile-panel-empty" aria-label="University profile">
             <div class="profile-panel-heading">
-              <div><span class="detail-kicker">Partner profile</span><h3>No profile data available</h3></div>
+              <div><span class="panel-eyebrow">PARTNER PROFILE &amp; REQUIREMENTS</span><h3>No profile data available</h3></div>
             </div>
             <p class="profile-empty-copy">This institution is retained in the historical comparison, but no structured MoveON profile is available in the current catalogue.</p>
           </section>
@@ -1167,7 +1268,7 @@ def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
     return f'''
         <section class="profile-panel" aria-label="University profile">
           <div class="profile-panel-heading">
-            <div><span class="detail-kicker">Partner profile</span><h3>TUM partner details</h3></div>
+            <div><span class="panel-eyebrow">PARTNER PROFILE &amp; REQUIREMENTS</span><h3>TUM partner details</h3></div>
             <span class="profile-panel-meta">{len(profiles)} {relation_label}{subject_note}</span>
           </div>
           <div class="profile-relations">{cards}</div>
@@ -1183,16 +1284,51 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     scored = int(group.get("scored_count") or 0)
     total = int(group.get("total_count") or 0)
     records = list(group.get("records") or [])
-    annual_rows = "".join(
-        _render_annual_row(record, group_index, annual_index)
-        for annual_index, record in enumerate(records)
-    )
+    modern_records = [r for r in records if (r.get("year") or 0) >= 2022]
+    historical_records = [r for r in records if (r.get("year") or 0) < 2022]
+
+    if modern_records:
+        modern_rows = "".join(
+            _render_annual_row(record, group_index, annual_index)
+            for annual_index, record in enumerate(modern_records)
+        )
+    else:
+        modern_rows = ""
+
+    if historical_records:
+        hist_offset = len(modern_records)
+        historical_rows = "".join(
+            _render_annual_row(record, group_index, hist_offset + idx)
+            for idx, record in enumerate(historical_records)
+        )
+        archive_html = f"""
+            <tr class="historical-archive-row">
+              <td colspan="4">
+                <details class="historical-archive-disclosure">
+                  <summary class="archive-summary-button">
+                    <span class="archive-badge">Archive</span>
+                    <span class="archive-title">Older historical records (2017–2021, {len(historical_records)} years)</span>
+                    <span class="archive-chevron" aria-hidden="true">▾</span>
+                  </summary>
+                  <table class="annual-table archive-table">
+                    <tbody>
+                      {historical_rows}
+                    </tbody>
+                  </table>
+                </details>
+              </td>
+            </tr>
+        """
+    else:
+        archive_html = ""
+
     if records:
         annual_content = (
             '<table class="annual-table"><thead><tr><th scope="col">Year</th>'
             '<th scope="col">Acceptance rate</th><th scope="col">Status</th>'
             '<th scope="col">Source</th></tr></thead><tbody>'
-            + annual_rows
+            + modern_rows
+            + archive_html
             + "</tbody></table>"
         )
     else:
@@ -1201,7 +1337,8 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
             '<p>This institution is present in the current partner catalogue, but no historical application records are available.</p></div>'
         )
     roster_note = ""
-    if not bool(group.get("is_latest_roster", True)):
+    is_current = bool(group.get("is_latest_roster", True))
+    if not is_current:
         latest_release = group.get("latest_release_year")
         label = (
             f"Not listed in release {latest_release}"
@@ -1209,15 +1346,16 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
             else "Not listed in the latest release"
         )
         roster_note = f'<span class="roster-note">{html.escape(label, quote=True)}</span>'
+    hidden_attr = "" if is_current else " hidden"
     return f"""
-      <tr class="data-row university-row" data-group-index="{group_index}">
+      <tr class="data-row university-row" data-group-index="{group_index}"{hidden_attr}>
         <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
         <td class="score-cell" data-label="Average acceptance"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' average acceptance') if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
-      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><strong>Historical acceptance by year</strong><span>{scored} of {total} years with active exchange data</span></div>{annual_content}</section></td></tr>
+      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Historical acceptance rates by year</h3></div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
     """
 
 
@@ -1397,6 +1535,7 @@ def _group_payload(group: Mapping[str, Any], index: int) -> dict[str, Any]:
         "mean_score": group.get("mean_score"),
         "scored_count": group.get("scored_count"),
         "total_count": group.get("total_count"),
+        "is_latest_roster": bool(group.get("is_latest_roster", True)),
         "categories": list(group.get("categories") or []),
         "source_only": bool(group.get("source_only")),
         "profile_levels": list(group.get("profile_levels") or []),
@@ -1545,6 +1684,9 @@ def _build_html(
       font-size: 1.15rem; font-weight: 700; line-height: 1.1;
       text-overflow: ellipsis; white-space: nowrap;
     }
+    .summary dd .stat-sub {
+      font-size: .8rem; font-weight: 500; color: var(--muted); margin-left: 4px;
+    }
     .controls {
       display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px; align-items: end; margin-bottom: 15px;
@@ -1581,7 +1723,307 @@ def _build_html(
       border-radius: 2px; background: var(--paper); color: var(--blue-deep); font-weight: 650;
     }
     .mobile-sort { display: none; }
-    .reset-button:hover { background: var(--blue-soft); }
+    .year-filter-section {
+      grid-column: 1 / -1;
+      margin: 4px 0 16px;
+      padding: 16px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+    .year-filter-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .year-filter-label {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--blue-deep);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .year-filter-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .preset-btn {
+      min-height: 32px;
+      padding: 4px 12px;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--blue-deep);
+      background: var(--blue-soft);
+      border: 1px solid #cce2f2;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .preset-btn:hover {
+      background: #c3ddf0;
+      border-color: #a5cced;
+    }
+    .preset-btn:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .year-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .year-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 6px 14px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    }
+    .year-pill:hover {
+      background: #e2e8f0;
+      color: var(--ink);
+    }
+    .year-pill:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
+    }
+    .year-pill[aria-pressed="true"] {
+      background: var(--blue-deep);
+      border-color: var(--blue-deep);
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0, 82, 147, 0.3);
+    }
+    .year-check {
+      display: none;
+      font-size: .8rem;
+      font-weight: 700;
+    }
+    .year-pill[aria-pressed="true"] .year-check {
+      display: inline;
+    }
+    .year-era-tag {
+      font-size: .68rem;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 8px;
+      background: #e2e8f0;
+      color: #475569;
+    }
+    .year-pill[aria-pressed="true"] .year-era-tag {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+    .traffic-light-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-size: .8rem;
+      font-weight: 650;
+      font-variant-numeric: tabular-nums;
+    }
+    .tier-blocks {
+      display: inline-flex;
+      gap: 2px;
+      align-items: center;
+    }
+    .tier-block {
+      width: 6px;
+      height: 11px;
+      border-radius: 1px;
+      background: #cbd5e1;
+    }
+    .traffic-light-pill.tier-1 {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .traffic-light-pill.tier-1 .tier-block.filled { background: #dc2626; }
+    .traffic-light-pill.tier-2 {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .traffic-light-pill.tier-2 .tier-block.filled { background: #d97706; }
+    .traffic-light-pill.tier-3 {
+      background: #f7fee7;
+      color: #3f6212;
+      border: 1px solid #d9f99d;
+    }
+    .traffic-light-pill.tier-3 .tier-block.filled { background: #65a30d; }
+    .traffic-light-pill.tier-4 {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .traffic-light-pill.tier-4 .tier-block.filled { background: #16a34a; }
+    .tier-1-fill { background: #dc2626 !important; }
+    .tier-2-fill { background: #d97706 !important; }
+    .tier-3-fill { background: #65a30d !important; }
+    .tier-4-fill { background: #16a34a !important; }
+    .basis-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 6px;
+      padding: 2px 7px;
+      font-size: .68rem;
+      font-weight: 700;
+      border-radius: 3px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      vertical-align: middle;
+      cursor: help;
+      text-decoration: underline dotted 1px rgba(0, 0, 0, 0.3);
+      text-underline-offset: 2px;
+      transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .basis-badge:hover, .basis-badge:focus-visible {
+      text-decoration-color: currentColor;
+      z-index: 40;
+    }
+    .basis-bar { background: var(--blue-soft); color: var(--blue-deep); }
+    .basis-exact { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .basis-tier { background: #f1f5f9; color: #475569; }
+    .basis-assigned { background: #ecfdf5; color: #047857; }
+    .score-track.is-exact .score-fill { background: #1d4ed8; }
+    .basis-tooltip {
+      position: absolute;
+      bottom: calc(100% + 7px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 255px;
+      padding: 8px 11px;
+      border-radius: 5px;
+      background: #0b2540;
+      color: #f1f5f9;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      font-size: .74rem;
+      font-weight: 400;
+      line-height: 1.35;
+      text-transform: none;
+      letter-spacing: normal;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      z-index: 100;
+      white-space: normal;
+      text-align: left;
+    }
+    .basis-tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: #0b2540 transparent transparent transparent;
+    }
+    .basis-tooltip .basis-tooltip-title {
+      display: block;
+      color: #93c5fd;
+      font-size: .76rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .basis-tooltip .basis-tooltip-body {
+      display: block;
+      color: #e2e8f0;
+    }
+    .basis-badge:hover .basis-tooltip,
+    .basis-badge:focus-visible .basis-tooltip,
+    .basis-badge:focus .basis-tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(-2px);
+    }
+    .historical-archive-row td {
+      padding: 0 !important;
+      background: #f8fafc;
+      border-top: 1px dashed #cbd5e1;
+    }
+    .historical-archive-disclosure { border: none; }
+    .archive-summary-button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 10px 16px;
+      cursor: pointer;
+      color: var(--blue);
+      font-weight: 650;
+      font-size: .84rem;
+      background: #f8fafc;
+      list-style: none;
+      user-select: none;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .archive-summary-button::-webkit-details-marker { display: none; }
+    .archive-summary-button:hover {
+      background: #f1f5f9;
+      color: var(--blue-deep);
+    }
+    .archive-summary-button:focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: -2px;
+    }
+    .archive-badge {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      background: #e2e8f0;
+      color: #475569;
+      border-radius: 2px;
+    }
+    .archive-chevron {
+      margin-left: auto;
+      font-size: .9rem;
+      transition: transform 0.2s ease;
+    }
+    .historical-archive-disclosure[open] .archive-chevron {
+      transform: rotate(180deg);
+    }
+    .archive-table {
+      margin: 0;
+      border-top: 1px solid #e2e8f0;
+      background: #fafbfc;
+    }
+    tr.annual-data-row {
+      position: relative;
+    }
+    tr.annual-data-row:hover,
+    tr.annual-data-row:focus-within {
+      z-index: 25;
+    }
+    tr.annual-data-row.is-year-inactive {
+      opacity: 0.55;
+      transition: opacity 0.15s ease;
+    }
+    tr.annual-data-row.is-year-inactive:hover,
+    tr.annual-data-row.is-year-inactive:focus-within {
+      opacity: 1;
+    }
     .result-line {
       display: flex; justify-content: space-between; gap: 16px; margin-bottom: 12px;
       color: var(--muted); font-size: .82rem;
@@ -1661,28 +2103,106 @@ def _build_html(
     .score-fill { display: block; height: 100%; background: var(--blue); }
     .details-cell { width: 16%; text-align: right; }
     .detail-toggle {
-      min-height: 44px; padding: 8px 0; border: 0; border-bottom: 1px solid #91adc0;
-      background: transparent; color: var(--blue-deep); font-size: .82rem; font-weight: 650;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 36px; padding: 6px 14px; border: 1px solid #b8d2e5;
+      border-radius: 4px; background: #f4f8fb; color: var(--blue-deep);
+      font-size: .8rem; font-weight: 650; text-decoration: none;
+      transition: all 0.15s ease;
     }
-    .detail-toggle:hover { border-bottom-color: var(--blue-deep); }
-    .university-detail-row > td { padding: 0; background: #f8fbfd; }
-    .profile-panel { padding: 20px 22px 18px; border-left: 4px solid #79b4df; background: var(--paper); }
-    .profile-panel-empty { border-left-color: #a9bac5; }
-    .profile-panel-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 13px; }
-    .profile-panel-heading h3 { margin: 0; font-family: Georgia, serif; font-size: 1.2rem; font-weight: 400; }
+    .detail-toggle:hover {
+      background: var(--blue); color: #ffffff; border-color: var(--blue);
+      box-shadow: 0 1px 4px rgba(0, 82, 147, 0.25);
+    }
+    tr.university-row {
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+    tr.university-row.is-expanded {
+      background: #eaf3fa !important;
+      border-top: 2px solid var(--blue);
+      box-shadow: inset 5px 0 0 var(--blue);
+    }
+    tr.university-row.is-expanded td {
+      background: #eaf3fa !important;
+      border-bottom: 1px solid #d4e4f0;
+    }
+    tr.university-row.is-expanded .university-name {
+      color: var(--blue-deep);
+      font-weight: 750;
+    }
+    tr.university-row.is-expanded .expand-label {
+      color: var(--blue);
+      font-weight: 650;
+    }
+    tr.university-row.is-expanded .university-detail-toggle {
+      background: var(--blue);
+      color: #ffffff;
+      border-color: var(--blue);
+      box-shadow: 0 1px 4px rgba(0, 82, 147, 0.3);
+    }
+    tr.university-row.is-expanded .university-detail-toggle:hover {
+      background: var(--blue-deep);
+      border-color: var(--blue-deep);
+    }
+    tr.university-detail-row:not([hidden]) {
+      box-shadow: inset 5px 0 0 var(--blue), 0 10px 24px -6px rgba(0, 51, 89, 0.12);
+      border-bottom: 3px solid var(--blue) !important;
+    }
+    tr.university-detail-row > td {
+      padding: 18px 24px 26px;
+      background: #eef5fa;
+    }
+    .detail-card-shell {
+      display: grid;
+      gap: 18px;
+    }
+    .panel-eyebrow {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--blue);
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .profile-panel {
+      padding: 20px 22px 18px;
+      border: 1px solid #c9dceb;
+      border-radius: 6px;
+      background: var(--paper);
+      box-shadow: 0 2px 6px rgba(0, 51, 89, 0.04);
+    }
+    .profile-panel-empty {
+      background: #fbfdfe;
+      border-style: dashed;
+    }
+    .profile-panel-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+    .profile-panel-heading h3 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 1.22rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
     .profile-panel-meta, .profile-retrieved { color: var(--muted); font-size: .78rem; }
     .profile-empty-copy { max-width: 720px; margin: 0; color: var(--muted); font-size: .84rem; }
     .profile-relations { display: grid; gap: 8px; }
-    .profile-relation { border: 1px solid var(--line); background: #fbfdfe; }
-    .profile-relation > summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; cursor: pointer; list-style-position: inside; color: var(--ink); }
+    .profile-relation { border: 1px solid #d4e3ef; border-radius: 4px; background: #fbfdfe; }
+    .profile-relation > summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 14px; cursor: pointer; list-style-position: inside; color: var(--ink); border-radius: 4px; }
     .profile-relation > summary::marker { color: var(--blue); }
     .profile-relation > summary { position: relative; padding-right: 48px; }
-    .profile-relation > summary::after { content: "+"; position: absolute; right: 16px; top: 10px; color: var(--blue); font-size: 1.4rem; }
+    .profile-relation > summary::after { content: "+"; position: absolute; right: 16px; top: 10px; color: var(--blue); font-size: 1.4rem; font-weight: 600; }
     .profile-relation[open] > summary::after { content: "−"; }
     .profile-open-hint { flex-basis: 100%; color: var(--blue); font-size: .75rem; }
     .profile-hint-open, .profile-relation[open] .profile-hint-closed { display: none; }
     .profile-relation[open] .profile-hint-open { display: inline; }
-    .profile-relation > summary:hover { background: var(--blue-soft); }
+    .profile-relation > summary:hover { background: #f0f7fc; }
     .profile-relation > summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
     .profile-relation-title { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 5px 10px; min-width: 0; }
     .profile-relation-meta { color: var(--muted); font-size: .76rem; font-weight: 400; }
@@ -1696,15 +2216,69 @@ def _build_html(
     .profile-field dd { margin: 0; color: #365264; font-size: .83rem; overflow-wrap: anywhere; }
     .profile-links { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-top: 8px; font-size: .78rem; font-weight: 650; }
     .profile-empty { color: var(--muted); font-style: italic; }
-    .historical-empty { padding: 23px 18px; border: 1px dashed var(--line); background: var(--paper); color: var(--muted); }
+    .historical-empty { padding: 23px 18px; border: 1px dashed var(--line); background: var(--paper); color: var(--muted); border-radius: 4px; }
     .historical-empty strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .historical-empty p { margin: 0; font-size: .83rem; }
-    .annual-panel { padding: 14px 18px 18px; border-left: 4px solid var(--blue); }
-    .annual-heading { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 8px; color: var(--muted); font-size: .8rem; }
-    .annual-heading strong { color: var(--ink); }
-    .annual-table { width: 100%; min-width: 540px; border: 1px solid var(--line); box-shadow: none; }
-    .annual-table th { padding: 9px 11px; font-size: .66rem; }
-    .annual-table td { padding: 9px 11px; font-size: .82rem; }
+    .annual-panel {
+      padding: 20px 22px 18px;
+      border: 1px solid #c9dceb;
+      border-radius: 6px;
+      background: var(--paper);
+      box-shadow: 0 2px 6px rgba(0, 51, 89, 0.04);
+    }
+    .annual-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+    .annual-heading h3 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 1.22rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .annual-count-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: #edf5fa;
+      color: var(--blue-deep);
+      font-size: .76rem;
+      font-weight: 650;
+      border: 1px solid #d3e4f0;
+    }
+    .annual-table {
+      width: 100%;
+      min-width: 540px;
+      border: 1px solid #cfe0ec;
+      border-radius: 4px;
+      overflow: visible;
+      box-shadow: none;
+    }
+    .annual-table th {
+      padding: 10px 12px;
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: #f8fafc;
+      border-bottom: 1px solid #cfe0ec;
+      color: #475569;
+    }
+    .annual-table td {
+      padding: 10px 12px;
+      font-size: .84rem;
+      border-bottom: 1px solid #eef3f7;
+    }
+    .annual-table tbody tr:last-child td {
+      border-bottom: none;
+    }
     .empty-row td { border-bottom: 0; }
     .empty-state { padding: 50px 24px; text-align: center; }
     .empty-state strong { display: block; color: var(--ink); font-family: Georgia, serif; font-size: 1.35rem; font-weight: 400; }
@@ -1823,7 +2397,7 @@ def _build_html(
       </aside>
     </header>
     <dl class="summary" aria-label="Report summary">
-      <div><dt>Partner universities</dt><dd id="stat-universities">@@UNIVERSITIES@@</dd></div>
+      <div><dt>Partner universities</dt><dd id="stat-universities">@@ACTIVE_UNIVERSITIES@@ <span class="stat-sub">active (@@UNIVERSITIES@@ total)</span></dd></div>
       <div><dt>Countries</dt><dd id="stat-countries">@@COUNTRIES@@</dd></div>
       <div><dt>Years covered</dt><dd id="stat-year-span">@@YEAR_SPAN@@</dd></div>
     </dl>
@@ -1842,11 +2416,34 @@ def _build_html(
           </span>
           <select id="status-filter">@@STATUS_OPTIONS@@</select>
         </div>
+        <div class="field"><label for="roster-filter">Application availability</label><select id="roster-filter"><option value="current" selected>Current exchange partners (Release 2027)</option><option value="all">All partners (including past agreements)</option></select></div>
         <div class="field"><label for="degree-filter">Degree level</label><select id="degree-filter"><option value="">All degree levels</option><option value="bachelor">Bachelor</option><option value="master">Master</option><option value="unknown">Unknown</option></select></div>
         <div class="field"><label for="subject-filter">Subject area</label><select id="subject-filter">@@SUBJECT_OPTIONS@@</select></div>
         <button class="reset-button" type="button" id="reset-filters">Reset filters</button>
+        <div class="field year-filter-section" role="group" aria-labelledby="year-filter-heading">
+          <div class="year-filter-header">
+            <span id="year-filter-heading" class="year-filter-label">Years included in average calculation</span>
+            <div class="year-filter-presets">
+              <button type="button" class="preset-btn" id="preset-core" title="Reset to standard 5-year core window (2022–2026)">Core (2022–2026)</button>
+              <button type="button" class="preset-btn" id="preset-all" title="Include all 10 historical years (2017–2026)">All Years (2017–2026)</button>
+              <button type="button" class="preset-btn" id="preset-recent" title="Focus strictly on latest 3 observation years (2024–2026)">Recent 3y (2024–2026)</button>
+            </div>
+          </div>
+          <div class="year-pills" id="year-pills" aria-label="Toggle observation years in average calculation">
+            <button type="button" class="year-pill" data-year="2026" aria-pressed="true"><span class="year-check">✓</span> 2026</button>
+            <button type="button" class="year-pill" data-year="2025" aria-pressed="true"><span class="year-check">✓</span> 2025</button>
+            <button type="button" class="year-pill" data-year="2024" aria-pressed="true"><span class="year-check">✓</span> 2024</button>
+            <button type="button" class="year-pill" data-year="2023" aria-pressed="true"><span class="year-check">✓</span> 2023</button>
+            <button type="button" class="year-pill" data-year="2022" aria-pressed="true"><span class="year-check">✓</span> 2022</button>
+            <button type="button" class="year-pill" data-year="2021" aria-pressed="false"><span class="year-check">✓</span> 2021 <span class="year-era-tag">Archive</span></button>
+            <button type="button" class="year-pill" data-year="2020" aria-pressed="false"><span class="year-check">✓</span> 2020 <span class="year-era-tag">Archive</span></button>
+            <button type="button" class="year-pill" data-year="2019" aria-pressed="false"><span class="year-check">✓</span> 2019 <span class="year-era-tag">Archive</span></button>
+            <button type="button" class="year-pill" data-year="2018" aria-pressed="false"><span class="year-check">✓</span> 2018 <span class="year-era-tag">Archive</span></button>
+            <button type="button" class="year-pill" data-year="2017" aria-pressed="false"><span class="year-check">✓</span> 2017 <span class="year-era-tag">Archive</span></button>
+          </div>
+        </div>
       </div>
-      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@UNIVERSITIES@@</strong> universit@@UNIVERSITY_SUFFIX@@ shown</span><span>Averages reflect years with active exchange data</span></div>
+      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@ACTIVE_UNIVERSITIES@@</strong> active partner universities (Release 2027)</span><span>Averages reflect years with active exchange data</span></div>
       <div class="mobile-sort" role="group" aria-label="Sort this list">
         <span class="mobile-sort-label">Sort</span>
         <button type="button" class="mobile-sort-button" data-sort-column="university" aria-pressed="false">University<span class="sort-indicator" aria-hidden="true"></span></button>
@@ -1881,6 +2478,7 @@ def _build_html(
       const search = document.getElementById("search");
       const countryFilter = document.getElementById("country-filter");
       const statusFilter = document.getElementById("status-filter");
+      const rosterFilter = document.getElementById("roster-filter");
       const degreeFilter = document.getElementById("degree-filter");
       const subjectFilter = document.getElementById("subject-filter");
       const resetButton = document.getElementById("reset-filters");
@@ -1893,7 +2491,12 @@ def _build_html(
         scored: { asc: "scored-asc", desc: "scored-desc", first: "desc" },
         score: { asc: "score-asc", desc: "score-desc", first: "desc" }
       };
-      const state = { search: "", country: "", status: "", degree: "", subject: "", sort: "source" };
+      const allAvailableYears = new Set();
+      groups.forEach((g) => (g.records || []).forEach((r) => { if (r.year !== null && r.year !== undefined) allAvailableYears.add(Number(r.year)); }));
+      const defaultCore = [2026, 2025, 2024, 2023, 2022];
+      const hasCoreYears = defaultCore.some((y) => allAvailableYears.has(y));
+      const initialYears = hasCoreYears ? new Set(defaultCore) : new Set(allAvailableYears);
+      const state = { search: "", country: "", status: "", roster: "current", degree: "", subject: "", sort: "source", years: initialYears };
       const text = (value) => value === null || value === undefined ? "" : String(value);
       const numeric = (value) => {
         if (value === null || value === undefined || value === "" || typeof value === "boolean") return null;
@@ -1924,9 +2527,99 @@ def _build_html(
           return degreeMatches && subjectMatches;
         });
       };
+      const getActiveRecords = (group) => {
+        return (group.records || []).filter((r) => r.year !== null && r.year !== undefined && state.years.has(Number(r.year)));
+      };
+      const computeGroupMetrics = (group) => {
+        const active = getActiveRecords(group);
+        const scores = [];
+        const categories = new Set();
+        for (const r of active) {
+          const s = text(r.status).toLowerCase().replace(/[\s-]+/g, "_");
+          if (s === "measured") {
+            categories.add("measured");
+            const val = numeric(r.score_percent);
+            if (val !== null) scores.push(Math.max(0, Math.min(100, val)));
+          } else if (s === "no_applications") {
+            categories.add("assigned");
+            const val = numeric(r.score_percent);
+            if (val !== null) scores.push(Math.max(0, Math.min(100, val)));
+          } else if (s === "ambiguous") {
+            categories.add("ambiguous");
+          } else {
+            categories.add("na");
+          }
+        }
+        const mean = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : null;
+        return {
+          score: mean,
+          scored_count: scores.length,
+          total_count: active.length,
+          categories: categories,
+        };
+      };
+      const updateGroupScores = () => {
+        groups.forEach((group) => {
+          const metrics = computeGroupMetrics(group);
+          group.current_score = metrics.score;
+          group.current_scored_count = metrics.scored_count;
+          group.current_total_count = metrics.total_count;
+          group.current_categories = metrics.categories;
+
+          const index = Number(group.index);
+          const summary = summaryRows.get(index);
+          const detail = detailRows.get(index);
+
+          if (summary) {
+            const yearsEl = summary.querySelector(".years-cell");
+            if (yearsEl) {
+              yearsEl.innerHTML = "<strong>" + metrics.scored_count + " of " + metrics.total_count + "</strong><span>years recorded</span>";
+            }
+            const scoreValEl = summary.querySelector(".score-value");
+            const scoreUnitEl = summary.querySelector(".score-unit");
+            const scoreTrack = summary.querySelector(".score-track");
+            const scoreFill = summary.querySelector(".score-fill");
+            if (metrics.score !== null) {
+              const label = metrics.score.toFixed(1) + "%";
+              if (scoreValEl) scoreValEl.textContent = label;
+              if (scoreUnitEl) scoreUnitEl.textContent = "avg acceptance";
+              if (scoreTrack) {
+                scoreTrack.classList.remove("is-empty");
+                scoreTrack.setAttribute("aria-label", label + " average acceptance");
+              }
+              if (scoreFill) scoreFill.style.width = metrics.score.toFixed(4) + "%";
+            } else {
+              if (scoreValEl) scoreValEl.textContent = "N/A";
+              if (scoreUnitEl) scoreUnitEl.textContent = "no recorded data";
+              if (scoreTrack) {
+                scoreTrack.classList.add("is-empty");
+                scoreTrack.setAttribute("aria-label", "N/A; no recorded data");
+              }
+              if (scoreFill) scoreFill.style.width = "0%";
+            }
+          }
+
+          if (detail) {
+            const headingSpan = detail.querySelector(".annual-count-badge, .annual-heading span");
+            if (headingSpan) {
+              headingSpan.textContent = metrics.scored_count + " of " + metrics.total_count + " years with active exchange data";
+            }
+            detail.querySelectorAll("tr.annual-data-row").forEach((row) => {
+              const rowYear = Number(row.dataset.year);
+              const isActive = state.years.has(rowYear);
+              row.classList.toggle("is-year-inactive", !isActive);
+            });
+          }
+        });
+      };
       const matches = (group) => {
+        if (state.roster === "current" && !group.is_latest_roster) return false;
         if (state.country && text(group.country) !== state.country) return false;
-        if (state.status && !(group.categories || []).includes(state.status)) return false;
+        if (state.status) {
+          const cats = group.current_categories || group.categories || [];
+          const hasCat = cats instanceof Set ? cats.has(state.status) : cats.includes(state.status);
+          if (!hasCat) return false;
+        }
         return searchMatches(group) && profileMatches(group);
       };
       const compareNullable = (left, right, descending) => {
@@ -1944,10 +2637,14 @@ def _build_html(
         if (sortKey === "university-desc") return text(right.university).localeCompare(text(left.university)) || sourceOrder;
         if (sortKey === "country-asc") return text(left.country).localeCompare(text(right.country)) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
         if (sortKey === "country-desc") return text(right.country).localeCompare(text(left.country)) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
-        if (sortKey === "scored-desc") return compareNullable(numeric(left.scored_count), numeric(right.scored_count), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
-        if (sortKey === "scored-asc") return compareNullable(numeric(left.scored_count), numeric(right.scored_count), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
-        if (sortKey === "score-desc") return compareNullable(numeric(left.mean_score), numeric(right.mean_score), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
-        if (sortKey === "score-asc") return compareNullable(numeric(left.mean_score), numeric(right.mean_score), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        const leftScored = left.current_scored_count !== undefined ? left.current_scored_count : left.scored_count;
+        const rightScored = right.current_scored_count !== undefined ? right.current_scored_count : right.scored_count;
+        if (sortKey === "scored-desc") return compareNullable(numeric(leftScored), numeric(rightScored), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "scored-asc") return compareNullable(numeric(leftScored), numeric(rightScored), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        const leftScore = left.current_score !== undefined ? left.current_score : left.mean_score;
+        const rightScore = right.current_score !== undefined ? right.current_score : right.mean_score;
+        if (sortKey === "score-desc") return compareNullable(numeric(leftScore), numeric(rightScore), true) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
+        if (sortKey === "score-asc") return compareNullable(numeric(leftScore), numeric(rightScore), false) || text(left.university).localeCompare(text(right.university)) || sourceOrder;
         return sourceOrder;
       };
       const orderedGroups = () => {
@@ -2010,6 +2707,12 @@ def _build_html(
             item.textContent = expanded ? "Hide details" : "View details";
           }
         });
+        const groupIndex = detail.dataset.groupDetail;
+        const summary = groupIndex !== undefined ? summaryRows.get(Number(groupIndex)) : null;
+        if (summary) {
+          summary.classList.toggle("is-expanded", expanded);
+        }
+        detail.classList.toggle("is-expanded", expanded);
       };
       const toggleButton = (button) => {
         const detailId = button.getAttribute("aria-controls");
@@ -2047,32 +2750,97 @@ def _build_html(
           if (!summary || !detail) return;
           const shown = visibleIndexes.has(index);
           summary.hidden = !shown;
-          if (!shown) detail.hidden = true;
+          if (!shown) {
+            detail.hidden = true;
+            summary.classList.remove("is-expanded");
+            detail.classList.remove("is-expanded");
+          }
           fragment.append(summary, detail);
         });
         body.appendChild(fragment);
         ensureEmptyRow(visible.length === 0);
-        resultCount.innerHTML = "<strong>" + visible.length + "</strong> universit" + (visible.length === 1 ? "y" : "ies") + " shown";
+        if (state.roster === "current") {
+          resultCount.innerHTML = "<strong>" + visible.length + "</strong> active partner universit" + (visible.length === 1 ? "y" : "ies") + " (Release 2027)";
+        } else {
+          resultCount.innerHTML = "<strong>" + visible.length + "</strong> partner universit" + (visible.length === 1 ? "y" : "ies") + " shown";
+        }
         syncSortHeaders();
       };
+      const yearPills = Array.from(document.querySelectorAll(".year-pill"));
+      const presetCore = document.getElementById("preset-core");
+      const presetAll = document.getElementById("preset-all");
+      const presetRecent = document.getElementById("preset-recent");
+      const updateYearPillsUI = () => {
+        yearPills.forEach((pill) => {
+          const y = Number(pill.dataset.year);
+          const active = state.years.has(y);
+          pill.setAttribute("aria-pressed", String(active));
+        });
+        const hasArchiveYear = Array.from(state.years).some((y) => y < 2022);
+        if (hasArchiveYear) {
+          document.querySelectorAll(".historical-archive-disclosure").forEach((details) => {
+            details.open = true;
+          });
+        }
+      };
+      const setYears = (newYears) => {
+        if (!newYears.size) return;
+        state.years = newYears;
+        updateYearPillsUI();
+        updateGroupScores();
+        render();
+      };
+      yearPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+          const y = Number(pill.dataset.year);
+          const nextYears = new Set(state.years);
+          if (nextYears.has(y)) {
+            if (nextYears.size > 1) nextYears.delete(y);
+          } else {
+            nextYears.add(y);
+          }
+          setYears(nextYears);
+        });
+      });
+      if (presetCore) {
+        presetCore.addEventListener("click", () => {
+          setYears(new Set([2026, 2025, 2024, 2023, 2022]));
+        });
+      }
+      if (presetAll) {
+        presetAll.addEventListener("click", () => {
+          setYears(new Set([2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017]));
+        });
+      }
+      if (presetRecent) {
+        presetRecent.addEventListener("click", () => {
+          setYears(new Set([2026, 2025, 2024]));
+        });
+      }
       const reset = () => {
         state.search = "";
         state.country = "";
         state.status = "";
+        state.roster = "current";
         state.degree = "";
         state.subject = "";
         state.sort = "source";
+        state.years = hasCoreYears ? new Set(defaultCore) : new Set(allAvailableYears);
         search.value = "";
         countryFilter.value = "";
         statusFilter.value = "";
+        if (rosterFilter) rosterFilter.value = "current";
         degreeFilter.value = "";
         subjectFilter.value = "";
+        updateYearPillsUI();
+        updateGroupScores();
         render();
         search.focus();
       };
       search.addEventListener("input", () => { state.search = search.value; render(); });
       countryFilter.addEventListener("change", () => { state.country = countryFilter.value; render(); });
       statusFilter.addEventListener("change", () => { state.status = statusFilter.value; render(); });
+      if (rosterFilter) rosterFilter.addEventListener("change", () => { state.roster = rosterFilter.value; render(); });
       degreeFilter.addEventListener("change", () => { state.degree = degreeFilter.value; render(); });
       subjectFilter.addEventListener("change", () => { state.subject = subjectFilter.value; render(); });
       document.querySelector("#report-table thead").addEventListener("mousedown", (event) => {
@@ -2115,13 +2883,17 @@ def _build_html(
           if (detail) setExpanded(button, detail, false);
         });
       });
+      updateYearPillsUI();
+      updateGroupScores();
       render();
     })();
   </script>
 </body>
 </html>
 """
+    active_groups_count = sum(1 for g in groups if g.get("is_latest_roster"))
     replacements = {
+        "@@ACTIVE_UNIVERSITIES@@": str(active_groups_count),
         "@@UNIVERSITIES@@": str(len(groups)),
         "@@COUNTRIES@@": str(len(countries)),
         "@@YEAR_SPAN@@": year_span,

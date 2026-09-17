@@ -200,6 +200,14 @@ def _cmd_fetch_profiles(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_consolidate(args: argparse.Namespace) -> int:
+    from .consolidate import build_combined_database
+
+    summary = build_combined_database(target_db_path=args.database)
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+    return 0
+
+
 def _profile_changes(previous: Mapping[str, Any] | None, current: Mapping[str, Any]) -> dict[str, Any]:
     """Compare source content by stable relation ID, ignoring retrieval timestamps."""
     def index(catalog: Mapping[str, Any] | None) -> dict[str, dict[str, Any]]:
@@ -285,6 +293,19 @@ def build_parser() -> argparse.ArgumentParser:
     profiles_parser.add_argument("--output", "-o", type=Path, required=True, help="destination profile catalog JSON")
     profiles_parser.add_argument("--check", action="store_true", help="show source changes without replacing the saved catalog")
     profiles_parser.set_defaults(handler=_cmd_fetch_profiles)
+
+    consolidate_parser = commands.add_parser(
+        "consolidate",
+        help="rebuild combined bars.sqlite and exports from all historical sources (2016-2026)",
+    )
+    consolidate_parser.add_argument(
+        "--database",
+        "-d",
+        type=Path,
+        default=Path("data/output/combined/bars.sqlite"),
+        help="target combined database (default: data/output/combined/bars.sqlite)",
+    )
+    consolidate_parser.set_defaults(handler=_cmd_consolidate)
     return parser
 
 
