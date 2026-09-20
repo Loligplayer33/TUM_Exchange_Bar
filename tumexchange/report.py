@@ -1084,10 +1084,10 @@ def _render_annual_row(
     score_content = _render_score_display(normalized, score, track_text)
     return f"""
           <tr class="annual-data-row" data-annual-index="{annual_index}" data-year="{year}">
-            <td class="numeric" data-label="Year">{_escaped(year)}</td>
-            <td class="score-cell" data-label="Acceptance rate">{score_content}</td>
-            <td data-label="Status">{status_html}</td>
-            <td class="source-cell" data-label="Source"><span class="source-release">{html.escape(release_text, quote=True)}</span></td>
+            <td class="numeric annual-year-cell" data-label="Year">{_escaped(year)}</td>
+            <td class="score-cell annual-score-cell" data-label="Acceptance rate">{score_content}</td>
+            <td class="annual-status-cell" data-label="Status">{status_html}</td>
+            <td class="source-cell annual-source-cell" data-label="Source"><span class="source-release">{html.escape(release_text, quote=True)}</span></td>
           </tr>
     """
 
@@ -1350,7 +1350,7 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     return f"""
       <tr class="data-row university-row" data-group-index="{group_index}"{hidden_attr}>
         <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
-        <td data-label="Country">{_escaped(group.get("country"))}</td>
+        <td class="country-cell" data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
         <td class="score-cell" data-label="Average acceptance"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' average acceptance') if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
@@ -1599,7 +1599,7 @@ def _build_html(
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light">
-  <title>TUMexchange Acceptance Chances</title>
+  <title>TUMexchange Acceptance Information</title>
   <style>
     :root {
       --ink: #182d3d;
@@ -1620,9 +1620,13 @@ def _build_html(
       background: var(--wash);
     }
     * { box-sizing: border-box; }
-    html { overflow-x: clip; }
+    html {
+      overflow-x: clip;
+      -webkit-text-size-adjust: 100%;
+    }
     body {
-      margin: 0; min-width: 320px; background: var(--wash); line-height: 1.45;
+      margin: 0; min-width: 320px; width: 100%; overflow-x: hidden; position: relative;
+      background: var(--wash); line-height: 1.45;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
     a { color: var(--blue-deep); text-underline-offset: .18em; }
@@ -1709,15 +1713,15 @@ def _build_html(
     }
     .help-trigger::before { position: absolute; inset: -13px; content: ""; }
     .help-tooltip {
+      display: none;
       position: absolute; z-index: 10; top: 40px; right: 0; width: min(280px, calc(100vw - 40px));
       margin: 0; padding: 10px 11px; border: 1px solid var(--line);
       background: var(--paper); color: var(--muted); box-shadow: var(--shadow);
       font-size: .77rem; font-weight: 400; opacity: 0; pointer-events: none;
-      visibility: hidden;
     }
     .help-trigger:hover + .help-tooltip,
     .help-trigger:focus-visible + .help-tooltip,
-    .help:focus-within .help-tooltip { opacity: 1; pointer-events: auto; visibility: visible; }
+    .help:focus-within .help-tooltip { display: block; opacity: 1; pointer-events: auto; }
     .reset-button {
       min-height: 44px; padding: 8px 13px; border: 1px solid var(--blue);
       border-radius: 2px; background: var(--paper); color: var(--blue-deep); font-weight: 650;
@@ -1752,6 +1756,8 @@ def _build_html(
       flex-wrap: wrap;
       gap: 8px;
     }
+    .preset-short { display: none; }
+    .preset-full { display: inline; }
     .preset-btn {
       min-height: 32px;
       padding: 4px 12px;
@@ -1922,7 +1928,7 @@ def _build_html(
       letter-spacing: normal;
       pointer-events: none;
       opacity: 0;
-      visibility: hidden;
+      display: none;
       transition: opacity 0.15s ease, transform 0.15s ease;
       z-index: 100;
       white-space: normal;
@@ -1952,6 +1958,7 @@ def _build_html(
     .basis-badge:hover .basis-tooltip,
     .basis-badge:focus-visible .basis-tooltip,
     .basis-badge:focus .basis-tooltip {
+      display: block;
       opacity: 1;
       visibility: visible;
       transform: translateX(-50%) translateY(-2px);
@@ -2294,23 +2301,32 @@ def _build_html(
       .search-field { grid-column: 1 / -1; }
     }
     @media (max-width: 960px) {
-      .shell { width: min(100% - 28px, 1440px); }
-      .hero { grid-template-columns: 1fr; gap: 22px; padding: 28px 0 18px; }
-      .utility { align-items: flex-start; flex-direction: column; gap: 10px; padding: 14px 0; }
-      .downloads { gap: 12px; }
-      .summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-      .summary dd { white-space: normal; }
-      .controls { grid-template-columns: 1fr 1fr; }
-      .search-field, .reset-button { grid-column: 1 / -1; }
+      .shell { width: min(100% - 24px, 1440px); }
+      .hero { grid-template-columns: 1fr; gap: 20px; padding: 24px 0 16px; }
+      .utility { align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; }
+      .downloads a {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 6px 12px; border-radius: 4px;
+        background: var(--blue-soft); color: var(--blue-deep);
+        font-weight: 650; font-size: .78rem; text-decoration: none;
+      }
+      .controls { grid-template-columns: 1fr 1fr; align-items: end; }
+      .search-field { grid-column: 1 / -1; }
+      .reset-button { grid-column: 2; align-self: end; }
       .result-line, footer, .annual-heading { align-items: flex-start; flex-direction: column; gap: 6px; }
       .mobile-sort {
-        display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-        margin: 0 0 12px; color: var(--muted); font-size: .77rem;
+        display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;
+        margin: 0 0 14px;
       }
-      .mobile-sort-label { margin-right: 2px; font-weight: 650; }
+      .mobile-sort-label {
+        grid-column: 1 / -1; margin-bottom: 2px;
+        color: var(--muted); font-size: .74rem; font-weight: 700;
+        text-transform: uppercase; letter-spacing: .06em;
+      }
       .mobile-sort-button {
-        display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 12px;
-        border: 1px solid #c6d5df; border-radius: 2px; background: var(--paper);
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+        min-height: 44px; padding: 8px 10px;
+        border: 1px solid #c6d5df; border-radius: 6px; background: var(--paper);
         color: var(--blue-deep); font-size: .78rem; font-weight: 650;
       }
       .mobile-sort-button.is-active { border-color: var(--blue); background: var(--blue-soft); }
@@ -2318,50 +2334,249 @@ def _build_html(
       .table-frame { overflow: visible; background: transparent; border: 0; box-shadow: none; }
       #report-table, .annual-table { min-width: 0; }
       #report-table > thead { display: none; }
-      #report-table, #report-table > tbody, .annual-table, .annual-table > tbody { display: block; width: 100%; }
-      #report-table > tbody { display: grid; gap: 10px; }
-      tr.university-row, tr.annual-data-row {
-        display: grid; grid-template-columns: 1fr; gap: 8px 12px;
-        padding: 14px; border: 1px solid var(--line); background: var(--paper);
+      #report-table, #report-table > tbody { display: block; width: 100%; }
+      #report-table > tbody { display: block; }
+      tr.university-row {
+        display: flex; flex-direction: column; gap: 10px;
+        padding: 16px 14px; border: 1px solid var(--line); border-radius: 8px;
+        background: var(--paper); box-shadow: 0 2px 6px rgba(22, 58, 88, 0.05);
+        margin-bottom: 12px; transition: background 0.15s ease, border-color 0.15s ease;
       }
-      tr.university-row { box-shadow: var(--shadow); }
-      tr.university-detail-row, tr.empty-row { display: block; }
-      tr.university-detail-row > td, tr.empty-row > td {
-        display: block; width: 100%;
+      tr.university-row.is-expanded {
+        background: #eaf3fa;
+        border-color: var(--blue);
+        border-bottom: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-bottom: 0;
+        box-shadow: inset 5px 0 0 var(--blue);
       }
-      tr.university-row > td, tr.annual-data-row > td {
-        display: grid; grid-template-columns: minmax(7.2rem, 32%) minmax(0, 1fr);
-        align-items: start; gap: 8px; width: 100%; min-width: 0; padding: 0; border: 0;
+      tr.university-detail-row { display: block; }
+      tr.university-detail-row:not([hidden]) {
+        display: block;
+        margin-bottom: 12px;
+        border: 1px solid var(--blue);
+        border-top: 0;
+        border-bottom: 3px solid var(--blue);
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        background: #eef5fa;
+        box-shadow: inset 5px 0 0 var(--blue);
       }
-      tr.university-row > td::before, tr.annual-data-row > td::before {
-        color: var(--muted); font-size: .68rem; font-weight: 700; letter-spacing: .06em;
-        text-transform: uppercase; content: attr(data-label);
+      tr.university-detail-row > td, tr.empty-row > td { display: block; width: 100%; padding: 0; border: 0; }
+      tr.university-row > td {
+        display: block; width: 100%; min-width: 0; padding: 0; border: 0;
       }
-      tr.university-row > .university-cell { grid-template-columns: 1fr; }
-      tr.university-row > .university-cell::before { display: none; }
-      tr.university-row > .details-cell { display: none; }
-      .university-toggle { align-items: flex-start; justify-content: space-between; min-height: 44px; gap: 12px; }
-      .expand-label { flex: 0 0 auto; padding-top: 2px; color: var(--blue-deep); font-weight: 650; }
-      .university-cell, .score-cell, .details-cell { width: auto; min-width: 0; }
-      .years-cell span { display: none; }
-      .score-cell, .score-track { max-width: none; }
-      .profile-panel { padding: 16px 14px 15px; }
+      tr.university-row > td::before { display: none !important; }
+      .university-toggle .expand-label { display: none; }
+      tr.university-row > .details-cell {
+        display: block;
+        order: 10;
+        width: 100%;
+        margin-top: 4px;
+      }
+      tr.university-row > .details-cell button {
+        display: flex; align-items: center; justify-content: center;
+        width: 100%; min-height: 44px; padding: 10px 14px;
+        border-radius: 6px; background: var(--blue-soft); color: var(--blue-deep);
+        font-size: .84rem; font-weight: 650; border: 1px solid #c8deef;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      tr.university-row.is-expanded > .details-cell button {
+        background: var(--blue-deep); color: #ffffff; border-color: var(--blue-deep);
+      }
+      .university-toggle {
+        display: flex; flex-direction: column; width: 100%; align-items: stretch;
+        text-align: left; background: transparent; border: 0; padding: 0; cursor: pointer;
+      }
+      .university-toggle .university-name {
+        display: block; font-size: 1.08rem; font-weight: 700; line-height: 1.35;
+        color: var(--ink); margin-bottom: 4px;
+      }
+      tr.university-row > .country-cell {
+        display: inline; font-size: .84rem; color: var(--muted); font-weight: 600;
+      }
+      tr.university-row > .years-cell {
+        display: inline; font-size: .8rem; color: var(--muted);
+      }
+      tr.university-row > .years-cell::before {
+        content: " · "; color: #94a3b8; font-weight: 400;
+      }
+      tr.university-row > .years-cell span { display: inline; margin-left: 3px; }
+      tr.university-row > .score-cell { width: 100%; max-width: none; margin-top: 2px; }
+      .score-stack { width: 100%; }
+      .score-line { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+      .score-value { font-size: 1.25rem; font-weight: 700; color: var(--blue-deep); }
+      .score-unit { font-size: .78rem; color: var(--muted); }
+      .score-track { width: 100%; max-width: none; height: 8px; }
+      .detail-card-shell { padding: 12px 10px; gap: 12px; }
+      .profile-panel { padding: 14px 12px; }
       .profile-panel-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .profile-relation > summary { align-items: flex-start; flex-direction: column; gap: 8px; }
       .profile-relation-badges { justify-content: flex-start; }
       .profile-fields { grid-template-columns: 1fr; gap: 8px; }
-      .annual-panel { padding: 12px 4px 4px; }
-      .annual-table { border: 0; }
+      .annual-panel { padding: 14px 12px; }
+      .annual-table { width: 100%; min-width: 0; border: 0; overflow: visible; }
       .annual-table > thead { display: none; }
-      .annual-table > tbody { display: grid; gap: 8px; }
-      tr.annual-data-row { background: #fbfdfe; }
-      .details-cell { text-align: left; }
+      .annual-table > tbody { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+      tr.annual-data-row {
+        display: grid; grid-template-columns: 82px 1fr;
+        gap: 4px 10px; align-items: center; padding: 10px 12px 12px;
+        border: 1px solid #d9e6f2; border-radius: 6px; background: #ffffff;
+        width: 100%; box-sizing: border-box;
+      }
+      tr.annual-data-row > td { display: block; padding: 0; border: 0; min-width: 0; }
+      tr.annual-data-row > td::before { display: none !important; }
+      tr.annual-data-row > .annual-year-cell {
+        grid-column: 1; grid-row: 1; font-size: 1.05rem; font-weight: 700; color: var(--blue-deep);
+      }
+      tr.annual-data-row > .annual-source-cell {
+        grid-column: 1; grid-row: 2; font-size: .72rem; color: var(--muted); white-space: nowrap;
+      }
+      tr.annual-data-row > .annual-score-cell {
+        grid-column: 2; grid-row: 1 / span 2; width: 100%;
+      }
+      tr.annual-data-row > .annual-status-cell { grid-column: 1 / -1; }
+      tr.annual-data-row > .annual-status-cell:has(.status-measured) { display: none; }
     }
-    @media (max-width: 840px) {
-      .hero { grid-template-columns: 1fr; gap: 24px; }
+    @media (max-width: 768px) {
+      .basis-tooltip {
+        position: absolute; bottom: calc(100% + 7px); left: auto; right: -6px;
+        transform: none; width: max-content; max-width: min(270px, calc(100vw - 36px));
+        z-index: 100;
+      }
+      .basis-tooltip::after { left: auto; right: 18px; transform: none; }
+      .basis-badge:hover .basis-tooltip,
+      .basis-badge:focus-visible .basis-tooltip,
+      .basis-badge:focus .basis-tooltip {
+        display: block;
+        transform: translateY(-2px);
+      }
+      .help-tooltip {
+        position: fixed;
+        top: auto;
+        bottom: 24px;
+        left: 16px;
+        right: 16px;
+        width: auto;
+        max-width: none;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+        border-radius: 8px;
+        z-index: 1000;
+      }
+      .summary {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 20px;
+      }
+      .summary > div {
+        padding: 10px 4px; text-align: center; background: var(--paper);
+        border: 1px solid var(--line); border-radius: 6px;
+        min-width: 0; box-sizing: border-box;
+      }
+      .summary dt {
+        font-size: .62rem; text-transform: uppercase; letter-spacing: .03em;
+        margin-bottom: 3px; color: var(--muted);
+        white-space: normal; line-height: 1.25;
+      }
+      .summary dd {
+        font-size: clamp(0.92rem, 3.8vw, 1.15rem); font-weight: 700; color: var(--blue-deep); margin: 0;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+      .summary .stat-sub { display: none; }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .field {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      .field label {
+        display: block;
+        width: 100%;
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: .8rem;
+        font-weight: 650;
+        text-align: left;
+      }
+      .label-with-help {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        width: 100%;
+      }
+      .field input, .field select {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 46px;
+        font-size: 16px !important;
+        border-radius: 6px;
+      }
+      .search-field input {
+        min-height: 48px;
+      }
+      .reset-button {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 4px 0 0;
+        font-size: .88rem;
+        font-weight: 650;
+        border-radius: 6px;
+      }
     }
-    @media (max-width: 620px) {
-      .summary { grid-template-columns: 1fr; }
+    @media (max-width: 640px) {
+      .shell { width: min(100% - 20px, 1440px); }
+      .hero { padding: 16px 0 12px; gap: 14px; }
+      .hero h1 { font-size: 1.7rem; line-height: 1.2; margin-bottom: 6px; }
+      .hero .lede { font-size: .9rem; }
+      .method-card { padding: 14px; border-radius: 6px; }
+      .method-card h2 { font-size: 1.1rem; margin: 0 0 6px; }
+      .method-card p { font-size: .8rem; line-height: 1.35; margin: 0 0 6px; }
+      .preset-full { display: none; }
+      .preset-short { display: inline; }
+      .year-filter-section { padding: 12px; border-radius: 6px; margin: 4px 0 12px; width: 100%; box-sizing: border-box; }
+      .year-filter-header { flex-direction: column; align-items: stretch; gap: 8px; margin-bottom: 10px; }
+      .year-filter-label { font-size: .74rem; text-align: center; }
+      .year-filter-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; box-sizing: border-box; }
+      .preset-btn {
+        min-height: 38px;
+        padding: 6px 2px;
+        font-size: .74rem;
+        font-weight: 650;
+        text-align: center;
+        border-radius: 6px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .year-pills { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; width: 100%; box-sizing: border-box; }
+      .year-pill {
+        min-height: 42px;
+        padding: 4px 1px;
+        font-size: .76rem;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        width: 100%;
+        box-sizing: border-box;
+        white-space: nowrap;
+      }
+      .year-check { font-size: .7rem; }
+      .year-era-tag { display: none; }
+      .mobile-sort { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin: 0 0 12px; }
+      .mobile-sort-label { font-size: .72rem; }
+      .mobile-sort-button { min-height: 42px; font-size: .76rem; padding: 6px 8px; justify-content: center; text-align: center; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
@@ -2380,12 +2595,12 @@ def _build_html(
 <body>
   <div class="shell">
     <nav class="utility" aria-label="Report navigation">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">T</span><span>TUMexchange Chances</span></div>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">T</span><span>TUMexchange Acceptance Information</span></div>
       <div class="downloads"><a href="rows.csv" download>Download CSV data</a></div>
     </nav>
     <header class="hero">
       <div>
-        <h1>TUMexchange Acceptance Chances</h1>
+        <h1>TUMexchange Acceptance Information</h1>
         <p class="lede">Explore historical admission chances and check partner university requirements for TUMexchange. Filter by country, degree level, or subject area.</p>
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
@@ -2424,9 +2639,9 @@ def _build_html(
           <div class="year-filter-header">
             <span id="year-filter-heading" class="year-filter-label">Years included in average calculation</span>
             <div class="year-filter-presets">
-              <button type="button" class="preset-btn" id="preset-core" title="Reset to standard 5-year core window (2022–2026)">Core (2022–2026)</button>
-              <button type="button" class="preset-btn" id="preset-all" title="Include all 10 historical years (2017–2026)">All Years (2017–2026)</button>
-              <button type="button" class="preset-btn" id="preset-recent" title="Focus strictly on latest 3 observation years (2024–2026)">Recent 3y (2024–2026)</button>
+              <button type="button" class="preset-btn" id="preset-core" title="Reset to standard 5-year core window (2022–2026)"><span class="preset-full">Core (2022–2026)</span><span class="preset-short">Core (22–26)</span></button>
+              <button type="button" class="preset-btn" id="preset-all" title="Include all 10 historical years (2017–2026)"><span class="preset-full">All Years (2017–2026)</span><span class="preset-short">All (17–26)</span></button>
+              <button type="button" class="preset-btn" id="preset-recent" title="Focus strictly on latest 3 observation years (2024–2026)"><span class="preset-full">Recent 3y (2024–2026)</span><span class="preset-short">Recent 3y</span></button>
             </div>
           </div>
           <div class="year-pills" id="year-pills" aria-label="Toggle observation years in average calculation">

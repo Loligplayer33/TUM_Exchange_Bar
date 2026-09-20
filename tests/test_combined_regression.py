@@ -385,7 +385,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
     def test_combined_html_embeds_grouped_current_annual_provenance(self) -> None:
         _, text, parser = _read_html(COMBINED_HTML)
         self.assertTrue(text.startswith("<!doctype html>"))
-        self.assertIn("<title>TUMexchange Acceptance Chances</title>", text)
+        self.assertIn("<title>TUMexchange Acceptance Information</title>", text)
         self.assertNotIn("@@UNIVERSITIES@@", text)
         self.assertNotIn("@@ANNUAL@@", text)
         payload = _report_data(parser)
