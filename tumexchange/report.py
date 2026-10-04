@@ -987,8 +987,8 @@ def _render_score_display(
         return (
             f'<div class="score-stack">'
             f'<div class="score-line"><span class="score-value">100%</span>'
-            f'<span class="basis-badge basis-assigned" tabindex="0" role="note" title="No applicants (100% placement): TUM recorded that places exceeded demand; all applicants secured placement.">No applicants'
-            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">No applicants (100% placement)</strong><span class="basis-tooltip-body">TUM recorded that places exceeded applicant demand; all applicants secured placement.</span></span></span></div>'
+            f'<span class="basis-badge basis-assigned" tabindex="0" role="note" title="No first-round wishes. Shown as a full bar because spots were left over.">No applicants'
+            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">No first-round wishes</strong><span class="basis-tooltip-body">TUM recorded no wishes that year, so the bar is full: spots were left over.</span></span></span></div>'
             f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
             f'<span class="score-fill" style="width: 100%"></span></div></div>'
         )
@@ -1038,8 +1038,8 @@ def _render_score_display(
         return (
             f'<div class="score-stack">'
             f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
-            f'<span class="basis-badge basis-exact" tabindex="0" role="note" title="Exact % (Release 2017): Exact decimal admission percentage officially published in TUM\'s 2016/17 exchange statistics release.">Exact %'
-            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Exact Published % (Release 2017)</strong><span class="basis-tooltip-body">Exact decimal admission percentage officially published in TUM’s 2016/17 exchange statistics release.</span></span></span></div>'
+            f'<span class="basis-badge basis-exact" tabindex="0" role="note" title="Exact % (Release 2017): Spots divided by first-round wishes, published as a number in the 2016/17 release.">Exact %'
+            f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Exact published % (Release 2017)</strong><span class="basis-tooltip-body">Spots divided by first-round wishes, published as a number in TUM’s 2016/17 release.</span></span></span></div>'
             f'<div class="score-track is-exact" aria-label="{html.escape(track_text, quote=True)}">'
             f'<span class="score-fill is-exact-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
         )
@@ -1048,8 +1048,8 @@ def _render_score_display(
     return (
         f'<div class="score-stack">'
         f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
-        f'<span class="basis-badge basis-bar" tabindex="0" role="note" title="Visual Bar (Releases 2025–2027): Continuous placement rate measured geometrically from TUM\'s vector/raster bar charts against calibrated anchors.">Visual Bar'
-        f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Visual Bar (Releases 2025–2027)</strong><span class="basis-tooltip-body">Continuous placement rate measured geometrically from TUM’s vector/raster bar charts against calibrated anchors.</span></span></span></div>'
+        f'<span class="basis-badge basis-bar" tabindex="0" role="note" title="Visual bar (Releases 2025–2027): Spots divided by first-round wishes, measured from the length of TUM\'s bar.">Visual Bar'
+        f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Visual bar (Releases 2025–2027)</strong><span class="basis-tooltip-body">Spots divided by first-round wishes, measured from the length of TUM’s bar.</span></span></span></div>'
         f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
         f'<span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
     )
@@ -1075,7 +1075,7 @@ def _render_annual_row(
         status_html = f'<span class="status-pill status-na">{html.escape(status_label, quote=True)}</span>'
 
     track_text = (
-        f"{score_label} acceptance rate"
+        f"{score_label}, {_wishes_label(score)}"
         if score is not None
         else "N/A; no active exchange"
     )
@@ -1085,7 +1085,7 @@ def _render_annual_row(
     return f"""
           <tr class="annual-data-row" data-annual-index="{annual_index}" data-year="{year}">
             <td class="numeric annual-year-cell" data-label="Year">{_escaped(year)}</td>
-            <td class="score-cell annual-score-cell" data-label="Acceptance rate">{score_content}</td>
+            <td class="score-cell annual-score-cell" data-label="Spots to wishes">{score_content}</td>
             <td class="annual-status-cell" data-label="Status">{status_html}</td>
             <td class="source-cell annual-source-cell" data-label="Source"><span class="source-release">{html.escape(release_text, quote=True)}</span></td>
           </tr>
@@ -1276,10 +1276,300 @@ def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
     '''
 
 
+_PARENTHETICAL_RE = re.compile(r"\s*\([^)]*\)")
+_CAMPUS_PIN_TABLE: dict[str, list[dict[str, Any]]] | None = None
+
+
+def _map_search_name(university: str) -> str:
+    """Drop parenthetical qualifiers so a campus search uses the institution name."""
+
+    cleaned = _PARENTHETICAL_RE.sub(" ", university)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" ,")
+    return cleaned or university.strip()
+
+
+def _campus_pin_table() -> Mapping[str, list[dict[str, Any]]]:
+    """Faculty campuses with checked coordinates, keyed by MoveON relation id."""
+
+    global _CAMPUS_PIN_TABLE
+    if _CAMPUS_PIN_TABLE is None:
+        path = Path(__file__).resolve().parents[1] / "data" / "source" / "moveon" / "campuses.json"
+        table: dict[str, list[dict[str, Any]]] = {}
+        if path.is_file():
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            raw = payload.get("by_relation_id") if isinstance(payload, dict) else None
+            if isinstance(raw, dict):
+                table = {
+                    str(key): [item for item in value if isinstance(item, dict)]
+                    for key, value in raw.items()
+                    if isinstance(value, list)
+                }
+        _CAMPUS_PIN_TABLE = table
+    return _CAMPUS_PIN_TABLE
+
+
+def _profile_field_text(profile: Mapping[str, Any], label: str) -> str:
+    for field in profile.get("fields") or []:
+        if isinstance(field, Mapping) and _text(field.get("label")).strip() == label:
+            return _text(field.get("text")).strip()
+    return ""
+
+
+def _split_campus_line(line: str) -> tuple[str, str]:
+    if ":" in line:
+        left, right = line.split(":", 1)
+        if 2 <= len(left.strip()) <= 72:
+            return left.strip(), right.strip()
+    match = re.match(r"^(.*?)\s+\((.+)\)\s*$", line)
+    if match and len(match.group(1).strip()) >= 2:
+        return match.group(1).strip(), match.group(2).strip()
+    return line, ""
+
+
+def _profile_campus_lines(profile: Mapping[str, Any]) -> list[str]:
+    lines: list[str] = []
+    for raw in _profile_field_text(profile, "Campus").replace("||", "\n").splitlines():
+        line = raw.strip(" •\t-")
+        if not line:
+            continue
+        folded = line.casefold()
+        if folded.startswith("students are affiliated") or folded.startswith("for rmit"):
+            continue
+        if len(line) > 140:
+            continue
+        lines.append(line)
+    return lines
+
+
+def _map_place(
+    *,
+    name: str,
+    label: str,
+    meta: str,
+    tag: str,
+    query: str,
+    fallback: str,
+    address: str = "",
+    lat: Any = None,
+    lon: Any = None,
+) -> dict[str, Any]:
+    place: dict[str, Any] = {
+        "name": name or label,
+        "label": label or name,
+        "meta": meta,
+        "tag": tag,
+        "query": query or name or label,
+        "fallback": fallback or query or name,
+        "address": address,
+    }
+    if isinstance(lat, (int, float)) and isinstance(lon, (int, float)):
+        if math.isfinite(lat) and math.isfinite(lon):
+            place["lat"] = float(lat)
+            place["lon"] = float(lon)
+    return place
+
+
+def _map_places(group: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One map place per campus. Faculty splits stay on separate pins."""
+
+    university = _text(group.get("university")).strip() or "University"
+    country = _text(group.get("country")).strip()
+    search_name = _map_search_name(university)
+    profiles = [
+        profile
+        for profile in (group.get("profiles") or [])
+        if isinstance(profile, Mapping)
+    ]
+    places: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    table = _campus_pin_table()
+
+    def add(place: dict[str, Any]) -> None:
+        key = place["label"].casefold()
+        if key in seen:
+            return
+        seen.add(key)
+        places.append(place)
+
+    for profile in profiles:
+        relation_id = _text(profile.get("relation_id")).strip()
+        city = _text(profile.get("city")).strip()
+        place_country = _text(profile.get("country")).strip() or country
+        for pin in table.get(relation_id) or []:
+            label = _text(pin.get("label") or pin.get("name")).strip() or search_name
+            campus_name = _text(pin.get("name")).strip() or label
+            who = _text(pin.get("who")).strip()
+            tag = _text(pin.get("tag")).strip()
+            address = _text(pin.get("address")).strip()
+            query = _text(pin.get("query")).strip() or ", ".join(
+                part for part in (search_name, campus_name, address, place_country) if part
+            )
+            add(
+                _map_place(
+                    name=campus_name,
+                    label=label,
+                    meta=who,
+                    tag=tag,
+                    query=query,
+                    fallback=", ".join(part for part in (city, place_country) if part) or campus_name,
+                    address=address,
+                    lat=pin.get("lat"),
+                    lon=pin.get("lon"),
+                )
+            )
+    if places:
+        return places
+
+    for profile in profiles:
+        city = _text(profile.get("city")).strip()
+        place_country = _text(profile.get("country")).strip() or country
+        lines = _profile_campus_lines(profile)
+        if len(lines) < 2:
+            continue
+        for line in lines:
+            label, tag = _split_campus_line(line)
+            query = ", ".join(
+                part for part in (search_name, line, city, place_country) if part
+            )
+            add(
+                _map_place(
+                    name=label,
+                    label=label,
+                    meta=tag,
+                    tag=tag,
+                    query=query,
+                    fallback=", ".join(part for part in (city, place_country) if part) or label,
+                )
+            )
+    if places:
+        return places
+
+    if profiles:
+        seen_cities: set[tuple[str, str]] = set()
+        for profile in profiles:
+            city = _text(profile.get("city")).strip()
+            place_country = _text(profile.get("country")).strip() or country
+            key = (city.casefold(), place_country.casefold())
+            if key in seen_cities:
+                continue
+            seen_cities.add(key)
+            label = city or place_country or search_name
+            add(
+                _map_place(
+                    name=label,
+                    label=label,
+                    meta=place_country if city else "",
+                    tag="",
+                    query=", ".join(part for part in (search_name, city, place_country) if part),
+                    fallback=", ".join(part for part in (city, place_country) if part) or search_name,
+                )
+            )
+        return places
+
+    label = country or search_name
+    return [
+        _map_place(
+            name=label,
+            label=label,
+            meta="",
+            tag="",
+            query=", ".join(part for part in (search_name, country) if part) or search_name,
+            fallback=country or search_name,
+        )
+    ]
+
+
+def _render_map_panel(group: Mapping[str, Any], group_index: int) -> str:
+    """Collapsed campus location. Tiles and named pins load only after Show map."""
+
+    places = _map_places(group)
+    frame_id = f"campus-map-{group_index}"
+    places_attr = html.escape(_safe_json(places), quote=True)
+    current = places[0]
+    meta = _text(current.get("meta")).strip()
+    meta_html = (
+        f'<p class="location-meta">{html.escape(meta, quote=True)}</p>'
+        if meta
+        else '<p class="location-meta" hidden></p>'
+    )
+    chips = ""
+    if len(places) > 1:
+        buttons = []
+        for index, place in enumerate(places):
+            current_class = " is-current" if index == 0 else ""
+            pressed = "true" if index == 0 else "false"
+            buttons.append(
+                f'<button type="button" class="map-place{current_class}" '
+                f'data-map-index="{index}" aria-pressed="{pressed}">'
+                f'{html.escape(_text(place.get("label")), quote=True)}</button>'
+            )
+        chips = (
+            '<div class="map-places" role="group" aria-label="Campuses">'
+            + "".join(buttons)
+            + "</div>"
+        )
+    pin = (
+        '<svg class="location-pin" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">'
+        '<path fill="currentColor" d="M12 2.2a6.8 6.8 0 0 0-6.8 6.8c0 5.1 6.8 12.8 6.8 12.8s6.8-7.7 6.8-12.8A6.8 6.8 0 0 0 12 2.2zm0 9.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8z"/>'
+        "</svg>"
+    )
+    fit_hidden = " hidden"
+    return f'''
+        <section class="location-panel" data-map-places="{places_attr}" aria-label="Campus location">
+          <div class="location-bar">
+            <div class="location-copy">
+              {pin}
+              <div class="location-text">
+                <p class="location-name">{html.escape(_text(current.get("name")), quote=True)}</p>
+                {meta_html}
+              </div>
+            </div>
+            <button class="map-toggle" type="button" aria-expanded="false" aria-controls="{frame_id}">Show map</button>
+          </div>
+          {chips}
+          <div id="{frame_id}" class="map-frame" hidden>
+            <p class="map-status" role="status">Looking up this campus…</p>
+            <div class="campus-map" hidden>
+              <div class="campus-map-stage" role="group" aria-label="Named campus pins"></div>
+              <div class="map-zoom">
+                <button type="button" class="map-zoom-btn" data-map-zoom="in" aria-label="Zoom in">+</button>
+                <button type="button" class="map-zoom-btn" data-map-zoom="out" aria-label="Zoom out">−</button>
+              </div>
+              <a class="map-attribution" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap</a>
+            </div>
+            <div class="map-caption">
+              <p class="map-note">Campus names sit on the pins. Choose one to see who studies there.</p>
+              <button type="button" class="map-fit-btn" data-map-zoom="fit"{fit_hidden}>Show all campuses</button>
+              <a class="map-external" href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">Open in OpenStreetMap</a>
+            </div>
+          </div>
+        </section>
+    '''
+
+
+def _wishes_label(score: float | None) -> str:
+    """Read a bar as spots divided by first-round wishes."""
+
+    if score is None:
+        return "no recorded data"
+    if score >= 99.95:
+        return "at least one spot per wish"
+    if score <= 0:
+        return "spots to wishes"
+    ratio = 100.0 / score
+    if abs(ratio - round(ratio)) < 0.05:
+        rendered = str(int(round(ratio)))
+    elif ratio >= 10:
+        rendered = f"{ratio:.0f}"
+    else:
+        rendered = f"{ratio:.1f}"
+    return f"about {rendered} wishes per spot"
+
+
 def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     score = group.get("mean_score")
     score_label = f"{score:.1f}%" if score is not None else "N/A"
-    score_unit = "avg acceptance" if score is not None else "no recorded data"
+    score_unit = _wishes_label(score if isinstance(score, (int, float)) else None)
     detail_id = f"university-detail-{group_index}"
     scored = int(group.get("scored_count") or 0)
     total = int(group.get("total_count") or 0)
@@ -1325,7 +1615,7 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
     if records:
         annual_content = (
             '<table class="annual-table"><thead><tr><th scope="col">Year</th>'
-            '<th scope="col">Acceptance rate</th><th scope="col">Status</th>'
+            '<th scope="col">Spots to wishes</th><th scope="col">Status</th>'
             '<th scope="col">Source</th></tr></thead><tbody>'
             + modern_rows
             + archive_html
@@ -1352,10 +1642,10 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
         <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td class="country-cell" data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
-        <td class="score-cell" data-label="Average acceptance"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ' average acceptance') if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+        <td class="score-cell" data-label="Spots to wishes"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ', ' + score_unit) if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
-      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Historical acceptance rates by year</h3></div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
+      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_map_panel(group, group_index)}{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Spots and first-round wishes by year</h3></div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
     """
 
 
@@ -2223,6 +2513,226 @@ def _build_html(
     .profile-field dd { margin: 0; color: #365264; font-size: .83rem; overflow-wrap: anywhere; }
     .profile-links { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-top: 8px; font-size: .78rem; font-weight: 650; }
     .profile-empty { color: var(--muted); font-style: italic; }
+    .location-panel {
+      padding: 14px 16px 14px;
+      border: 1px solid #c9dceb;
+      border-radius: 6px;
+      background: var(--paper);
+      box-shadow: 0 2px 6px rgba(0, 51, 89, 0.04);
+    }
+    .location-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .location-copy {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .location-pin { flex: none; color: var(--blue); }
+    .location-text { min-width: 0; }
+    .location-name {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+    }
+    .location-meta {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+    .map-toggle {
+      flex: none;
+      min-height: 36px;
+      padding: 6px 14px;
+      border: 1px solid #b8d2e5;
+      border-radius: 4px;
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      font-size: .8rem;
+      font-weight: 650;
+    }
+    .map-toggle:hover {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+    .map-toggle[aria-expanded="true"] {
+      background: var(--paper);
+      color: var(--blue-deep);
+    }
+    .map-toggle[aria-expanded="true"]:hover {
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+    }
+    .map-places {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .map-place {
+      min-height: 32px;
+      padding: 4px 10px;
+      border: 1px solid #c6d5df;
+      border-radius: 4px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 650;
+    }
+    .map-place:hover { border-color: #91b4cc; color: var(--blue-deep); }
+    .map-place.is-current {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+    }
+    .map-frame { min-width: 0; margin-top: 14px; }
+    .map-status {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+    .campus-map {
+      position: relative;
+      height: 340px;
+      overflow: hidden;
+      border: 1px solid #cfe0ec;
+      border-radius: 4px;
+      background: #e7eef3;
+      touch-action: none;
+    }
+    .campus-map-stage {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      cursor: grab;
+    }
+    .campus-map-stage.is-dragging { cursor: grabbing; }
+    .campus-tile {
+      position: absolute;
+      width: 256px;
+      height: 256px;
+      user-select: none;
+      pointer-events: none;
+    }
+    .campus-pin {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      max-width: 168px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      transform: translate(-50%, -100%);
+      cursor: pointer;
+    }
+    .campus-pin.is-below { transform: translate(-50%, 8px); flex-direction: column-reverse; }
+    .campus-pin-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      max-width: 160px;
+      padding: 4px 8px 5px;
+      border: 1px solid #c5d7e6;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 2px 8px rgba(22, 58, 88, .16);
+      color: var(--ink);
+      text-align: left;
+    }
+    .campus-pin-name {
+      font-size: .78rem;
+      font-weight: 750;
+      line-height: 1.15;
+    }
+    .campus-pin-tag {
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+    .campus-pin-point {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: var(--blue-deep);
+      box-shadow: 0 1px 4px rgba(22, 58, 88, .45);
+    }
+    .campus-pin.is-current { z-index: 3; }
+    .campus-pin.is-current .campus-pin-card {
+      border-color: var(--blue-deep);
+      background: var(--blue-deep);
+      color: #fff;
+    }
+    .campus-pin.is-current .campus-pin-tag { color: #d5e6f2; }
+    .campus-pin.is-current .campus-pin-point {
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(35, 103, 166, .28);
+    }
+    .map-zoom {
+      position: absolute;
+      z-index: 4;
+      top: 8px;
+      right: 8px;
+      display: flex;
+      gap: 4px;
+    }
+    .map-zoom-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid #c5d7e6;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, .96);
+      color: var(--blue-deep);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      box-shadow: 0 1px 4px rgba(22, 58, 88, .12);
+    }
+    .map-fit-btn {
+      flex: none;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--blue-deep);
+      font-size: .78rem;
+      font-weight: 650;
+      text-decoration: underline;
+      text-underline-offset: .18em;
+    }
+    .map-attribution {
+      position: absolute;
+      z-index: 4;
+      right: 10px;
+      bottom: 8px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, .88);
+      color: var(--muted);
+      font-size: .68rem;
+      text-decoration: none;
+    }
+    .map-caption {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .map-note { margin: 0; color: var(--muted); font-size: .75rem; }
+    .map-external { flex: none; font-size: .78rem; font-weight: 650; }
     .historical-empty { padding: 23px 18px; border: 1px dashed var(--line); background: var(--paper); color: var(--muted); border-radius: 4px; }
     .historical-empty strong { display: block; margin-bottom: 3px; color: var(--ink); }
     .historical-empty p { margin: 0; font-size: .83rem; }
@@ -2410,6 +2920,15 @@ def _build_html(
       .score-unit { font-size: .78rem; color: var(--muted); }
       .score-track { width: 100%; max-width: none; height: 8px; }
       .detail-card-shell { padding: 12px 10px; gap: 12px; }
+      .location-panel { padding: 12px; }
+      .location-bar { align-items: stretch; flex-direction: column; gap: 10px; }
+      .map-toggle { width: 100%; min-height: 44px; }
+      .campus-map { height: 280px; }
+      .campus-pin { max-width: 132px; }
+      .campus-pin-card { max-width: 124px; padding: 3px 6px 4px; }
+      .campus-pin-name { font-size: .72rem; }
+      .map-zoom-btn { width: 40px; height: 40px; }
+      .map-caption { align-items: flex-start; flex-direction: column; gap: 4px; }
       .profile-panel { padding: 14px 12px; }
       .profile-panel-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .profile-relation > summary { align-items: flex-start; flex-direction: column; gap: 8px; }
@@ -2583,7 +3102,7 @@ def _build_html(
     }
     @media print {
       body { background: #fff; }
-      .utility, .controls, .mobile-sort, .detail-toggle, footer { display: none; }
+      .utility, .controls, .mobile-sort, .detail-toggle, .map-toggle, .map-frame, footer { display: none; }
       .shell { width: 100%; }
       .hero { padding: 20px 0; }
       .table-frame { overflow: visible; box-shadow: none; }
@@ -2601,14 +3120,14 @@ def _build_html(
     <header class="hero">
       <div>
         <h1>TUMexchange Acceptance Information</h1>
-        <p class="lede">Explore historical admission chances and check partner university requirements for TUMexchange. Filter by country, degree level, or subject area.</p>
+        <p class="lede">See how first-round wishes compared with available spots, and check partner university requirements. Filter by country, degree level, or subject area.</p>
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
         <p class="eyebrow">How to read the bars</p>
         <h2 id="method-heading">What the bars mean</h2>
-        <p><strong>Full bar (100%):</strong> All applicants were accepted (places exceeded applicants, or no one applied that year).</p>
-        <p><strong>Partial bar:</strong> Shows the percentage of applicants accepted (for example, 50% means half of applicants got a place).</p>
-        <p class="method-note">Competition fluctuates each semester based on applicant volume and student grades; past rates serve as a helpful guide, not an admission guarantee.</p>
+        <p><strong>Full bar (100%):</strong> There were at least as many spots as first-round wishes, or nobody applied.</p>
+        <p><strong>Partial bar:</strong> Spots divided by first-round wishes. 33% means about three wishes for each spot.</p>
+        <p class="method-note">A shorter bar means more first-round wishes per spot. Later rounds are not included. Past years are a guide, not an admission guarantee.</p>
       </aside>
     </header>
     <dl class="summary" aria-label="Report summary">
@@ -2625,8 +3144,8 @@ def _build_html(
           <span class="label-with-help">
             <label for="status-filter">Status</label>
             <span class="help">
-              <button class="help-trigger" type="button" aria-label="Explain 100% acceptance for unapplied years" aria-describedby="assigned-help">i</button>
-              <span class="help-tooltip" id="assigned-help" role="tooltip">Years with no applications are counted as 100% acceptance because any applicant would have secured a spot.</span>
+              <button class="help-trigger" type="button" aria-label="Explain the full bar for years with no wishes" aria-describedby="assigned-help">i</button>
+              <span class="help-tooltip" id="assigned-help" role="tooltip">Years with no applications are shown as 100% because there were spots and no first-round wishes.</span>
             </span>
           </span>
           <select id="status-filter">@@STATUS_OPTIONS@@</select>
@@ -2664,23 +3183,23 @@ def _build_html(
         <button type="button" class="mobile-sort-button" data-sort-column="university" aria-pressed="false">University<span class="sort-indicator" aria-hidden="true"></span></button>
         <button type="button" class="mobile-sort-button" data-sort-column="country" aria-pressed="false">Country<span class="sort-indicator" aria-hidden="true"></span></button>
         <button type="button" class="mobile-sort-button" data-sort-column="scored" aria-pressed="false">Years recorded<span class="sort-indicator" aria-hidden="true"></span></button>
-        <button type="button" class="mobile-sort-button" data-sort-column="score" aria-pressed="false">Average acceptance<span class="sort-indicator" aria-hidden="true"></span></button>
+        <button type="button" class="mobile-sort-button" data-sort-column="score" aria-pressed="false">Spots to wishes<span class="sort-indicator" aria-hidden="true"></span></button>
       </div>
     </section>
     <div class="table-frame">
       <table id="report-table">
-        <caption class="visually-hidden">TUMexchange universities with historical acceptance rates and partner requirements</caption>
+        <caption class="visually-hidden">TUMexchange universities with first-round wishes per spot and partner requirements</caption>
         <thead><tr>
           <th scope="col" class="sortable" data-sort-column="university" aria-sort="none"><button type="button" class="sort-button">University<span class="sort-indicator" aria-hidden="true"></span></button></th>
           <th scope="col" class="sortable" data-sort-column="country" aria-sort="none"><button type="button" class="sort-button">Country<span class="sort-indicator" aria-hidden="true"></span></button></th>
           <th scope="col" class="sortable" data-sort-column="scored" aria-sort="none"><button type="button" class="sort-button">Years recorded<span class="sort-indicator" aria-hidden="true"></span></button></th>
-          <th scope="col" class="sortable" data-sort-column="score" aria-sort="none"><button type="button" class="sort-button">Average acceptance<span class="sort-indicator" aria-hidden="true"></span></button></th>
+          <th scope="col" class="sortable" data-sort-column="score" aria-sort="none"><button type="button" class="sort-button">Spots to wishes<span class="sort-indicator" aria-hidden="true"></span></button></th>
           <th scope="col"><span class="visually-hidden">Details</span></th>
         </tr></thead>
         <tbody id="rows-body">@@INITIAL_ROWS@@</tbody>
       </table>
     </div>
-    <footer><p>TUMexchange acceptance data compiled from official TUM publication releases.</p><p><a href="rows.csv" download>Download complete CSV dataset</a></p></footer>
+    <footer><p>Bars show spots divided by first-round wishes, measured from official TUM charts.</p><p><a href="rows.csv" download>Download complete CSV dataset</a></p></footer>
   </div>
   <script id="report-data" type="application/json">@@REPORT_DATA@@</script>
   <script>
@@ -2721,12 +3240,19 @@ def _build_html(
       const summaryRows = new Map(Array.from(body.querySelectorAll("tr.university-row")).map((row) => [Number(row.dataset.groupIndex), row]));
       const detailRows = new Map(Array.from(body.querySelectorAll("tr.university-detail-row")).map((row) => [Number(row.dataset.groupDetail), row]));
       const foldSearch = (value) => text(value).normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-      const searchTokens = () => foldSearch(state.search).split(/\s+/).filter(Boolean);
+      groups.forEach((group) => { group._haystack = foldSearch(group.search_text); });
+      let cachedSearch = null;
+      let cachedTokens = [];
+      const searchTokens = () => {
+        if (cachedSearch === state.search) return cachedTokens;
+        cachedSearch = state.search;
+        cachedTokens = foldSearch(state.search).split(/\s+/).filter(Boolean);
+        return cachedTokens;
+      };
       const searchMatches = (group) => {
         const tokens = searchTokens();
         if (!tokens.length) return true;
-        const haystack = foldSearch(group.search_text);
-        return tokens.every((token) => haystack.includes(token));
+        return tokens.every((token) => group._haystack.includes(token));
       };
       const profileMatches = (group) => {
         if (!state.degree && !state.subject) return true;
@@ -2773,6 +3299,40 @@ def _build_html(
           categories: categories,
         };
       };
+      const wishesLabel = (score) => {
+        const value = Number(score);
+        if (!Number.isFinite(value)) return "no recorded data";
+        if (value >= 99.95) return "at least one spot per wish";
+        if (value <= 0) return "spots to wishes";
+        const ratio = 100 / value;
+        const rendered = Math.abs(ratio - Math.round(ratio)) < 0.05
+          ? String(Math.round(ratio))
+          : (ratio >= 10 ? ratio.toFixed(0) : ratio.toFixed(1));
+        return "about " + rendered + " wishes per spot";
+      };
+      const setText = (element, value) => {
+        if (element && element.textContent !== value) element.textContent = value;
+      };
+      const rowViews = new Map();
+      const viewFor = (index) => {
+        let view = rowViews.get(index);
+        if (view) return view;
+        const summary = summaryRows.get(index);
+        const detail = detailRows.get(index);
+        view = {
+          summary,
+          detail,
+          yearsStrong: summary ? summary.querySelector(".years-cell strong") : null,
+          scoreValEl: summary ? summary.querySelector(".score-value") : null,
+          scoreUnitEl: summary ? summary.querySelector(".score-unit") : null,
+          scoreTrack: summary ? summary.querySelector(".score-track") : null,
+          scoreFill: summary ? summary.querySelector(".score-fill") : null,
+          headingSpan: detail ? detail.querySelector(".annual-count-badge") : null,
+          annualRows: detail ? Array.from(detail.querySelectorAll("tr.annual-data-row")) : [],
+        };
+        rowViews.set(index, view);
+        return view;
+      };
       const updateGroupScores = () => {
         groups.forEach((group) => {
           const metrics = computeGroupMetrics(group);
@@ -2780,51 +3340,38 @@ def _build_html(
           group.current_scored_count = metrics.scored_count;
           group.current_total_count = metrics.total_count;
           group.current_categories = metrics.categories;
-
-          const index = Number(group.index);
-          const summary = summaryRows.get(index);
-          const detail = detailRows.get(index);
-
-          if (summary) {
-            const yearsEl = summary.querySelector(".years-cell");
-            if (yearsEl) {
-              yearsEl.innerHTML = "<strong>" + metrics.scored_count + " of " + metrics.total_count + "</strong><span>years recorded</span>";
+          const view = viewFor(Number(group.index));
+          setText(view.yearsStrong, metrics.scored_count + " of " + metrics.total_count);
+          if (metrics.score !== null) {
+            const label = metrics.score.toFixed(1) + "%";
+            const unit = wishesLabel(metrics.score);
+            setText(view.scoreValEl, label);
+            setText(view.scoreUnitEl, unit);
+            if (view.scoreTrack) {
+              view.scoreTrack.classList.remove("is-empty");
+              const aria = label + ", " + unit;
+              if (view.scoreTrack.getAttribute("aria-label") !== aria) view.scoreTrack.setAttribute("aria-label", aria);
             }
-            const scoreValEl = summary.querySelector(".score-value");
-            const scoreUnitEl = summary.querySelector(".score-unit");
-            const scoreTrack = summary.querySelector(".score-track");
-            const scoreFill = summary.querySelector(".score-fill");
-            if (metrics.score !== null) {
-              const label = metrics.score.toFixed(1) + "%";
-              if (scoreValEl) scoreValEl.textContent = label;
-              if (scoreUnitEl) scoreUnitEl.textContent = "avg acceptance";
-              if (scoreTrack) {
-                scoreTrack.classList.remove("is-empty");
-                scoreTrack.setAttribute("aria-label", label + " average acceptance");
+            if (view.scoreFill) {
+              const width = metrics.score.toFixed(4) + "%";
+              if (view.scoreFill.style.width !== width) view.scoreFill.style.width = width;
+            }
+          } else {
+            setText(view.scoreValEl, "N/A");
+            setText(view.scoreUnitEl, "no recorded data");
+            if (view.scoreTrack) {
+              view.scoreTrack.classList.add("is-empty");
+              if (view.scoreTrack.getAttribute("aria-label") !== "N/A; no recorded data") {
+                view.scoreTrack.setAttribute("aria-label", "N/A; no recorded data");
               }
-              if (scoreFill) scoreFill.style.width = metrics.score.toFixed(4) + "%";
-            } else {
-              if (scoreValEl) scoreValEl.textContent = "N/A";
-              if (scoreUnitEl) scoreUnitEl.textContent = "no recorded data";
-              if (scoreTrack) {
-                scoreTrack.classList.add("is-empty");
-                scoreTrack.setAttribute("aria-label", "N/A; no recorded data");
-              }
-              if (scoreFill) scoreFill.style.width = "0%";
             }
+            if (view.scoreFill && view.scoreFill.style.width !== "0%") view.scoreFill.style.width = "0%";
           }
-
-          if (detail) {
-            const headingSpan = detail.querySelector(".annual-count-badge, .annual-heading span");
-            if (headingSpan) {
-              headingSpan.textContent = metrics.scored_count + " of " + metrics.total_count + " years with active exchange data";
-            }
-            detail.querySelectorAll("tr.annual-data-row").forEach((row) => {
-              const rowYear = Number(row.dataset.year);
-              const isActive = state.years.has(rowYear);
-              row.classList.toggle("is-year-inactive", !isActive);
-            });
-          }
+          setText(view.headingSpan, metrics.scored_count + " of " + metrics.total_count + " years with active exchange data");
+          view.annualRows.forEach((row) => {
+            const inactive = !state.years.has(Number(row.dataset.year));
+            if (row.classList.contains("is-year-inactive") !== inactive) row.classList.toggle("is-year-inactive", inactive);
+          });
         });
       };
       const matches = (group) => {
@@ -2954,30 +3501,42 @@ def _build_html(
         if (title) title.textContent = noData ? "No extracted rows yet" : "No universities match these filters";
         if (hint) hint.textContent = noData ? "Run the extractor to populate this report." : "Clear a filter or reset the search to show all universities.";
       };
-      const render = () => {
-        const visible = groups.filter(matches);
-        const visibleIndexes = new Set(visible.map((group) => Number(group.index)));
+      let appliedSort = "source";
+      const reorderRows = () => {
         const fragment = document.createDocumentFragment();
         orderedGroups().forEach((group) => {
           const index = Number(group.index);
           const summary = summaryRows.get(index);
           const detail = detailRows.get(index);
           if (!summary || !detail) return;
-          const shown = visibleIndexes.has(index);
-          summary.hidden = !shown;
-          if (!shown) {
-            detail.hidden = true;
-            summary.classList.remove("is-expanded");
-            detail.classList.remove("is-expanded");
-          }
           fragment.append(summary, detail);
         });
+        const empty = document.getElementById("empty-state-row");
         body.appendChild(fragment);
-        ensureEmptyRow(visible.length === 0);
+        if (empty) body.appendChild(empty);
+        appliedSort = state.sort;
+      };
+      const render = () => {
+        if (state.sort !== appliedSort) reorderRows();
+        let visibleCount = 0;
+        groups.forEach((group) => {
+          const index = Number(group.index);
+          const summary = summaryRows.get(index);
+          const detail = detailRows.get(index);
+          if (!summary || !detail) return;
+          const shown = matches(group);
+          if (shown) visibleCount += 1;
+          if (summary.hidden === shown) summary.hidden = !shown;
+          if (!shown && (!detail.hidden || summary.classList.contains("is-expanded"))) {
+            const button = summary.querySelector(".university-toggle");
+            if (button) setExpanded(button, detail, false);
+          }
+        });
+        ensureEmptyRow(visibleCount === 0);
         if (state.roster === "current") {
-          resultCount.innerHTML = "<strong>" + visible.length + "</strong> active partner universit" + (visible.length === 1 ? "y" : "ies") + " (Release 2027)";
+          resultCount.innerHTML = "<strong>" + visibleCount + "</strong> active partner universit" + (visibleCount === 1 ? "y" : "ies") + " (Release 2027)";
         } else {
-          resultCount.innerHTML = "<strong>" + visible.length + "</strong> partner universit" + (visible.length === 1 ? "y" : "ies") + " shown";
+          resultCount.innerHTML = "<strong>" + visibleCount + "</strong> partner universit" + (visibleCount === 1 ? "y" : "ies") + " shown";
         }
         syncSortHeaders();
       };
@@ -3070,6 +3629,324 @@ def _build_html(
         if (button) cycleSort(button.dataset.sortColumn);
       });
       resetButton.addEventListener("click", reset);
+      const mapViews = new WeakMap();
+      const mapCache = new Map();
+      let mapNextAt = 0;
+      const tileSize = 256;
+      const project = (lat, lon, zoom) => {
+        const scale = tileSize * Math.pow(2, zoom);
+        const sin = Math.sin(lat * Math.PI / 180);
+        const clamped = Math.min(0.9999, Math.max(-0.9999, sin));
+        return {
+          x: (lon + 180) / 360 * scale,
+          y: (0.5 - Math.log((1 + clamped) / (1 - clamped)) / (4 * Math.PI)) * scale,
+        };
+      };
+      const unproject = (x, y, zoom) => {
+        const scale = tileSize * Math.pow(2, zoom);
+        const lon = x / scale * 360 - 180;
+        const n = Math.PI - 2 * Math.PI * y / scale;
+        const lat = 180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
+        return { lat, lon };
+      };
+      const nominatim = async (query) => {
+        const wait = mapNextAt - Date.now();
+        if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait));
+        mapNextAt = Date.now() + 1100;
+        const response = await fetch(
+          "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=" + encodeURIComponent(query),
+          { headers: { Accept: "application/json" } }
+        );
+        if (!response.ok) throw new Error("lookup failed");
+        const data = await response.json();
+        return Array.isArray(data) && data.length ? data[0] : null;
+      };
+      const locatePlace = async (place) => {
+        if (Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lon))) {
+          return { lat: Number(place.lat), lon: Number(place.lon), fixed: true };
+        }
+        const key = (place.query || "") + "\n" + (place.fallback || "");
+        if (mapCache.has(key)) return mapCache.get(key);
+        let hit = place.query ? await nominatim(place.query) : null;
+        let cityOnly = false;
+        if (!hit && place.fallback && place.fallback !== place.query) {
+          hit = await nominatim(place.fallback);
+          cityOnly = Boolean(hit);
+        }
+        const located = hit ? { lat: Number(hit.lat), lon: Number(hit.lon), fixed: false, cityOnly } : null;
+        mapCache.set(key, located);
+        return located;
+      };
+      const readPlaces = (panel) => {
+        try { return JSON.parse(panel.dataset.mapPlaces || "[]"); }
+        catch (error) { return []; }
+      };
+      const fitView = (points, width, height) => {
+        if (!points.length) return { zoom: 14, originX: 0, originY: 0 };
+        let zoom = points.length === 1 ? 15 : 16;
+        const pad = 72;
+        while (zoom > 3) {
+          const projected = points.map((point) => project(point.lat, point.lon, zoom));
+          const minX = Math.min(...projected.map((point) => point.x));
+          const maxX = Math.max(...projected.map((point) => point.x));
+          const minY = Math.min(...projected.map((point) => point.y));
+          const maxY = Math.max(...projected.map((point) => point.y));
+          if (maxX - minX + pad * 2 <= width && maxY - minY + pad * 2 <= height) break;
+          zoom -= 1;
+        }
+        const projected = points.map((point) => project(point.lat, point.lon, zoom));
+        const minX = Math.min(...projected.map((point) => point.x));
+        const maxX = Math.max(...projected.map((point) => point.x));
+        const minY = Math.min(...projected.map((point) => point.y));
+        const maxY = Math.max(...projected.map((point) => point.y));
+        return {
+          zoom,
+          originX: (minX + maxX) / 2 - width / 2,
+          originY: (minY + maxY) / 2 - height / 2,
+          fitted: true,
+        };
+      };
+      const focusView = (point, width, height, zoom) => {
+        const projected = project(point.lat, point.lon, zoom);
+        return {
+          zoom,
+          originX: projected.x - width / 2,
+          originY: projected.y - height / 2,
+          fitted: false,
+        };
+      };
+      const paintMap = (panel) => {
+        const stage = panel.querySelector(".campus-map-stage");
+        const map = panel.querySelector(".campus-map");
+        if (!stage || !map || map.hidden) return;
+        const view = mapViews.get(panel);
+        const places = readPlaces(panel).filter((place) => Number.isFinite(Number(place.lat)));
+        if (!view || !places.length) return;
+        const width = stage.clientWidth || 640;
+        const height = stage.clientHeight || 340;
+        const zoom = view.zoom;
+        const originX = view.originX;
+        const originY = view.originY;
+        const tiles = document.createElement("div");
+        const x0 = Math.floor(originX / tileSize);
+        const x1 = Math.floor((originX + width) / tileSize);
+        const y0 = Math.floor(originY / tileSize);
+        const y1 = Math.floor((originY + height) / tileSize);
+        const maxIndex = Math.pow(2, zoom);
+        for (let tx = x0; tx <= x1; tx += 1) {
+          for (let ty = y0; ty <= y1; ty += 1) {
+            if (ty < 0 || ty >= maxIndex) continue;
+            const wrapped = ((tx % maxIndex) + maxIndex) % maxIndex;
+            const img = document.createElement("img");
+            img.className = "campus-tile";
+            img.alt = "";
+            img.width = tileSize;
+            img.height = tileSize;
+            img.style.left = (tx * tileSize - originX) + "px";
+            img.style.top = (ty * tileSize - originY) + "px";
+            img.src = "https://a.tile.openstreetmap.fr/osmfr/" + zoom + "/" + wrapped + "/" + ty + ".png";
+            tiles.appendChild(img);
+          }
+        }
+        const selected = Number(panel.dataset.mapIndex || 0);
+        places.forEach((place, index) => {
+          const projected = project(Number(place.lat), Number(place.lon), zoom);
+          const x = projected.x - originX;
+          const y = projected.y - originY;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "campus-pin" + (index === selected ? " is-current" : "") + (y < 58 ? " is-below" : "");
+          button.style.left = x + "px";
+          button.style.top = y + "px";
+          button.dataset.mapIndex = String(index);
+          const name = place.label || place.name || "Campus";
+          button.setAttribute("aria-label", name + (place.tag ? ", " + place.tag : ""));
+          button.setAttribute("aria-pressed", String(index === selected));
+          const card = document.createElement("span");
+          card.className = "campus-pin-card";
+          const nameEl = document.createElement("span");
+          nameEl.className = "campus-pin-name";
+          nameEl.textContent = name;
+          card.appendChild(nameEl);
+          if (place.tag) {
+            const tagEl = document.createElement("span");
+            tagEl.className = "campus-pin-tag";
+            tagEl.textContent = place.tag;
+            card.appendChild(tagEl);
+          }
+          const point = document.createElement("span");
+          point.className = "campus-pin-point";
+          point.setAttribute("aria-hidden", "true");
+          button.append(card, point);
+          tiles.appendChild(button);
+        });
+        stage.replaceChildren(tiles);
+        const fitButton = panel.querySelector("[data-map-zoom='fit']");
+        if (fitButton) fitButton.hidden = places.length < 2 || view.fitted;
+      };
+      const selectCampus = (panel, index, zoomIn) => {
+        const places = readPlaces(panel);
+        const place = places[index] || places[0];
+        if (!place) return;
+        panel.dataset.mapIndex = String(places.indexOf(place) < 0 ? 0 : index);
+        panel.querySelectorAll(".map-place").forEach((button, buttonIndex) => {
+          const current = buttonIndex === Number(panel.dataset.mapIndex);
+          button.classList.toggle("is-current", current);
+          button.setAttribute("aria-pressed", String(current));
+        });
+        const nameEl = panel.querySelector(".location-name");
+        const metaEl = panel.querySelector(".location-meta");
+        if (nameEl) nameEl.textContent = place.name || place.label || "";
+        if (metaEl) {
+          metaEl.textContent = place.meta || "";
+          metaEl.hidden = !place.meta;
+        }
+        const note = panel.querySelector(".map-note");
+        if (note) {
+          note.textContent = place.address
+            ? place.label + " · " + place.address
+            : "Campus names sit on the pins. Choose one to see who studies there.";
+        }
+        const link = panel.querySelector(".map-external");
+        const stage = panel.querySelector(".campus-map-stage");
+        if (Number.isFinite(Number(place.lat)) && Number.isFinite(Number(place.lon))) {
+          const lat = Number(place.lat);
+          const lon = Number(place.lon);
+          if (link) {
+            link.href = "https://www.openstreetmap.org/?mlat=" + lat.toFixed(5) + "&mlon=" + lon.toFixed(5) + "#map=16/" + lat.toFixed(5) + "/" + lon.toFixed(5);
+          }
+          if (zoomIn && stage) {
+            const width = stage.clientWidth || 640;
+            const height = stage.clientHeight || 340;
+            mapViews.set(panel, focusView(place, width, height, 15));
+          }
+        } else if (link) {
+          link.href = "https://www.openstreetmap.org/search?query=" + encodeURIComponent(place.query || place.label || "");
+        }
+        paintMap(panel);
+      };
+      const showMap = async (panel) => {
+        const status = panel.querySelector(".map-status");
+        const map = panel.querySelector(".campus-map");
+        const places = readPlaces(panel);
+        if (status) {
+          status.hidden = false;
+          status.textContent = "Looking up this campus…";
+        }
+        try {
+          const located = [];
+          for (const place of places) {
+            const hit = await locatePlace(place);
+            if (hit && Number.isFinite(hit.lat) && Number.isFinite(hit.lon)) {
+              place.lat = hit.lat;
+              place.lon = hit.lon;
+              place.cityOnly = Boolean(hit.cityOnly);
+              located.push(place);
+            }
+          }
+          panel.dataset.mapPlaces = JSON.stringify(places);
+          if (!located.length) {
+            if (status) {
+              status.hidden = false;
+              status.textContent = "OpenStreetMap has no match for this campus. Open the search to look nearby.";
+            }
+            if (map) map.hidden = true;
+            return;
+          }
+          if (status) status.hidden = located.length === places.length;
+          if (status && located.length !== places.length) {
+            status.hidden = false;
+            status.textContent = "Some campuses could not be placed. The named pins are the ones OpenStreetMap matched.";
+          }
+          if (map) map.hidden = false;
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+          const stage = panel.querySelector(".campus-map-stage");
+          const width = stage && stage.clientWidth ? stage.clientWidth : 640;
+          const height = stage && stage.clientHeight ? stage.clientHeight : 340;
+          mapViews.set(panel, fitView(located, width, height));
+          const index = Number(panel.dataset.mapIndex || 0);
+          selectCampus(panel, Number.isFinite(index) ? index : 0, false);
+          if (status && located.length === places.length) status.hidden = true;
+        } catch (error) {
+          if (status) {
+            status.hidden = false;
+            status.textContent = "The map could not be loaded. Check your connection, then try again.";
+          }
+        }
+      };
+      const zoomMap = (panel, nextZoom, anchorX, anchorY) => {
+        const stage = panel.querySelector(".campus-map-stage");
+        const view = mapViews.get(panel);
+        if (!stage || !view) return;
+        const width = stage.clientWidth || 640;
+        const height = stage.clientHeight || 340;
+        const ax = Number.isFinite(anchorX) ? anchorX : width / 2;
+        const ay = Number.isFinite(anchorY) ? anchorY : height / 2;
+        const zoom = Math.max(3, Math.min(18, Math.round(nextZoom)));
+        if (zoom === view.zoom) return;
+        const before = unproject(view.originX + ax, view.originY + ay, view.zoom);
+        const projected = project(before.lat, before.lon, zoom);
+        view.zoom = zoom;
+        view.originX = projected.x - ax;
+        view.originY = projected.y - ay;
+        view.fitted = false;
+        paintMap(panel);
+      };
+      const bindMapStage = (panel) => {
+        const stage = panel.querySelector(".campus-map-stage");
+        if (!stage || stage.dataset.bound === "true") return;
+        stage.dataset.bound = "true";
+        let drag = null;
+        let wheelBucket = 0;
+        stage.addEventListener("wheel", (event) => {
+          if (!mapViews.has(panel)) return;
+          event.preventDefault();
+          const rect = stage.getBoundingClientRect();
+          wheelBucket += event.deltaY;
+          const threshold = event.ctrlKey ? 28 : 70;
+          if (Math.abs(wheelBucket) < threshold) return;
+          const direction = wheelBucket > 0 ? -1 : 1;
+          wheelBucket = 0;
+          const view = mapViews.get(panel);
+          zoomMap(panel, view.zoom + direction, event.clientX - rect.left, event.clientY - rect.top);
+        }, { passive: false });
+        stage.addEventListener("gesturestart", (event) => {
+          event.preventDefault();
+          const view = mapViews.get(panel);
+          if (view) stage.dataset.gestureZoom = String(view.zoom);
+        });
+        stage.addEventListener("gesturechange", (event) => {
+          event.preventDefault();
+          const start = Number(stage.dataset.gestureZoom);
+          if (!Number.isFinite(start)) return;
+          const rect = stage.getBoundingClientRect();
+          zoomMap(panel, start + Math.log2(event.scale || 1), event.clientX - rect.left, event.clientY - rect.top);
+        });
+        stage.addEventListener("pointerdown", (event) => {
+          if (event.target.closest(".campus-pin")) return;
+          const view = mapViews.get(panel);
+          if (!view) return;
+          drag = { id: event.pointerId, x: event.clientX, y: event.clientY, originX: view.originX, originY: view.originY };
+          stage.classList.add("is-dragging");
+          stage.setPointerCapture(event.pointerId);
+        });
+        stage.addEventListener("pointermove", (event) => {
+          if (!drag || drag.id !== event.pointerId) return;
+          const view = mapViews.get(panel);
+          if (!view) return;
+          view.originX = drag.originX - (event.clientX - drag.x);
+          view.originY = drag.originY - (event.clientY - drag.y);
+          view.fitted = false;
+          paintMap(panel);
+        });
+        const endDrag = (event) => {
+          if (!drag || drag.id !== event.pointerId) return;
+          drag = null;
+          stage.classList.remove("is-dragging");
+        };
+        stage.addEventListener("pointerup", endDrag);
+        stage.addEventListener("pointercancel", endDrag);
+      };
       const tableFrame = document.querySelector(".table-frame");
       const toggleFromRow = (row, selector) => {
         const button = row.querySelector(selector);
@@ -3078,7 +3955,64 @@ def _build_html(
       tableFrame.addEventListener("click", (event) => {
         const emptyReset = event.target.closest("[data-empty-reset]");
         if (emptyReset) { reset(); return; }
-        if (event.target.closest("a, summary, .help-trigger, .sort-button")) return;
+        const zoomButton = event.target.closest("[data-map-zoom]");
+        if (zoomButton) {
+          const panel = zoomButton.closest(".location-panel");
+          const stage = panel && panel.querySelector(".campus-map-stage");
+          const view = panel && mapViews.get(panel);
+          if (!panel || !stage || !view) return;
+          const width = stage.clientWidth || 640;
+          const height = stage.clientHeight || 340;
+          const action = zoomButton.dataset.mapZoom;
+          if (action === "fit") {
+            const points = readPlaces(panel).filter((place) => Number.isFinite(Number(place.lat)));
+            mapViews.set(panel, fitView(points, width, height));
+            paintMap(panel);
+            return;
+          }
+          const nextZoom = action === "in" ? view.zoom + 1 : view.zoom - 1;
+          zoomMap(panel, nextZoom, width / 2, height / 2);
+          return;
+        }
+        const campusPin = event.target.closest(".campus-pin");
+        if (campusPin) {
+          const panel = campusPin.closest(".location-panel");
+          if (panel) selectCampus(panel, Number(campusPin.dataset.mapIndex || 0), true);
+          return;
+        }
+        const placeButton = event.target.closest(".map-place");
+        if (placeButton) {
+          const panel = placeButton.closest(".location-panel");
+          if (!panel) return;
+          const toggle = panel.querySelector(".map-toggle");
+          const frame = panel.querySelector(".map-frame");
+          if (toggle && toggle.getAttribute("aria-expanded") !== "true") {
+            toggle.setAttribute("aria-expanded", "true");
+            toggle.textContent = "Hide map";
+            if (frame) frame.hidden = false;
+            bindMapStage(panel);
+            showMap(panel).then(() => selectCampus(panel, Number(placeButton.dataset.mapIndex || 0), true));
+            return;
+          }
+          selectCampus(panel, Number(placeButton.dataset.mapIndex || 0), true);
+          return;
+        }
+        const mapToggle = event.target.closest(".map-toggle");
+        if (mapToggle) {
+          const panel = mapToggle.closest(".location-panel");
+          const frame = document.getElementById(mapToggle.getAttribute("aria-controls") || "");
+          const expanded = mapToggle.getAttribute("aria-expanded") === "true";
+          mapToggle.setAttribute("aria-expanded", String(!expanded));
+          mapToggle.textContent = expanded ? "Show map" : "Hide map";
+          if (frame) frame.hidden = expanded;
+          if (!expanded && panel) {
+            bindMapStage(panel);
+            const map = panel.querySelector(".campus-map");
+            if (!map || map.hidden || !mapViews.has(panel)) showMap(panel);
+          }
+          return;
+        }
+        if (event.target.closest("a, summary, .help-trigger, .sort-button, .campus-map")) return;
         const universityRow = event.target.closest("tr.university-row");
         if (universityRow) toggleFromRow(universityRow, ".university-toggle, .university-detail-toggle");
       });

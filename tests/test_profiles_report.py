@@ -160,6 +160,62 @@ class ProfileReportTests(unittest.TestCase):
         self.assertIn('href="https://example.test/good"', rendered)
         self.assertNotIn('href="javascript:alert(1)"', rendered)
 
+    def test_sjtu_faculties_use_separate_named_campus_pins(self) -> None:
+        group = {
+            "university": "Shanghai Jiao Tong University",
+            "country": "China",
+            "profiles": [
+                {
+                    "relation_id": "10362",
+                    "name": "Shanghai Jiao Tong University",
+                    "city": "Shanghai",
+                    "country": "China",
+                    "fields": [{"label": "Campus", "text": "Shanghai"}],
+                }
+            ],
+        }
+        places = report._map_places(group)
+        labels = [place["label"] for place in places]
+        self.assertEqual(labels, ["Minhang", "Xuhui"])
+        minhang, xuhui = places
+        self.assertIn("Informatics", minhang["meta"])
+        self.assertIn("Management", xuhui["meta"])
+        self.assertAlmostEqual(minhang["lat"], 31.0275548, places=4)
+        self.assertAlmostEqual(xuhui["lat"], 31.2008911, places=4)
+        self.assertGreater(abs(minhang["lat"] - xuhui["lat"]), 0.1)
+        rendered = report._render_map_panel(group, 3)
+        self.assertIn("campus-map-stage", rendered)
+        self.assertIn(">Minhang<", rendered)
+        self.assertIn(">Xuhui<", rendered)
+        self.assertNotIn("<iframe", rendered)
+        page = report._build_html([], {}, None)
+        self.assertIn("tile.openstreetmap.fr/osmfr/", page)
+        self.assertIn('addEventListener("wheel"', page)
+        self.assertIn("campus-pin-name", page)
+
+    def test_campus_field_splits_unnamed_faculties_without_coordinates(self) -> None:
+        group = {
+            "university": "Example University",
+            "country": "Chile",
+            "profiles": [
+                {
+                    "relation_id": "not-curated",
+                    "city": "Santiago",
+                    "country": "Chile",
+                    "fields": [
+                        {
+                            "label": "Campus",
+                            "text": "Engineering campus (FCFM)\nDowntown campus (Business)",
+                        }
+                    ],
+                }
+            ],
+        }
+        places = report._map_places(group)
+        self.assertEqual([place["label"] for place in places], ["Engineering campus", "Downtown campus"])
+        self.assertEqual(places[0]["tag"], "FCFM")
+        self.assertNotIn("lat", places[0])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,402 @@
+{
+  "schema_version": "campus-pins-v1",
+  "checked": "2026-10-04",
+  "by_relation_id": {
+    "10362": [
+      {
+        "name": "Minhang Campus",
+        "label": "Minhang",
+        "tag": "Global College",
+        "who": "Global College (Engineering & Design except architecture, Electrical and Computer Engineering, Informatics) and the general program for other faculties. Medicine and the Shanghai Advanced Institute of Finance are not open.",
+        "address": "800 Dongchuan Road, Minhang District, Shanghai",
+        "query": "Shanghai Jiao Tong University Minhang Campus, 800 Dongchuan Road, Shanghai, China",
+        "lat": 31.0275548,
+        "lon": 121.4323084,
+        "source_url": "https://gc.sjtu.edu.cn/contact-us/"
+      },
+      {
+        "name": "Xuhui Campus",
+        "label": "Xuhui",
+        "tag": "Management",
+        "who": "Antai College of Economics and Management, for Master's students from the TUM School of Management.",
+        "address": "1954 Huashan Road, Xuhui District, Shanghai",
+        "query": "Shanghai Jiao Tong University Xuhui Campus, 1954 Huashan Road, Shanghai, China",
+        "lat": 31.2008911,
+        "lon": 121.4283949,
+        "source_url": "https://www.acem.sjtu.edu.cn/en/acem/contact-us.html"
+      }
+    ],
+    "10381": [
+      {
+        "name": "Siping Campus",
+        "label": "Siping",
+        "tag": "CDHK and civil",
+        "who": "CDHK, civil engineering, architecture and planning, and the other schools Tongji places on Siping. The CDHK building is on this campus.",
+        "address": "1239 Siping Road, Yangpu District, Shanghai",
+        "query": "Tongji University Siping Campus, 1239 Siping Road, Shanghai, China",
+        "lat": 31.2847393,
+        "lon": 121.4969491,
+        "source_url": "https://cdhk.tongji.edu.cn/cslm/list.htm"
+      },
+      {
+        "name": "Jiading Campus",
+        "label": "Jiading",
+        "tag": "Automotive and software",
+        "who": "Mechanical engineering, automotive studies, software, electronics, and transportation.",
+        "address": "4800 Cao'an Highway, Jiading District, Shanghai",
+        "query": "Tongji University Jiading Campus, 4800 Cao'an Highway, Shanghai, China",
+        "lat": 31.2852097,
+        "lon": 121.2123782,
+        "source_url": "https://jiading.tongji.edu.cn/xqcgyl/list.htm"
+      }
+    ],
+    "10461": [
+      {
+        "name": "Zijingang Campus",
+        "label": "Zijingang",
+        "tag": "Sciences and management",
+        "who": "Life sciences, management, mathematics, physics, and chemistry, plus medicine general-education courses. Courses cannot be combined with Haining.",
+        "address": "866 Yuhangtang Road, Hangzhou",
+        "query": "Zhejiang University Zijingang Campus, 866 Yuhangtang Road, Hangzhou, China",
+        "lat": 30.297658,
+        "lon": 120.0769816,
+        "source_url": "https://www.zju.edu.cn/english/2023/0509/c75921a2754909/page.htm"
+      },
+      {
+        "name": "Yuquan Campus",
+        "label": "Yuquan",
+        "tag": "Engineering",
+        "who": "Most engineering schools.",
+        "address": "38 Zheda Road, Hangzhou",
+        "query": "Zhejiang University Yuquan Campus, 38 Zheda Road, Hangzhou, China",
+        "lat": 30.2625643,
+        "lon": 120.1237368,
+        "source_url": "https://www.zju.edu.cn/english/visiting/list.htm"
+      },
+      {
+        "name": "Huajiachi Campus",
+        "label": "Huajiachi",
+        "tag": "Medicine courses",
+        "who": "Medicine general-education courses. TUM's directory places these at Huajiachi and Zijingang.",
+        "address": "268 Kaixuan Road, Hangzhou",
+        "query": "Zhejiang University Huajiachi Campus, 268 Kaixuan Road, Hangzhou, China",
+        "lat": 30.2703562,
+        "lon": 120.1867974,
+        "source_url": "https://www.zju.edu.cn/english/2023/0509/c75921a2754909/page.htm"
+      },
+      {
+        "name": "Haining Campus",
+        "label": "Haining",
+        "tag": "ZJUI and ZIBS",
+        "who": "ZJU-UIUC Institute and the International Business School. Courses cannot be combined with the Hangzhou campuses.",
+        "address": "718 East Haizhou Road, Haining",
+        "query": "Zhejiang University International Campus, 718 East Haizhou Road, Haining, China",
+        "lat": 30.520833,
+        "lon": 120.721667,
+        "source_url": "https://zjui.intl.zju.edu.cn/en/contact/"
+      }
+    ],
+    "10349": [
+      {
+        "name": "Melbourne City Campus",
+        "label": "City",
+        "tag": "All fields",
+        "who": "All study fields.",
+        "address": "124 La Trobe Street, Melbourne",
+        "query": "RMIT University Melbourne City Campus, 124 La Trobe Street, Melbourne, Australia",
+        "lat": -37.8081607,
+        "lon": 144.9645832,
+        "source_url": "https://www.rmit.edu.au/about/our-locations-and-facilities/locations/melbourne-city-campus"
+      },
+      {
+        "name": "Brunswick Campus",
+        "label": "Brunswick",
+        "tag": "Design",
+        "who": "Design courses.",
+        "address": "25 Dawson Street, Brunswick",
+        "query": "RMIT University Brunswick Campus, 25 Dawson Street, Brunswick, Australia",
+        "lat": -37.7722153,
+        "lon": 144.9577852,
+        "source_url": "https://www.rmit.edu.au/about/our-locations-and-facilities/locations/melbourne-brunswick-campus"
+      },
+      {
+        "name": "Bundoora Campus",
+        "label": "Bundoora",
+        "tag": "Health and science",
+        "who": "Education, biomedical, health, and science courses.",
+        "address": "225-245 Plenty Road, Bundoora",
+        "query": "RMIT University Bundoora Campus, Plenty Road, Bundoora, Australia",
+        "lat": -37.6880532,
+        "lon": 145.0669061,
+        "source_url": "https://www.rmit.edu.au/about/our-locations-and-facilities/locations/melbourne-bundoora-campus"
+      }
+    ],
+    "19729": [
+      {
+        "name": "St. George Campus",
+        "label": "St. George",
+        "tag": "Engineering and arts",
+        "who": "Arts and Science, Applied Science and Engineering, Architecture, Landscape and Design.",
+        "address": "27 King's College Circle, Toronto",
+        "query": "University of Toronto St. George Campus, King's College Circle, Toronto, Canada",
+        "lat": 43.6607231,
+        "lon": -79.39592,
+        "source_url": "https://www.utoronto.ca/contacts"
+      },
+      {
+        "name": "Scarborough Campus",
+        "label": "Scarborough",
+        "tag": "Science and management",
+        "who": "Humanities, social sciences, science, management, and computer science. Management students here are limited to undergraduate courses.",
+        "address": "1265 Military Trail, Toronto",
+        "query": "University of Toronto Scarborough, 1265 Military Trail, Toronto, Canada",
+        "lat": 43.782798,
+        "lon": -79.1860643,
+        "source_url": "https://www.utsc.utoronto.ca/home/contact-information"
+      },
+      {
+        "name": "Mississauga Campus",
+        "label": "Mississauga",
+        "tag": "Science and management",
+        "who": "Humanities, social sciences, science, management, and computer science. Management students here are limited to undergraduate courses.",
+        "address": "3359 Mississauga Road, Mississauga",
+        "query": "University of Toronto Mississauga, 3359 Mississauga Road, Mississauga, Canada",
+        "lat": 43.5508441,
+        "lon": -79.6628727,
+        "source_url": "https://www.utm.utoronto.ca/about-us/contact-us"
+      }
+    ],
+    "10413": [
+      {
+        "name": "Campinas Campus",
+        "label": "Campinas",
+        "tag": "Main campus",
+        "who": "Main campus in Barão Geraldo.",
+        "address": "Cidade Universitária Zeferino Vaz, Campinas",
+        "query": "UNICAMP Cidade Universitaria Zeferino Vaz, Campinas, Brazil",
+        "lat": -22.822656,
+        "lon": -47.0627959,
+        "source_url": "https://www.unicamp.br/unicamp-responde/"
+      },
+      {
+        "name": "Limeira School of Applied Sciences",
+        "label": "Limeira FCA",
+        "tag": "Applied sciences",
+        "who": "School of Applied Sciences.",
+        "address": "Avenida Cônego Manoel Alves 1226, Limeira",
+        "query": "UNICAMP Faculdade de Ciencias Aplicadas, Limeira, Brazil",
+        "lat": -22.5515904,
+        "lon": -47.4398205,
+        "source_url": "https://deape.unicamp.br/fale-com-a-deape/enderecos/"
+      },
+      {
+        "name": "Limeira School of Technology",
+        "label": "Limeira FT",
+        "tag": "Technology",
+        "who": "School of Technology.",
+        "address": "Rua Paschoal Marmo 1888, Limeira",
+        "query": "UNICAMP Faculdade de Tecnologia, Limeira, Brazil",
+        "lat": -22.5617672,
+        "lon": -47.4236182,
+        "source_url": "https://deape.unicamp.br/fale-com-a-deape/enderecos/"
+      },
+      {
+        "name": "Piracicaba Dental School",
+        "label": "Piracicaba",
+        "tag": "Dentistry",
+        "who": "Piracicaba Dental School.",
+        "address": "Avenida Limeira 901, Piracicaba",
+        "query": "UNICAMP Faculdade de Odontologia de Piracicaba, Piracicaba, Brazil",
+        "lat": -22.7014908,
+        "lon": -47.6476332,
+        "source_url": "https://deape.unicamp.br/fale-com-a-deape/enderecos/"
+      }
+    ],
+    "10435": [
+      {
+        "name": "Edmonton Campus",
+        "label": "Edmonton",
+        "tag": "Main campus",
+        "who": "Main campus in Edmonton.",
+        "address": "116 Street and 85 Avenue, Edmonton",
+        "query": "University of Alberta North Campus, Edmonton, Canada",
+        "lat": 53.52682,
+        "lon": -113.5244937,
+        "source_url": "https://www.ualberta.ca/en/about/contact.html"
+      },
+      {
+        "name": "Augustana Campus",
+        "label": "Augustana",
+        "tag": "AU courses",
+        "who": "Camrose campus. Courses here use codes that start with AU.",
+        "address": "4901 46 Avenue, Camrose",
+        "query": "University of Alberta Augustana Campus, Camrose, Canada",
+        "lat": 53.011106,
+        "lon": -112.8225232,
+        "source_url": "https://www.ualberta.ca/en/augustana/campus-info/index.html"
+      }
+    ],
+    "10437": [
+      {
+        "name": "Vancouver Campus",
+        "label": "Vancouver",
+        "tag": "Main campus",
+        "who": "Point Grey campus, including Applied Science.",
+        "address": "6200 University Boulevard, Vancouver",
+        "query": "University of British Columbia Vancouver campus, University Boulevard, Vancouver, Canada",
+        "lat": 49.2650422,
+        "lon": -123.2506755,
+        "source_url": "https://www.ubc.ca/about/maps.html"
+      },
+      {
+        "name": "Okanagan Campus",
+        "label": "Okanagan",
+        "tag": "Kelowna",
+        "who": "Okanagan campus in Kelowna. TUM lists it separately from Vancouver.",
+        "address": "3333 University Way, Kelowna",
+        "query": "University of British Columbia Okanagan, 3333 University Way, Kelowna, Canada",
+        "lat": 49.9444003,
+        "lon": -119.3920347,
+        "source_url": "https://ok.ubc.ca/about/maps-directions-tours/"
+      }
+    ],
+    "14206": [
+      {
+        "name": "Casa Central",
+        "label": "Casa Central",
+        "tag": "Rectorate",
+        "who": "Rectorate and central offices, not a faculty teaching campus.",
+        "address": "Avenida Libertador Bernardo O'Higgins 1058, Santiago",
+        "query": "Universidad de Chile Casa Central, Santiago, Chile",
+        "lat": -33.4445568,
+        "lon": -70.6509537,
+        "source_url": "https://uchile.cl/presentacion/campus/casa-central"
+      },
+      {
+        "name": "Campus Juan Gómez Millas",
+        "label": "Gómez Millas",
+        "tag": "Social sciences and arts",
+        "who": "Social sciences, communications, arts, sciences, and philosophy.",
+        "address": "Avenida Capitán Ignacio Carrera Pinto 1045, Ñuñoa, Santiago",
+        "query": "Universidad de Chile Campus Juan Gomez Millas, Santiago, Chile",
+        "lat": -33.4680059,
+        "lon": -70.5935102,
+        "source_url": "https://uchile.cl/presentacion/campus/campus-juan-gomez-millas"
+      },
+      {
+        "name": "Campus Beauchef",
+        "label": "Beauchef",
+        "tag": "Engineering",
+        "who": "Faculty of Physical Sciences and Mathematics (FCFM): engineering, physics, and mathematics.",
+        "address": "Avenida Beauchef 850, Santiago",
+        "query": "Universidad de Chile Facultad de Ciencias Fisicas y Matematicas, Beauchef 850, Santiago, Chile",
+        "lat": -33.4576797,
+        "lon": -70.6623367,
+        "source_url": "https://uchile.cl/presentacion/campus/campus-beauchef"
+      },
+      {
+        "name": "Campus Sur",
+        "label": "Campus Sur",
+        "tag": "Agriculture",
+        "who": "Faculty of Agricultural Sciences.",
+        "address": "Santa Rosa 11315, La Pintana, Santiago",
+        "query": "Universidad de Chile Campus Sur, Santa Rosa 11315, Santiago, Chile",
+        "lat": -33.5689773,
+        "lon": -70.6329257,
+        "source_url": "https://uchile.cl/english-version/contact/maps-and-addresses-of-the-different-campuses"
+      },
+      {
+        "name": "Campus Andrés Bello",
+        "label": "Andrés Bello",
+        "tag": "Architecture and economics",
+        "who": "Architecture and urbanism, law, economics and business, and government.",
+        "address": "Avenida Portugal 84, Santiago",
+        "query": "Universidad de Chile Facultad de Arquitectura y Urbanismo, Avenida Portugal 84, Santiago, Chile",
+        "lat": -33.4417717,
+        "lon": -70.6374494,
+        "source_url": "https://uchile.cl/presentacion/campus/campus-andres-bello"
+      },
+      {
+        "name": "Campus Norte",
+        "label": "Norte",
+        "tag": "Medicine",
+        "who": "Medicine and chemical and pharmaceutical sciences.",
+        "address": "Avenida Independencia 1027, Santiago",
+        "query": "Universidad de Chile Campus Norte, Avenida Independencia 1027, Santiago, Chile",
+        "lat": -33.4179406,
+        "lon": -70.6550254,
+        "source_url": "https://medicina.uchile.cl/facultad/campus-y-departamentos/campus-norte/presentacion"
+      }
+    ],
+    "10275": [
+      {
+        "name": "Mount Scopus Campus",
+        "label": "Mount Scopus",
+        "tag": "Humanities and business",
+        "who": "Humanities, social sciences, law, education, and business.",
+        "address": "Mount Scopus, Jerusalem",
+        "query": "Hebrew University Mount Scopus Campus, Jerusalem",
+        "lat": 31.7926862,
+        "lon": 35.2449854,
+        "source_url": "https://international.huji.ac.il/our-campuses-0"
+      },
+      {
+        "name": "Edmond J. Safra Campus",
+        "label": "Givat Ram",
+        "tag": "Science and engineering",
+        "who": "Mathematics, natural sciences, engineering, and computer science.",
+        "address": "Edmond J. Safra Campus, Givat Ram, Jerusalem",
+        "query": "Hebrew University Edmond J. Safra Campus, Givat Ram, Jerusalem",
+        "lat": 31.7729398,
+        "lon": 35.197995,
+        "source_url": "https://international.huji.ac.il/our-campuses-0"
+      },
+      {
+        "name": "Ein Kerem Campus",
+        "label": "Ein Kerem",
+        "tag": "Medicine",
+        "who": "Medicine, dentistry, pharmacy, nursing, and public health.",
+        "address": "Hadassah Ein Kerem, Jerusalem",
+        "query": "Hebrew University Ein Kerem Campus, Jerusalem",
+        "lat": 31.7653138,
+        "lon": 35.150195,
+        "source_url": "https://international.huji.ac.il/our-campuses-0"
+      },
+      {
+        "name": "Rehovot Campus",
+        "label": "Rehovot",
+        "tag": "Agriculture",
+        "who": "Agriculture, food, environment, veterinary medicine, and nutritional sciences.",
+        "address": "Herzl 229, Rehovot",
+        "query": "Hebrew University Faculty of Agriculture, Rehovot, Israel",
+        "lat": 31.9052114,
+        "lon": 34.8036548,
+        "source_url": "https://en.hafakulta.agri.huji.ac.il/campus-map"
+      }
+    ],
+    "10310": [
+      {
+        "name": "Mita Campus",
+        "label": "Mita",
+        "tag": "Keio International Program",
+        "who": "Keio International Program courses in Tokyo.",
+        "address": "2-15-45 Mita, Minato-ku, Tokyo",
+        "query": "Keio University Mita Campus, Tokyo, Japan",
+        "lat": 35.6488408,
+        "lon": 139.7427718,
+        "source_url": "https://www.ic.keio.ac.jp/en/study/exchange/courses.html"
+      },
+      {
+        "name": "Shonan Fujisawa Campus",
+        "label": "Shonan Fujisawa",
+        "tag": "KIP at SFC",
+        "who": "KIP at SFC only. Students on this program cannot take courses on the Tokyo campuses.",
+        "address": "5322 Endo, Fujisawa, Kanagawa",
+        "query": "Keio University Shonan Fujisawa Campus, Endo, Fujisawa, Japan",
+        "lat": 35.384097,
+        "lon": 139.439616,
+        "source_url": "https://www.ic.keio.ac.jp/en/study/exchange/courses.html"
+      }
+    ]
+  }
+}

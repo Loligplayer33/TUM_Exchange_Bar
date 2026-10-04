@@ -86,7 +86,8 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(html.count('class="data-row university-row"'), 125)
         self.assertEqual(html.count('class="annual-data-row"'), 375)
         self.assertIn('class="annual-table"', html)
-        self.assertIn("Average acceptance", html)
+        self.assertIn("Spots to wishes", html)
+        self.assertIn("about three wishes for each spot", html)
         self.assertNotIn("Annual statuses", html)
         self.assertNotIn('id="year-filter"', html)
         self.assertNotIn("yearFilter", html)
@@ -405,6 +406,8 @@ class ReportTests(unittest.TestCase):
         html = report._build_html(self.normalized, self.calibration)
         self.assertIn("const foldSearch", html)
         self.assertIn("tokens.every", html)
+        self.assertIn('search.addEventListener("input", () => { state.search = search.value; render(); })', html)
+        self.assertIn("if (state.sort !== appliedSort) reorderRows()", html)
         self.assertIn('placeholder="UFRJ, São Paulo, Brazil, 2024"', html)
         concepcion = next(
             group
@@ -427,7 +430,7 @@ class ReportTests(unittest.TestCase):
         self.assertIn('aria-label="Sort this list"', html)
         self.assertIn('data-label="Country"', html)
         self.assertIn('data-label="Years recorded"', html)
-        self.assertIn('data-label="Average acceptance"', html)
+        self.assertIn('data-label="Spots to wishes"', html)
         self.assertIn('data-label="Source"', html)
         self.assertIn("const mobileSortButtons", html)
         self.assertIn('querySelector(".mobile-sort")', html)

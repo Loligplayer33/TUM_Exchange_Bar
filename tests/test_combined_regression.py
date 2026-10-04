@@ -405,7 +405,7 @@ class CombinedArtifactsRegressionTests(unittest.TestCase):
         self.assertEqual(text.count('class="annual-data-row"'), 1463)
         self.assertNotIn('class="annual-detail-row"', text)
         self.assertIn('class="annual-table"', text)
-        self.assertIn("Acceptance rate", text)
+        self.assertIn("Spots to wishes", text)
         self.assertIn("Release 2026", text)
         self.assertIn("Release 2027", text)
         self.assertIn("Not listed in release 2027", text)

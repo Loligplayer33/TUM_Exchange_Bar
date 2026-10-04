@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions and technical guidelines for AI agents working in `tumexchange-bars`.
+Instructions for AI agents working in `tumexchange-bars`, both on the software and on David's personal university research.
 
 ## About the Project & Motivation
 
@@ -59,13 +59,28 @@ TUMexchange is the central university-wide exchange program of the Technical Uni
 
 1. **Release Years vs Observation Years:**
    Filenames indicate document release years, not observation years. For example, release 2027 contains observation years 2024–2026; release 2026 contains 2023–2025.
-2. **Bar Meaning & Acceptance Rates:**
-   Vector bars indicate the placement rate of applicants.
-   * Full bar (100%): All applicants were placed, or no students applied that year.
-   * Partial bar: Percent of applicants accepted (e.g. 50% = half placed).
-   * `no_applications` status is displayed as `100% (No applicants)` because places exceeded demand.
+2. **Bar Meaning:**
+   Vector bars are available spots divided by first-round wishes. A former TUMexchange staff member described 33% as about three first-round wishes per spot.
+   * Full bar (100%): At least as many spots as first-round wishes, or no wishes that year.
+   * Partial bar: Spots ÷ first-round wishes. A shorter bar means more wishes per spot. Later rounds are not included.
+   * `no_applications` status is displayed as `100% (No applicants)` because spots were left over.
    * `no_cooperation` / `no_places` are non-scoring years (`No active exchange`) and excluded from university averages.
 3. **UI & Student-Facing Contracts:**
    The generated HTML report is student-facing. Keep internal pipeline developer metadata (PDF point widths, SHA-256 hashes, bounding box coordinates, calibration IDs, raw JSON dump toggles) out of the visual UI, while maintaining complete provenance in the underlying SQLite database, CSV exports, and embedded `<script id="report-data">` JSON.
 4. **Standalone Portability:**
    The generated report HTML (`combined-report.html`) must remain self-contained (inline CSS and vanilla JavaScript without external runtime CDNs or remote dependencies).
+
+## Personal Asia-Exchange Research
+
+This workspace also supports David's research into choosing an exchange university. His initial focus is on Chinese universities and Hong Kong, especially Shanghai, Shenzhen, and Hong Kong; Beijing is also in scope. Keep the geographic shortlist open because these are current interests, not a final decision. Recent comparison work was scoped to a TUM M.Sc. Information Systems student; confirm the current degree, subject area, and exchange cycle whenever they affect eligibility.
+
+When the local-only `research/` folder is present, read `research/README.md` and the timecoded source at `research/sources/asia-advisory-session-transcript.txt` before Asia-exchange research. The transcript is from an information session specifically about Asia exchanges and contains useful guidance on subject-area eligibility, course planning and recognition, language proof, selection, host-country citizenship, workload, exchange participation, and extensions. Use it as substantive starting context and retain its timestamps and speaker attribution. The transcript does not state the event date; treat year-specific figures and recollections as session guidance that needs current confirmation.
+
+For recommendations and comparisons:
+
+1. Check the current TUMexchange relation and the partner university's rules for the exact school, subject area, degree level, campus, semester, and language. A university-wide course catalog does not establish exchange access.
+2. Prefer current official TUM and partner-university sources for eligibility and requirements. Cite direct links and the date checked. Distinguish written rules, advisor statements, individual experience reports, and analysis; a past report or listed housing option is not a guarantee.
+3. Treat course lists as tentative until the relevant partner confirms access. Separate partner admission from course enrollment and TUM credit recognition; ask the responsible TUM school or advisor where recognition is at issue.
+4. Keep academic fit, campus and city experience, housing, costs, language, and evidence certainty distinct. Name the exact university, school, and campus, and state trade-offs instead of implying a single objective ranking.
+5. Do not foreground admission odds, grades, historical placement rates, or application strategy unless David asks for them. When a prior conclusion is challenged or changes, revisit the cited sources and relevant prior discussion before giving a new conclusion.
+6. Write university names in full and make uncertainty explicit. Preserve useful research notes and source copies in the local-only `research/` directory; keep them separate from the tracked software and data pipeline.
