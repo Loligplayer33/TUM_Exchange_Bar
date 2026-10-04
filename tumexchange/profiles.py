@@ -457,7 +457,24 @@ def attach_profiles(
     normalized_catalog = _validate_catalog(catalog)
     profiles = normalized_catalog["profiles"]
     matches = normalized_catalog.get("matches", {})
-    result = [_enrich_group(group, _profiles_for_group(group, profiles, matches)) for group in groups]
+    # A reviewed school or faculty match owns that relation. The older
+    # university-wide chances row must not keep a second copy of it.
+    claimed_relations = {
+        str(relation_id)
+        for group in groups
+        for relation_id in (matches.get(_name_key(_text(group.get("university")))) or [])
+    }
+    result = []
+    for group in groups:
+        selected = _profiles_for_group(group, profiles, matches)
+        explicit = matches.get(_name_key(_text(group.get("university"))))
+        if explicit is None:
+            selected = [
+                profile
+                for profile in selected
+                if str(profile["relation_id"]) not in claimed_relations
+            ]
+        result.append(_enrich_group(group, selected))
 
     matched_relation_ids = {
         str(profile["relation_id"])

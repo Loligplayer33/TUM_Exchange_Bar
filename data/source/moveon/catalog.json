@@ -1,12 +1,12 @@
 {
   "schema_version": "moveon-catalog-v1",
-  "retrieved_at": "2026-09-16T16:45:09Z",
+  "retrieved_at": "2026-10-04T17:40:52Z",
   "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-  "expected_relation_count": 124,
-  "retrieved_relation_count": 124,
+  "expected_relation_count": 120,
+  "retrieved_relation_count": 120,
   "counts": {
-    "countries": 32,
-    "institutions": 124,
+    "countries": 33,
+    "institutions": 120,
     "programs": 1
   },
   "profiles": [
@@ -91,7 +91,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=387&relation_id=10303&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1318",
@@ -184,7 +184,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1318&relation_id=13056&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1428",
@@ -274,7 +274,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1428&relation_id=21315&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1497",
@@ -287,20 +287,20 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Biosciences",
         "LS-Forest Science and Resource Management",
-        "MGT-Business Administration",
-        "MH-Sport and Health Science",
-        "NAT-Chemistry",
-        "NAT-Physics"
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation"
       ],
       "fields": [
         {
@@ -355,7 +355,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Forest Science and Resource Management|| MGT-Business Administration|| MH-Sport and Health Science|| NAT-Chemistry|| NAT-Physics",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| LS-Forest Science and Resource Management|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
           "links": []
         },
         {
@@ -365,10 +365,10 @@
         },
         {
           "label": "Exchange Information",
-          "text": "Fact Sheet 26-27",
+          "text": "Fact Sheet 26/27",
           "links": [
             {
-              "label": "Fact Sheet 26-27 (on TUM's directory)",
+              "label": "Fact Sheet 26/27 (on TUM's directory)",
               "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
               "document_id": "955566"
             }
@@ -377,56 +377,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1497&relation_id=10245&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "1524",
-      "relation_id": "10183",
-      "name": "Deakin University",
-      "country": "Australia",
-      "city": "Melbourne Burwood",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "ED-Architecture and Design",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "LS-Biosciences",
-        "LS-Forest Science and Resource Management",
-        "LS-Landscape Architecture and Planning",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "SOT-Education",
-        "SOT-Governance"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| SOT-Education|| SOT-Governance",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Melbourne Burwood",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1524&relation_id=10183&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1611",
@@ -565,7 +516,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1611&relation_id=13629&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "367",
@@ -578,26 +529,26 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "LS-Biosciences",
-        "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
         "NAT-Chemistry",
-        "NAT-Physics"
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "ED-Mechanical Engineering",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
+        "LS-Biosciences",
+        "LS-Nutritional Sciences",
+        "LS-Landscape Architecture and Planning",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -657,7 +608,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| LS-Nutritional Sciences|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -679,7 +630,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=367&relation_id=10347&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "903",
@@ -706,8 +657,8 @@
         "LS-Biosciences",
         "LS-Landscape Architecture and Planning",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -785,7 +736,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Landscape Architecture and Planning|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Landscape Architecture and Planning|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
           "links": []
         },
         {
@@ -807,7 +758,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=903&relation_id=10349&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1366",
@@ -831,8 +782,8 @@
         "ED-Medical Technology",
         "LS-Biosciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -900,7 +851,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
           "links": []
         },
         {
@@ -922,7 +873,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1366&relation_id=10373&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "930",
@@ -1045,7 +996,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=930&relation_id=10389&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "256",
@@ -1144,7 +1095,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=256&relation_id=10447&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2091",
@@ -1175,8 +1126,8 @@
         "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -1271,7 +1222,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
           "links": []
         },
         {
@@ -1282,7 +1233,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2091&relation_id=13647&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1694",
@@ -1295,28 +1246,28 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "MGT-Business Administration",
+        "SOT-Education",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Education"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -1389,7 +1340,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -1411,7 +1362,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1694&relation_id=11623&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1397",
@@ -1525,7 +1476,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1397&relation_id=10449&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "716",
@@ -1628,7 +1579,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=716&relation_id=10455&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "613",
@@ -1641,29 +1592,29 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
+        "MH-Medicine",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Medicine",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
         "SOT-Education",
-        "SOT-Governance"
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -1703,7 +1654,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| MH-Medicine|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -1725,7 +1676,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=613&relation_id=10413&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1274",
@@ -1778,7 +1729,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1274&relation_id=10425&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "394",
@@ -1883,7 +1834,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=394&relation_id=10423&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "614",
@@ -1908,9 +1859,9 @@
         "ED-Medical Technology",
         "LS-Biosciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Medicine",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -1922,6 +1873,16 @@
           "label": "Level",
           "text": "Undergraduate / Bachelor|| Postgraduate / Master",
           "links": []
+        },
+        {
+          "label": "Partner Information",
+          "text": "Factsheet 2026",
+          "links": [
+            {
+              "label": "Factsheet 2026",
+              "url": "https://internacional.ufrj.br/wp-content/uploads/2026/02/fact-sheet-temporaria-ingles.pdf"
+            }
+          ]
         },
         {
           "label": "Campus",
@@ -1955,7 +1916,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
           "links": []
         },
         {
@@ -1966,7 +1927,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=614&relation_id=10421&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3231",
@@ -2001,7 +1962,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3231&relation_id=21754&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "254",
@@ -2014,19 +1975,19 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "LS-Biosciences",
+        "MH-Health and Sport Sciences",
         "MGT-Business Administration",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "SOT-Governance"
+        "LS-Biosciences",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -2066,7 +2027,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| SOT-Governance",
+          "text": "NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -2088,7 +2049,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=254&relation_id=10261&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1054",
@@ -2173,7 +2134,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1054&relation_id=10264&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "255",
@@ -2268,7 +2229,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=255&relation_id=10266&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "252",
@@ -2358,7 +2319,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=252&relation_id=11476&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "247",
@@ -2371,17 +2332,17 @@
         "master"
       ],
       "subject_areas": [
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "LS-Biosciences",
-        "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
         "NAT-Physics",
-        "SOT-Governance"
+        "MH-Health and Sport Sciences",
+        "LS-Biosciences",
+        "LS-Nutritional Sciences",
+        "LS-Landscape Architecture and Planning",
+        "SOT-Governance",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -2436,7 +2397,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Informatics|| CIT-Mathematics|| LS-Biosciences|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| NAT-Physics|| MH-Health and Sport Sciences|| LS-Biosciences|| LS-Nutritional Sciences|| LS-Landscape Architecture and Planning|| SOT-Governance|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -2458,7 +2419,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=247&relation_id=10431&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "415",
@@ -2471,29 +2432,29 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -2553,7 +2514,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -2575,7 +2536,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=415&relation_id=10435&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1012",
@@ -2588,26 +2549,26 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -2672,7 +2633,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -2694,7 +2655,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1012&relation_id=10437&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1040",
@@ -2778,7 +2739,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1040&relation_id=10445&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1477",
@@ -2791,27 +2752,28 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
         "SOT-Education",
-        "SOT-Governance"
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training",
+        "LS-Landscape Architecture - Environment Science"
       ],
       "fields": [
         {
@@ -2886,7 +2848,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| LS-Landscape Architecture - Environment Science",
           "links": []
         },
         {
@@ -2897,7 +2859,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1477&relation_id=19729&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1013",
@@ -2921,8 +2883,8 @@
         "ED-Medical Technology",
         "LS-Biosciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -2935,13 +2897,48 @@
           "links": []
         },
         {
+          "label": "Campus",
+          "text": "Waterloo",
+          "links": []
+        },
+        {
           "label": "Semester Dates",
           "text": "Fall Trimester: September to December\n- corresponds to TUM winter semester\nWinter Trimester: January to April\n- corresponds to TUM winter semester\nSpring Trimester: May to August\n- corresponds to TUM summer semester",
           "links": []
         },
         {
+          "label": "Study System",
+          "text": "UOW operates on a trimester system with a full fall, winter, and spring term.\nUndergraduate full-time course load is five courses per term (equivalent to 2.5 units) with a minimum of three courses per term.\nGraduate full-time course load is one graduate course per term.",
+          "links": []
+        },
+        {
+          "label": "Admission Requirements",
+          "text": "A 75% cumulative average or equivalent at their home institution.",
+          "links": []
+        },
+        {
+          "label": "Academic Restrictions",
+          "text": "Undergraduate exchange students can only enrol in a maximum of two Computer Science courses per term.\nSpace is limited in our Architecture programs at all levels.",
+          "links": []
+        },
+        {
+          "label": "Language Requirements",
+          "text": "English C1:\nUOW only accepts the following English Language Certificates\nTOEFL\nIELTS\nPTE\nCambridge rtificate\nDuolingo English Test (only for undergraduate program)\nRequired test scores differ for undergraduate and graduate admission\nCheck the Fact Sheet for more details",
+          "links": []
+        },
+        {
+          "label": "Additional Information",
+          "text": "On campus housing is extremely limited and not guaranteed\nHousing is more accessible in the spring term",
+          "links": []
+        },
+        {
+          "label": "Application Deadlines at Host University",
+          "text": "For stays in fall semester: April 1\nFor stays in winter semester: September 1\nFor stays in spring semester: December 1",
+          "links": []
+        },
+        {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
           "links": []
         },
         {
@@ -2963,7 +2960,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1013&relation_id=10453&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "384",
@@ -3061,7 +3058,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=384&relation_id=10343&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "481",
@@ -3074,27 +3071,27 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "SOT-Education",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Education"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -3139,7 +3136,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -3161,7 +3158,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=481&relation_id=10345&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "671",
@@ -3184,7 +3181,6 @@
         "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
         "ED-Medical Technology",
-        "MGT-Business Administration",
         "NAT-Chemistry",
         "NAT-Physics"
       ],
@@ -3231,7 +3227,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| MGT-Business Administration|| NAT-Chemistry|| NAT-Physics",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| NAT-Chemistry|| NAT-Physics",
           "links": []
         },
         {
@@ -3253,7 +3249,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=671&relation_id=14206&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "397",
@@ -3342,7 +3338,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=397&relation_id=10401&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "511",
@@ -3435,7 +3431,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=511&relation_id=10407&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1461",
@@ -3526,7 +3522,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1461&relation_id=10259&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "472",
@@ -3609,7 +3605,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=472&relation_id=15576&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "682",
@@ -3636,7 +3632,7 @@
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
-        "MH-Sport and Health Science",
+        "MH-Health and Sport Sciences",
         "NAT-Chemistry",
         "NAT-Physics",
         "SOT-Education",
@@ -3694,13 +3690,23 @@
           "links": []
         },
         {
+          "label": "Additional Information",
+          "text": "International Students Division",
+          "links": [
+            {
+              "label": "International Students Division",
+              "url": "https://isd.pku.edu.cn/en/"
+            }
+          ]
+        },
+        {
           "label": "Application Deadlines at Host University",
           "text": "Stays starting in September: Mid-April\nStays starting in February: Mid-November",
           "links": []
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MH-Sport and Health Science|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MH-Health and Sport Sciences|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
           "links": []
         },
         {
@@ -3711,7 +3717,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=682&relation_id=12155&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "336",
@@ -3821,7 +3827,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=336&relation_id=10362&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3293",
@@ -3910,7 +3916,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3293&relation_id=14784&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1203",
@@ -3999,7 +4005,105 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1203&relation_id=14096&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "234",
+      "relation_id": "10752",
+      "name": "The Hong Kong University of Science and Technology",
+      "country": "China",
+      "city": "Hong Kong",
+      "levels": [
+        "bachelor",
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Mathematics",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "LS-Agricultural and Horticultural Sciences",
+        "LS-Biosciences",
+        "LS-Brewing and Food Technology",
+        "LS-Forest Science and Resource Management",
+        "LS-Nutritional Sciences",
+        "NAT-Chemistry",
+        "NAT-Physics"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Website",
+          "text": "Exchange\nInformation",
+          "links": [
+            {
+              "label": "Exchange\nInformation",
+              "url": "https://advise.science.ust.hk/sfs/exchange/incoming/application-procedures"
+            }
+          ]
+        },
+        {
+          "label": "Partner Information",
+          "text": "Factsheet HKUST School of Science\n2027/28",
+          "links": [
+            {
+              "label": "Factsheet HKUST School of Science\n2027/28",
+              "url": "https://dl.science.ust.hk/public/HKUST_Science_Exchange_Fact%20Sheet_2027-28.pdf"
+            }
+          ]
+        },
+        {
+          "label": "Semester Dates",
+          "text": "Fall Term: September to December\n– corresponds to TUM winter semester\nSpring Term: February to May\n– corresponds to TUM summer semester",
+          "links": []
+        },
+        {
+          "label": "Academic Restrictions",
+          "text": "courses only at undergraduate (Bachelor’s) level\nMaster’s students may take undergraduate courses, but must verify credit recognition with their TUM School\nflexible study plan required as enrollment into classes is subject to constraints such as class quota, pre-requisite requirements, instructors’ consent, etc.\nstudents are allowed to take courses offered by other Schools, subject to pre-requisite requirements, class quota and approval of the course instructors",
+          "links": []
+        },
+        {
+          "label": "Language Requirements",
+          "text": "no English Proof required",
+          "links": []
+        },
+        {
+          "label": "Application Deadlines at Host University",
+          "text": "Stays starting in September: March\nStays starting in February: September",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Nutritional Sciences|| NAT-Chemistry|| NAT-Physics",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Hong Kong",
+          "links": []
+        },
+        {
+          "label": "Exchange Information",
+          "text": "Fact Sheet School of Engineering 2026/27,\nFact Sheet School of Science 2026/27",
+          "links": [
+            {
+              "label": "Fact Sheet School of Engineering 2026/27 (on TUM's directory)",
+              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+              "document_id": "1333668"
+            },
+            {
+              "label": "Fact Sheet School of Science 2026/27 (on TUM's directory)",
+              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+              "document_id": "958754"
+            }
+          ]
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=234&relation_id=10752&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "234",
@@ -4109,105 +4213,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=234&relation_id=10375&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "234",
-      "relation_id": "10752",
-      "name": "The Hong Kong University of Science and Technology",
-      "country": "China",
-      "city": "Hong Kong",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "LS-Agricultural and Horticultural Sciences",
-        "LS-Biosciences",
-        "LS-Brewing and Food Technology",
-        "LS-Forest Science and Resource Management",
-        "LS-Nutritional Sciences",
-        "NAT-Chemistry",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Website",
-          "text": "Exchange\nInformation",
-          "links": [
-            {
-              "label": "Exchange\nInformation",
-              "url": "https://advise.science.ust.hk/sfs/exchange/incoming/application-procedures"
-            }
-          ]
-        },
-        {
-          "label": "Partner Information",
-          "text": "Factsheet HKUST School of Science\n2027/28",
-          "links": [
-            {
-              "label": "Factsheet HKUST School of Science\n2027/28",
-              "url": "https://dl.science.ust.hk/public/HKUST_Science_Exchange_Fact%20Sheet_2027-28.pdf"
-            }
-          ]
-        },
-        {
-          "label": "Semester Dates",
-          "text": "Fall Term: September to December\n– corresponds to TUM winter semester\nSpring Term: February to May\n– corresponds to TUM summer semester",
-          "links": []
-        },
-        {
-          "label": "Academic Restrictions",
-          "text": "courses only at undergraduate (Bachelor’s) level\nMaster’s students may take undergraduate courses, but must verify credit recognition with their TUM School\nflexible study plan required as enrollment into classes is subject to constraints such as class quota, pre-requisite requirements, instructors’ consent, etc.\nstudents are allowed to take courses offered by other Schools, subject to pre-requisite requirements, class quota and approval of the course instructors",
-          "links": []
-        },
-        {
-          "label": "Language Requirements",
-          "text": "no English Proof required",
-          "links": []
-        },
-        {
-          "label": "Application Deadlines at Host University",
-          "text": "Stays starting in September: March\nStays starting in February: September",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Nutritional Sciences|| NAT-Chemistry|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Hong Kong",
-          "links": []
-        },
-        {
-          "label": "Exchange Information",
-          "text": "Fact Sheet School of Engineering 2026/27,\nFact Sheet School of Science 2026/27",
-          "links": [
-            {
-              "label": "Fact Sheet School of Engineering 2026/27 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "1333668"
-            },
-            {
-              "label": "Fact Sheet School of Science 2026/27 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "958754"
-            }
-          ]
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=234&relation_id=10752&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "643",
@@ -4297,7 +4303,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=643&relation_id=20958&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "319",
@@ -4406,7 +4412,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=319&relation_id=10381&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "4958",
@@ -4513,7 +4519,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=4958&relation_id=20397&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "335",
@@ -4620,7 +4626,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=335&relation_id=10395&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "337",
@@ -4727,7 +4733,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=337&relation_id=10461&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "515",
@@ -4740,31 +4746,31 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
+        "MH-Medicine",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
-        "LS-Food Chemistry",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Medicine",
+        "SOT-Education",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Education"
+        "LS-Food Chemistry"
       ],
       "fields": [
         {
@@ -4809,7 +4815,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Food Chemistry|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| MH-Medicine|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| LS-Food Chemistry",
           "links": []
         },
         {
@@ -4831,7 +4837,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=515&relation_id=10399&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1644",
@@ -4844,24 +4850,24 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "LS-Biosciences",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
         "NAT-Chemistry",
-        "NAT-Physics"
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "ED-Mechanical Engineering",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
+        "LS-Biosciences",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -4901,7 +4907,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -4923,7 +4929,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1644&relation_id=10815&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "465",
@@ -5011,7 +5017,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=465&relation_id=10405&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "704",
@@ -5087,7 +5093,127 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=704&relation_id=10304&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "7006",
+      "relation_id": "22472",
+      "name": "Universidad San Francisco de Quito (USFQ)",
+      "country": "Ecuador",
+      "city": "Quito",
+      "levels": [
+        "bachelor",
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Architecture and Design",
+        "ED-Civil / Environmental / Geo Engineering",
+        "ED-Geodesy",
+        "ED-Interdisciplinary Engineering",
+        "ED-Mechanical Engineering",
+        "ED-Medical Technology",
+        "LS-Agricultural and Horticultural Sciences",
+        "LS-Biosciences",
+        "LS-Brewing and Food Technology",
+        "LS-Food Chemistry",
+        "LS-Forest Science and Resource Management",
+        "LS-Landscape Architecture and Planning",
+        "LS-Nutritional Sciences",
+        "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
+        "MH-Medicine",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training",
+        "NAT-Chemistry",
+        "NAT-Physics",
+        "SOT-Department of Science, Technology and Society",
+        "SOT-Education",
+        "SOT-Governance"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Partner Information",
+          "text": "Fact sheet",
+          "links": [
+            {
+              "label": "Fact sheet",
+              "url": "http://sway.cloud.microsoft/mATYl495DGb5HVbd?ref=email"
+            }
+          ]
+        },
+        {
+          "label": "Campus",
+          "text": "Quito",
+          "links": []
+        },
+        {
+          "label": "Semester Dates",
+          "text": "Fall Semester: August to December\n~corresponds to TUM winter semester\nSpring Semester: January to May\n~corresponds to TUM summer semester",
+          "links": []
+        },
+        {
+          "label": "Specific Programs",
+          "text": "Galápagos Semester Program (self-paid program, GPA of 3.0 ~ TUM grading scale 2,0 s. fact sheet)",
+          "links": []
+        },
+        {
+          "label": "Study System",
+          "text": "Maximum of 16 US credits per semester\nCourse guide for courses in English (small number of courses)\nCourse guide for courses in Spanish",
+          "links": [
+            {
+              "label": "courses in English",
+              "url": "https://estudusfqedu-my.sharepoint.com/personal/opi_usfq_edu_ec/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fopi%5Fusfq%5Fedu%5Fec%2FDocuments%2FOPI%20External%20Documents%2FComunicaci%C3%B3n%2FDocumentos%20Sway%2FUSFQ%5FCourse%5FGuide%2Epdf&parent=%2Fpersonal%2Fopi%5Fusfq%5Fedu%5Fec%2FDocuments%2FOPI%20External%20Documents%2FComunicaci%C3%B3n%2FDocumentos%20Sway&ga=1"
+            },
+            {
+              "label": "courses in Spanish",
+              "url": "https://wsexternal.usfq.edu.ec/MallaCurricular-USFQ/"
+            }
+          ]
+        },
+        {
+          "label": "Admission Requirements",
+          "text": "Spanish B1 level\nEnglish B2 level\nGPA of 2.50 ~ TUM grading scale 2,5",
+          "links": []
+        },
+        {
+          "label": "Language Requirements",
+          "text": "Spanish and English proficiency according to your course selection. No proficiency required by USFQ, but level B1 for Spanish is highly recommended.",
+          "links": []
+        },
+        {
+          "label": "Additional Information",
+          "text": "Accommodation: Host family, self-organized\nCampus life: student clubs",
+          "links": []
+        },
+        {
+          "label": "Application Deadlines at Host University",
+          "text": "Stays starting in August: End of May\nStays starting in January: Mid of October",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Food Chemistry|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Quito",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=7006&relation_id=22472&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2830",
@@ -5179,7 +5305,52 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2830&relation_id=15217&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "1488",
+      "relation_id": "20902",
+      "name": "Bahir Dar University (BDU)",
+      "country": "Ethiopia",
+      "city": "Bahir Dar",
+      "levels": [
+        "bachelor",
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Civil / Environmental / Geo Engineering",
+        "ED-Geodesy",
+        "ED-Interdisciplinary Engineering",
+        "LS-Agricultural and Horticultural Sciences",
+        "LS-Biosciences",
+        "LS-Brewing and Food Technology",
+        "LS-Forest Science and Resource Management",
+        "MGT-Business Administration",
+        "SOT-Governance"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| MGT-Business Administration|| SOT-Governance",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Bahir Dar",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1488&relation_id=20902&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "410",
@@ -5192,31 +5363,31 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
         "SOT-Education",
-        "SOT-Governance"
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -5256,7 +5427,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -5278,7 +5449,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=410&relation_id=15249&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "338",
@@ -5370,7 +5541,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=338&relation_id=10280&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "340",
@@ -5466,7 +5637,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=340&relation_id=10282&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "339",
@@ -5509,7 +5680,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=339&relation_id=10284&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "343",
@@ -5549,7 +5720,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=343&relation_id=10286&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "342",
@@ -5622,7 +5793,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=342&relation_id=10290&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "353",
@@ -5684,7 +5855,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=353&relation_id=10292&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1207",
@@ -5756,7 +5927,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1207&relation_id=10294&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "346",
@@ -5802,11 +5973,22 @@
           "label": "City",
           "text": "Roorkee",
           "links": []
+        },
+        {
+          "label": "Exchange Information",
+          "text": "Fact Sheet 2026",
+          "links": [
+            {
+              "label": "Fact Sheet 2026 (on TUM's directory)",
+              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+              "document_id": "745764"
+            }
+          ]
         }
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=346&relation_id=10296&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "236",
@@ -5853,7 +6035,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=236&relation_id=10298&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1447",
@@ -5866,27 +6048,27 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
         "SOT-Education",
-        "SOT-Governance"
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -5931,7 +6113,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -5958,7 +6140,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1447&relation_id=10275&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "412",
@@ -6056,7 +6238,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=412&relation_id=10383&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "413",
@@ -6166,7 +6348,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=413&relation_id=10385&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "871",
@@ -6261,7 +6443,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=871&relation_id=10277&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "258",
@@ -6356,7 +6538,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=258&relation_id=10379&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "513",
@@ -6369,25 +6551,25 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "ED-Aerospace",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -6447,7 +6629,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Aerospace|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Physics|| SOT-Governance",
+          "text": "CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -6458,7 +6640,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=513&relation_id=10310&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2589",
@@ -6471,30 +6653,30 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "ED-Aerospace",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "MH-Medicine",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Medicine",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -6564,7 +6746,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| MH-Medicine|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -6575,7 +6757,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2589&relation_id=14119&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "327",
@@ -6672,7 +6854,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=327&relation_id=10316&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "260",
@@ -6700,9 +6882,9 @@
         "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Medicine",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics"
@@ -6735,7 +6917,7 @@
         },
         {
           "label": "Study System",
-          "text": "double-check the availability of English-taught courses Courses are available in English→ https://www.isc.kyushu-u.ac.jp/intlweb/en/student/english\nJapanese immigration law stipulates that international students with “student” visa have to spend at least 10 hours in class or research every week.",
+          "text": "double-check the availability of English-taught courses Courses are available in English→ https://www.isc.kyushu-u.ac.jp/intlweb/en/student/english\nEnglish-taught undergraduate programs are limited to Engineering, Agriculture, and ISI\nCourse availability is limited and placement is not guaranteed\nJapanese immigration law stipulates that international students with “student” visa have to spend at least 10 hours in class or research every week.",
           "links": [
             {
               "label": "English-taught courses",
@@ -6760,7 +6942,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
           "links": []
         },
         {
@@ -6787,7 +6969,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=260&relation_id=10318&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "325",
@@ -6800,29 +6982,29 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "MH-Medicine",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Medicine",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -6892,7 +7074,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| MH-Medicine|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -6903,7 +7085,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=325&relation_id=10328&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "259",
@@ -7010,7 +7192,93 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=259&relation_id=10341&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "262",
+      "relation_id": "10762",
+      "name": "The University of Tokyo",
+      "country": "Japan",
+      "city": "Tokyo",
+      "levels": [
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "NAT-Physics"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Website",
+          "text": "Exchange at the Graduate School of Information Science and Technology at the University of Tokyo\nExchange Information",
+          "links": [
+            {
+              "label": "Exchange Information",
+              "url": "https://www.i.u-tokyo.ac.jp/edu/entra/exchange_students_e.shtml"
+            }
+          ]
+        },
+        {
+          "label": "Partner Information",
+          "text": "Factsheet",
+          "links": [
+            {
+              "label": "Factsheet",
+              "url": "https://www.i.u-tokyo.ac.jp/edu/entra/exchange_students_e.shtml"
+            }
+          ]
+        },
+        {
+          "label": "Semester Dates",
+          "text": "Winter Semester: October to March\n– corresponds to TUM winter semester\nSummer Semester: April to September\n– corresponds to TUM summer semester",
+          "links": []
+        },
+        {
+          "label": "Admission Requirements",
+          "text": "only for Master's students from TUM School of Computation, Information and Technology (CIT) or from Physics\nno official GPA-requirement; due to high demand, a GPA of at least 2.0 (German scale) at the time of the TUMexchange application is strongly recommended\nevery student needs to find a laboratory under a supervising professor, start searching immediately after you have been accepted (indicate also your exchange semester)\ndo not contact any professors before you have been accepted for TUMexchange\nif your exchange begins in the following Winter term, start looking for a supervising professor as soon as you have been accepted for TUMexchange",
+          "links": []
+        },
+        {
+          "label": "Language Requirements",
+          "text": "No English language proof required",
+          "links": []
+        },
+        {
+          "label": "Additional Information",
+          "text": "Students whose primary focus is coursework are still welcome, provided that they also participate in some form of research in a laboratory.\nAll exchange students required to register for the IST Project Research course and to submit a three-page report on their research work at the end of each semester.",
+          "links": [
+            {
+              "label": "IST Project Research course",
+              "url": "https://catalog.he.u-tokyo.ac.jp/detail?code=4893-1005&year=2026&interface_language=en"
+            }
+          ]
+        },
+        {
+          "label": "Application Deadlines at Host University",
+          "text": "Stays starting in October: April\nStays starting in April: October",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| NAT-Physics",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Tokyo",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10762&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "262",
@@ -7103,93 +7371,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10377&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "262",
-      "relation_id": "10762",
-      "name": "The University of Tokyo",
-      "country": "Japan",
-      "city": "Tokyo",
-      "levels": [
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Website",
-          "text": "Exchange at the Graduate School of Information Science and Technology at the University of Tokyo\nExchange Information",
-          "links": [
-            {
-              "label": "Exchange Information",
-              "url": "https://www.i.u-tokyo.ac.jp/edu/entra/exchange_students_e.shtml"
-            }
-          ]
-        },
-        {
-          "label": "Partner Information",
-          "text": "Factsheet",
-          "links": [
-            {
-              "label": "Factsheet",
-              "url": "https://www.i.u-tokyo.ac.jp/edu/entra/exchange_students_e.shtml"
-            }
-          ]
-        },
-        {
-          "label": "Semester Dates",
-          "text": "Winter Semester: October to March\n– corresponds to TUM winter semester\nSummer Semester: April to September\n– corresponds to TUM summer semester",
-          "links": []
-        },
-        {
-          "label": "Admission Requirements",
-          "text": "only for Master's students from TUM School of Computation, Information and Technology (CIT) or from Physics\nno official GPA-requirement; due to high demand, a GPA of at least 2.0 (German scale) at the time of the TUMexchange application is strongly recommended\nevery student needs to find a laboratory under a supervising professor, start searching immediately after you have been accepted (indicate also your exchange semester)\ndo not contact any professors before you have been accepted for TUMexchange\nif your exchange begins in the following Winter term, start looking for a supervising professor as soon as you have been accepted for TUMexchange",
-          "links": []
-        },
-        {
-          "label": "Language Requirements",
-          "text": "No English language proof required",
-          "links": []
-        },
-        {
-          "label": "Additional Information",
-          "text": "Students whose primary focus is coursework are still welcome, provided that they also participate in some form of research in a laboratory.\nAll exchange students required to register for the IST Project Research course and to submit a three-page report on their research work at the end of each semester.",
-          "links": [
-            {
-              "label": "IST Project Research course",
-              "url": "https://catalog.he.u-tokyo.ac.jp/detail?code=4893-1005&year=2026&interface_language=en"
-            }
-          ]
-        },
-        {
-          "label": "Application Deadlines at Host University",
-          "text": "Stays starting in October: April\nStays starting in April: October",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Tokyo",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10762&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "872",
@@ -7288,7 +7470,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=872&relation_id=10391&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "5586",
@@ -7365,7 +7547,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=5586&relation_id=20915&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "350",
@@ -7378,21 +7560,21 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "LS-Biosciences",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
         "MGT-Business Administration",
+        "LS-Biosciences",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -7432,7 +7614,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Biosciences|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -7442,19 +7624,24 @@
         },
         {
           "label": "Exchange Information",
-          "text": "Fact Sheet KAIST Spring 2026",
+          "text": "Fact Sheet KAIST Spring 2026,\nFact Sheet 2027",
           "links": [
             {
               "label": "Fact Sheet KAIST Spring 2026 (on TUM's directory)",
               "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
               "document_id": "1356790"
+            },
+            {
+              "label": "Fact Sheet 2027 (on TUM's directory)",
+              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+              "document_id": "844231"
             }
           ]
         }
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=350&relation_id=10312&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "482",
@@ -7466,27 +7653,27 @@
         "bachelor"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
         "ED-Architecture and Design",
         "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
+        "CIT-Informatics",
+        "CIT-Mathematics",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "ED-Medical Technology",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -7526,7 +7713,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -7548,7 +7735,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=482&relation_id=10314&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1672",
@@ -7635,7 +7822,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1672&relation_id=10766&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2698",
@@ -7648,21 +7835,21 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Informatics",
-        "ED-Aerospace",
         "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
+        "NAT-Chemistry",
+        "CIT-Informatics",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "MH-Health and Sport Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
-        "LS-Forest Science and Resource Management",
         "LS-Nutritional Sciences",
+        "LS-Forest Science and Resource Management",
+        "ED-Medical Technology",
+        "SOT-Governance",
+        "ED-Aerospace",
+        "ED-Geodesy",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -7697,7 +7884,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Informatics|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Nutritional Sciences|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| ED-Mechanical Engineering|| MH-Health and Sport Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| ED-Medical Technology|| SOT-Governance|| ED-Aerospace|| ED-Geodesy|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -7734,7 +7921,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2698&relation_id=14769&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1172",
@@ -7844,7 +8031,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1172&relation_id=10359&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1037",
@@ -7947,7 +8134,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1037&relation_id=10459&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "976",
@@ -8037,7 +8224,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=976&relation_id=14117&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "349",
@@ -8068,9 +8255,9 @@
         "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Medicine",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -8121,7 +8308,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Food Chemistry|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Food Chemistry|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
           "links": []
         },
         {
@@ -8143,7 +8330,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=349&relation_id=10306&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "348",
@@ -8236,7 +8423,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=348&relation_id=10411&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "489",
@@ -8264,9 +8451,9 @@
         "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Medicine",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics"
@@ -8289,22 +8476,37 @@
         },
         {
           "label": "Study System",
-          "text": "The first cicle in Mexico, the Licenciatura (Bachelor), lasts four to six years. Master's students attend courses at an advanced Licenciatura level.\nAt UNAM, TUM master students can also enroll in the Master/Graduate program (Posgrado), please check the organization details as Masters are organized differently in Latin America.",
-          "links": []
+          "text": "The first cicle in Mexico, the Licenciatura (Bachelor), lasts four to six years. Master's students attend courses at an advanced Licenciatura level.\nAt UNAM, TUM master students can also enroll in the Master/Graduate program (Posgrado), please check the organization details as Masters are organized differently in Latin America.\nEnglish taught courses",
+          "links": [
+            {
+              "label": "courses",
+              "url": "https://www.unaminternacional.unam.mx/file/1508"
+            }
+          ]
         },
         {
           "label": "Admission Requirements",
-          "text": "GPA undergraduate programs: 8/10 ~ TUM grade average of 2,6\nminimum of 44% adcanve on credits and courses",
+          "text": "GPA of 2.5 ~ TUM grade average of 2,5\nMinimum of 40% adcanve on credits and courses",
           "links": []
         },
         {
           "label": "Academic Restrictions",
-          "text": "Medicine students can only apply for rotaciones hospitalarias in the period of January - June at UNAM",
+          "text": "Medicine students can only apply for rotaciones hospitalarias in the period of January - June at UNAM. Please contact them in advance to make sure there are spots available.",
           "links": []
         },
         {
           "label": "Language Requirements",
-          "text": "Spanish B2\nSIELE und DELE",
+          "text": "Spanish B2\nSIELE und DELE\nSpecific requierements may differ for each School at UNAM.",
+          "links": [
+            {
+              "label": "Specific requierements",
+              "url": "https://www.unaminternacional.unam.mx/file/1507"
+            }
+          ]
+        },
+        {
+          "label": "Additional Information",
+          "text": "UNAMigo program (welcome and integration services by UNAM students)\nAccommodation: self-organized",
           "links": []
         },
         {
@@ -8314,7 +8516,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
           "links": []
         },
         {
@@ -8325,7 +8527,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=489&relation_id=10403&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "383",
@@ -8394,7 +8596,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=383&relation_id=10255&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2447",
@@ -8469,7 +8671,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2447&relation_id=20985&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3715",
@@ -8482,22 +8684,22 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
         "CIT-Informatics",
         "CIT-Mathematics",
+        "ED-Mechanical Engineering",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
+        "SOT-Education",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
         "CS-Campus Straubing for Biotechnology and Sustainability",
         "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
         "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "MGT-Business Administration",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "SOT-Education",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -8532,7 +8734,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| SOT-Education|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| MH-Health and Sport Sciences|| MGT-Business Administration|| SOT-Education|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -8554,7 +8756,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3715&relation_id=20224&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "368",
@@ -8650,7 +8852,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=368&relation_id=10457&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "4953",
@@ -8736,7 +8938,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=4953&relation_id=22474&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3816",
@@ -8830,7 +9032,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3816&relation_id=20908&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "232",
@@ -8922,7 +9124,40 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=232&relation_id=10331&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "233",
+      "relation_id": "22019",
+      "name": "National University of Singapore (NUS)",
+      "country": "Singapore",
+      "city": "Singapore",
+      "levels": [
+        "bachelor"
+      ],
+      "subject_areas": [
+        "ED-Architecture and Design"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "ED-Architecture and Design",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Singapore",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=233&relation_id=22019&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "233",
@@ -9025,7 +9260,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=233&relation_id=10337&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "6512",
@@ -9078,7 +9313,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=6512&relation_id=21860&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "425",
@@ -9091,28 +9326,29 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
         "SOT-Education",
-        "SOT-Governance"
+        "ED-Geology",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -9167,7 +9403,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Geology|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -9189,7 +9425,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=425&relation_id=10371&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3369",
@@ -9226,7 +9462,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3369&relation_id=22476&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "6998",
@@ -9315,7 +9551,106 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=6998&relation_id=22478&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "5717",
+      "relation_id": "22482",
+      "name": "University of the Witwatersrand (Wits)",
+      "country": "South Africa",
+      "city": "Johannesburg",
+      "levels": [
+        "bachelor",
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "CIT-Informatics",
+        "CIT-Mathematics",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Architecture and Design",
+        "ED-Civil / Environmental / Geo Engineering",
+        "ED-Geodesy",
+        "ED-Interdisciplinary Engineering",
+        "ED-Mechanical Engineering",
+        "ED-Medical Technology",
+        "LS-Agricultural and Horticultural Sciences",
+        "LS-Biosciences",
+        "LS-Brewing and Food Technology",
+        "LS-Food Chemistry",
+        "LS-Forest Science and Resource Management",
+        "LS-Landscape Architecture and Planning",
+        "LS-Nutritional Sciences",
+        "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
+        "MH-Medicine",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training",
+        "NAT-Chemistry",
+        "NAT-Physics",
+        "SOT-Department of Science, Technology and Society",
+        "SOT-Education",
+        "SOT-Governance"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Architecture and Design|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Food Chemistry|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Medicine|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education|| SOT-Governance",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Johannesburg",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=5717&relation_id=22482&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
+    },
+    {
+      "institution_id": "7002",
+      "relation_id": "22480",
+      "name": "University of Venda (UniVen)",
+      "country": "South Africa",
+      "city": "Thohoyandou",
+      "levels": [
+        "bachelor",
+        "master"
+      ],
+      "subject_areas": [
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Interdisciplinary Engineering",
+        "ED-Mechanical Engineering",
+        "MGT-Business Administration",
+        "SOT-Governance"
+      ],
+      "fields": [
+        {
+          "label": "Level",
+          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
+          "links": []
+        },
+        {
+          "label": "Subject Area",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| MGT-Business Administration|| SOT-Governance",
+          "links": []
+        },
+        {
+          "label": "City",
+          "text": "Thohoyandou",
+          "links": []
+        }
+      ],
+      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=7002&relation_id=22480&openwhichtab=travelreports&hide_elements=true&whichtab=all",
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "407",
@@ -9424,7 +9759,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=407&relation_id=10333&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "524",
@@ -9516,7 +9851,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=524&relation_id=10335&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1751",
@@ -9600,7 +9935,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1751&relation_id=11485&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "775",
@@ -9692,7 +10027,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=775&relation_id=10257&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1273",
@@ -9731,7 +10066,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1273&relation_id=10322&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "351",
@@ -9820,7 +10155,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=351&relation_id=10363&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "3230",
@@ -9906,323 +10241,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3230&relation_id=21094&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "207",
-      "relation_id": "20371",
-      "name": "Cardiff University",
-      "country": "United Kingdom",
-      "city": "Cardiff",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "MGT-Business Administration",
-        "NAT-Chemistry"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| MGT-Business Administration|| NAT-Chemistry",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Cardiff",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=207&relation_id=20371&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "263",
-      "relation_id": "20356",
-      "name": "The University of Edinburgh",
-      "country": "United Kingdom",
-      "city": "Edinburgh",
-      "levels": [
-        "bachelor"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "ED-Civil / Environmental / Geo Engineering",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| ED-Civil / Environmental / Geo Engineering|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Edinburgh",
-          "links": []
-        },
-        {
-          "label": "Exchange Information",
-          "text": "Fact Sheet 2026/27",
-          "links": [
-            {
-              "label": "Fact Sheet 2026/27 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "984754"
-            }
-          ]
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=263&relation_id=20356&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "203",
-      "relation_id": "20382",
-      "name": "University of Bath",
-      "country": "United Kingdom",
-      "city": "Bath",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Mathematics",
-        "ED-Architecture and Design",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Mathematics|| ED-Architecture and Design|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Bath",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=203&relation_id=20382&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "268",
-      "relation_id": "20858",
-      "name": "University of Bristol",
-      "country": "United Kingdom",
-      "city": "Bristol",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Mathematics",
-        "NAT-Chemistry",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Mathematics|| NAT-Chemistry|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Bristol",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=268&relation_id=20858&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "2406",
-      "relation_id": "20350",
-      "name": "University of Exeter",
-      "country": "United Kingdom",
-      "city": "Exeter",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "MGT-Business Administration",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| MGT-Business Administration|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Exeter",
-          "links": []
-        },
-        {
-          "label": "Exchange Information",
-          "text": "Fact Sheet 2026/27",
-          "links": [
-            {
-              "label": "Fact Sheet 2026/27 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "1081161"
-            }
-          ]
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2406&relation_id=20350&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "216",
-      "relation_id": "20364",
-      "name": "University of Newcastle upon Tyne",
-      "country": "United Kingdom",
-      "city": "Newcastle-Upon-Tyne",
-      "levels": [
-        "bachelor"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "LS-Agricultural and Horticultural Sciences",
-        "LS-Biosciences",
-        "LS-Brewing and Food Technology",
-        "LS-Forest Science and Resource Management",
-        "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Newcastle-Upon-Tyne",
-          "links": []
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=216&relation_id=20364&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "211",
-      "relation_id": "20476",
-      "name": "University of Strathclyde",
-      "country": "United Kingdom",
-      "city": "Glasgow",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CIT-Informatics",
-        "CIT-Mathematics",
-        "ED-Aerospace",
-        "ED-Architecture and Design",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "MH-Medicine",
-        "NAT-Chemistry",
-        "NAT-Physics"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| ED-Aerospace|| ED-Architecture and Design|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| MH-Medicine|| NAT-Chemistry|| NAT-Physics",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Glasgow",
-          "links": []
-        },
-        {
-          "label": "Exchange Information",
-          "text": "Fact Sheet 2026/27",
-          "links": [
-            {
-              "label": "Fact Sheet 2026/27 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "1066822"
-            }
-          ]
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=211&relation_id=20476&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "242",
@@ -10247,8 +10266,8 @@
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
         "MGT-Business Administration",
+        "MH-Health and Sport Sciences",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
         "MH-Sport Teacher Training",
         "NAT-Chemistry",
         "NAT-Physics",
@@ -10306,8 +10325,13 @@
         },
         {
           "label": "Language Requirements",
-          "text": "English: C1\nTOEFL (minimum iBT 95), Institute Code for TOEFL is 5248\nIELTS (minimum 7.0)\nNote that a TOEFL/IELTS score report is valid for 2 years max.\nNo other language certificates are accepted at Georgia Tech.",
-          "links": []
+          "text": "English: C1\nTOEFL (minimum iBT 95), Institute Code for TOEFL is 5248\nIELTS (minimum 7.0)\nNote that a TOEFL/IELTS score report is valid for 2 years max.\nFor other accepted English proficiency scores, please visit Georgia Tech's Website",
+          "links": [
+            {
+              "label": "Georgia Tech's Website",
+              "url": "https://www.usg.edu/international-education/esl-programs/english-proficiency-requirements/"
+            }
+          ]
         },
         {
           "label": "Additional Information",
@@ -10321,7 +10345,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Brewing and Food Technology|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Governance",
+          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Biosciences|| LS-Brewing and Food Technology|| MGT-Business Administration|| MH-Health and Sport Sciences|| MH-Sport and Exercise Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Governance",
           "links": []
         },
         {
@@ -10343,7 +10367,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=242&relation_id=10269&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "244",
@@ -10356,24 +10380,24 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Interdisciplinary Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
-        "LS-Landscape Architecture and Planning",
         "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "LS-Landscape Architecture and Planning",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "SOT-Governance",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Governance"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -10383,7 +10407,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Civil / Environmental / Geo Engineering|| ED-Interdisciplinary Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Governance",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Nutritional Sciences|| LS-Landscape Architecture and Planning|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Governance|| CS-Campus Straubing for Biotechnology and Sustainability|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -10405,7 +10429,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=244&relation_id=10339&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "475",
@@ -10418,29 +10442,30 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
+        "SOT-Education",
+        "ED-Geology",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
         "SOT-Department of Science, Technology and Society",
-        "SOT-Education"
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "MH-Sport and Exercise Science",
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -10505,7 +10530,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Department of Science, Technology and Society|| SOT-Education",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Geology|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| SOT-Department of Science, Technology and Society|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -10537,7 +10562,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=475&relation_id=11620&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1450",
@@ -10550,29 +10575,30 @@
         "master"
       ],
       "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
+        "ED-Civil / Environmental / Geo Engineering",
+        "NAT-Chemistry",
         "CIT-Informatics",
         "CIT-Mathematics",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
         "ED-Mechanical Engineering",
-        "ED-Medical Technology",
+        "NAT-Physics",
+        "MH-Health and Sport Sciences",
+        "MGT-Business Administration",
         "LS-Agricultural and Horticultural Sciences",
         "LS-Biosciences",
         "LS-Brewing and Food Technology",
+        "LS-Nutritional Sciences",
         "LS-Forest Science and Resource Management",
         "LS-Landscape Architecture and Planning",
-        "LS-Nutritional Sciences",
-        "MGT-Business Administration",
+        "SOT-Education",
+        "ED-Geology",
+        "ED-Medical Technology",
+        "ED-Interdisciplinary Engineering",
+        "CS-Campus Straubing for Biotechnology and Sustainability",
+        "ED-Aerospace",
+        "ED-Geodesy",
+        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
         "MH-Sport and Exercise Science",
-        "MH-Sport and Health Science",
-        "MH-Sport Teacher Training",
-        "NAT-Chemistry",
-        "NAT-Physics",
-        "SOT-Education"
+        "MH-Sport Teacher Training"
       ],
       "fields": [
         {
@@ -10632,7 +10658,7 @@
         },
         {
           "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CIT-Informatics|| CIT-Mathematics|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| LS-Nutritional Sciences|| MGT-Business Administration|| MH-Sport and Exercise Science|| MH-Sport and Health Science|| MH-Sport Teacher Training|| NAT-Chemistry|| NAT-Physics|| SOT-Education",
+          "text": "ED-Civil / Environmental / Geo Engineering|| NAT-Chemistry|| CIT-Informatics|| CIT-Mathematics|| ED-Mechanical Engineering|| NAT-Physics|| MH-Health and Sport Sciences|| MGT-Business Administration|| LS-Agricultural and Horticultural Sciences|| LS-Biosciences|| LS-Brewing and Food Technology|| LS-Nutritional Sciences|| LS-Forest Science and Resource Management|| LS-Landscape Architecture and Planning|| SOT-Education|| ED-Geology|| ED-Medical Technology|| ED-Interdisciplinary Engineering|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Geodesy|| CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| MH-Sport and Exercise Science|| MH-Sport Teacher Training",
           "links": []
         },
         {
@@ -10643,7 +10669,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1450&relation_id=11621&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "237",
@@ -10743,105 +10769,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=237&relation_id=10463&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
-    },
-    {
-      "institution_id": "245",
-      "relation_id": "10451",
-      "name": "University of Texas at Austin (UT Austin)",
-      "country": "United States",
-      "city": "Austin",
-      "levels": [
-        "bachelor",
-        "master"
-      ],
-      "subject_areas": [
-        "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation",
-        "CS-Campus Straubing for Biotechnology and Sustainability",
-        "ED-Aerospace",
-        "ED-Civil / Environmental / Geo Engineering",
-        "ED-Geodesy",
-        "ED-Interdisciplinary Engineering",
-        "ED-Mechanical Engineering",
-        "ED-Medical Technology",
-        "NAT-Chemistry"
-      ],
-      "fields": [
-        {
-          "label": "Level",
-          "text": "Undergraduate / Bachelor|| Postgraduate / Master",
-          "links": []
-        },
-        {
-          "label": "Website",
-          "text": "Exchange Information",
-          "links": [
-            {
-              "label": "Exchange Information",
-              "url": "https://global.utexas.edu/isss/advising-services/student-exchange-program/before-you-apply"
-            }
-          ]
-        },
-        {
-          "label": "Campus",
-          "text": "Austin",
-          "links": []
-        },
-        {
-          "label": "Semester Dates",
-          "text": "Fall semester: August to December\n- corresponds to TUM winter semester\nSpring semester: January to May\n- corresponds to TUM summer semester",
-          "links": []
-        },
-        {
-          "label": "Study System",
-          "text": "Study cycles are similar to German system: Bachelor/Master\nStandard 15-week semester system (Fall and Spring) plus an abbreviated Summer term\nMinimum work-load at UTA is 12 credit hours per semester (usually 4 classes)",
-          "links": []
-        },
-        {
-          "label": "Academic Restrictions",
-          "text": "Cooperati between TUM and UTA covers UTA's Cockrell School of Engineering only.\nStudents admitted to the Engineering exchange program may not enroll in business courses.\nThe Computer Science program at UT Austin can only accommodate a very limited number of exchange students.",
-          "links": []
-        },
-        {
-          "label": "Language Requirements",
-          "text": "English: B2\nIELTS, TOEFL\nCertificate from TUM Language Center",
-          "links": []
-        },
-        {
-          "label": "Additional Information",
-          "text": "Exchange students attending UT Austin usually choose from three types of housing: co-operative houses (co-ops), private dormitories, and apartments.\nSpace in UT-owned dorms is available, but limited",
-          "links": []
-        },
-        {
-          "label": "Application Deadlines at Host University",
-          "text": "For stays starting in August: March 1\nFor stays starting in January: September 1 (of previous year)",
-          "links": []
-        },
-        {
-          "label": "Subject Area",
-          "text": "CIT-Electrical and Computer Engineering / Electricity, Energy, Electronics and Automation|| CS-Campus Straubing for Biotechnology and Sustainability|| ED-Aerospace|| ED-Civil / Environmental / Geo Engineering|| ED-Geodesy|| ED-Interdisciplinary Engineering|| ED-Mechanical Engineering|| ED-Medical Technology|| NAT-Chemistry",
-          "links": []
-        },
-        {
-          "label": "City",
-          "text": "Austin",
-          "links": []
-        },
-        {
-          "label": "Exchange Information",
-          "text": "Fact Sheet 2025",
-          "links": [
-            {
-              "label": "Fact Sheet 2025 (on TUM's directory)",
-              "url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-              "document_id": "1289406"
-            }
-          ]
-        }
-      ],
-      "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=245&relation_id=10451&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1298",
@@ -10941,7 +10869,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1298&relation_id=12481&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2618",
@@ -11015,7 +10943,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2618&relation_id=13052&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "1661",
@@ -11105,7 +11033,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1661&relation_id=10470&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     },
     {
       "institution_id": "2475",
@@ -11144,7 +11072,7 @@
       ],
       "source_url": "https://tum.adv-pub.moveon4.de/report-page-6940/",
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2475&relation_id=12152&openwhichtab=travelreports&hide_elements=true&whichtab=all",
-      "retrieved_at": "2026-09-16T16:45:09Z"
+      "retrieved_at": "2026-10-04T17:40:52Z"
     }
   ]
 }

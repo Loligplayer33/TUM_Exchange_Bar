@@ -431,6 +431,25 @@ def _profile_catalog_meta(catalog: Any) -> Mapping[str, Any]:
     return catalog if isinstance(catalog, Mapping) else {}
 
 
+def _site_disclaimer(catalog: Any) -> str:
+    """Student-facing caution, with the date of the latest MoveON fetch."""
+
+    fetched = ""
+    if isinstance(catalog, Mapping):
+        raw = _text(catalog.get("retrieved_at")).strip()
+        if len(raw) >= 10:
+            fetched = _checked_label(raw[:10])
+    date_sentence = (
+        f" MoveOn was last fetched on {html.escape(fetched, quote=True)}."
+        if fetched
+        else ""
+    )
+    return (
+        '<p class="site-note">This Website is vibecoded - don\'t take everything for granted '
+        f"and double check with MoveOn.{date_sentence}</p>"
+    )
+
+
 def _profile_records(catalog: Any) -> list[Mapping[str, Any]]:
     if isinstance(catalog, Mapping):
         catalog = catalog.get("profiles")
@@ -494,14 +513,40 @@ def _profile_group_defaults(group: Mapping[str, Any], catalog_meta: Mapping[str,
     return result
 
 
+def _mark_offers_places(
+    groups: Sequence[Mapping[str, Any]], *, from_moveon: bool
+) -> list[dict[str, Any]]:
+    """A MoveON listing means places are open this year.
+
+    Reports built without a partner catalog keep the chances-PDF roster.
+    """
+
+    marked: list[dict[str, Any]] = []
+    for group in groups:
+        item = dict(group)
+        item["checked_against_moveon"] = from_moveon
+        if from_moveon:
+            item["offers_places"] = bool(item.get("profiles"))
+        else:
+            item["offers_places"] = bool(item.get("is_latest_roster", True))
+        marked.append(item)
+    return marked
+
+
 def _attach_profile_catalog(groups: Sequence[Mapping[str, Any]], catalog: Any) -> list[dict[str, Any]]:
     """Attach profile relations while keeping the renderer tolerant of no catalog."""
 
     if catalog is None:
-        return [_profile_group_defaults(group) for group in groups]
+        return _mark_offers_places(
+            [_profile_group_defaults(group) for group in groups],
+            from_moveon=False,
+        )
     attached = attach_profiles(groups, catalog)
     meta = _profile_catalog_meta(catalog)
-    return [_profile_group_defaults(group, meta) for group in attached]
+    return _mark_offers_places(
+        [_profile_group_defaults(group, meta) for group in attached],
+        from_moveon=True,
+    )
 
 
 def _score_class(record: Mapping[str, Any], score: float | None) -> str:
@@ -1143,6 +1188,8 @@ def _render_profile_summary(group: Mapping[str, Any]) -> str:
             pieces.append(
                 f'<span class="profile-subject-count">{len(group["profile_subjects"])} subject areas</span>'
             )
+    elif group.get("checked_against_moveon"):
+        pieces.append('<span class="profile-missing">Not on MoveON</span>')
     else:
         pieces.append('<span class="profile-missing">No profile data</span>')
     return '<span class="profile-summary">' + "".join(pieces) + "</span>"
@@ -1250,12 +1297,19 @@ def _render_profile_card(profile: Mapping[str, Any], group_index: int, profile_i
 def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
     profiles = group.get("profiles") or []
     if not profiles:
-        return '''
+        if group.get("checked_against_moveon"):
+            heading = "Not on MoveON"
+            copy = "This university is not on the current MoveON list, so there are no places to apply this year."
+        else:
+            heading = "No profile data available"
+            copy = "This institution is retained in the historical comparison, but no structured MoveON profile is available in the current catalogue."
+        return f'''
           <section class="profile-panel profile-panel-empty" aria-label="University profile">
             <div class="profile-panel-heading">
-              <div><span class="panel-eyebrow">PARTNER PROFILE &amp; REQUIREMENTS</span><h3>No profile data available</h3></div>
+              <div><span class="panel-eyebrow">PARTNER PROFILE &amp; REQUIREMENTS</span><h3>{html.escape(heading, quote=True)}</h3></div>
             </div>
-            <p class="profile-empty-copy">This institution is retained in the historical comparison, but no structured MoveON profile is available in the current catalogue.</p>
+            <p class="profile-empty-copy">{html.escape(copy, quote=True)}</p>
+            {_render_further_panel(group)}
           </section>
         '''
     relation_label = "relation" if len(profiles) == 1 else "relations"
@@ -1272,6 +1326,7 @@ def _render_profile_panel(group: Mapping[str, Any], group_index: int) -> str:
             <span class="profile-panel-meta">{len(profiles)} {relation_label}{subject_note}</span>
           </div>
           <div class="profile-relations">{cards}</div>
+          {_render_further_panel(group)}
         </section>
     '''
 
@@ -1547,6 +1602,250 @@ def _render_map_panel(group: Mapping[str, Any], group_index: int) -> str:
     '''
 
 
+_FURTHER_INFORMATION: dict[str, Any] | None = None
+_MONTHS = (
+    "",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+)
+
+
+def _further_information() -> Mapping[str, Any]:
+    """Checked ranking and experience-report snapshot, loaded once."""
+
+    global _FURTHER_INFORMATION
+    if _FURTHER_INFORMATION is None:
+        path = Path(__file__).resolve().parents[1] / "data" / "source" / "further" / "information.json"
+        payload: dict[str, Any] = {}
+        if path.is_file():
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(loaded, dict) and loaded.get("schema_version") == "further-information-v1":
+                payload = loaded
+        _FURTHER_INFORMATION = payload
+    return _FURTHER_INFORMATION
+
+
+def _checked_label(value: Any) -> str:
+    text = _text(value).strip()
+    parts = text.split("-")
+    if len(parts) != 3 or not all(part.isdigit() for part in parts):
+        return text
+    year, month, day = (int(part) for part in parts)
+    if not 1 <= month <= 12 or not 1 <= day <= 31:
+        return text
+    return f"{day} {_MONTHS[month]} {year}"
+
+
+def _display_metric(value: Any) -> str:
+    text = _text(value).strip()
+    if text.casefold() in {"", "n/a", "na", "-", "—"}:
+        return ""
+    return text
+
+
+def _external_anchor(url: Any, label: str) -> str:
+    safe = _safe_profile_url(url)
+    if not safe:
+        return ""
+    return (
+        f'<a class="ranking-link" href="{html.escape(safe, quote=True)}" '
+        f'target="_blank" rel="noopener noreferrer">{html.escape(label, quote=True)}</a>'
+    )
+
+
+def _places_phrase(count: int) -> str:
+    if count <= 0:
+        return "No reports filed"
+    noun = "place" if count == 1 else "places"
+    return f"at least {count} {noun}"
+
+
+def _relation_hint(profile: Mapping[str, Any]) -> str:
+    levels = _profile_levels(profile)
+    degree = " and ".join(_PROFILE_LEVEL_LABELS[level] for level in levels)
+    subjects = _profile_subjects(profile)
+    subject = ""
+    if subjects:
+        subject = subjects[0]
+        if "-" in subject:
+            subject = subject.split("-", 1)[1].strip()
+        subject = subject.split("/")[0].strip()
+        if len(subject) > 42:
+            subject = subject[:39].rstrip() + "…"
+    return " · ".join(part for part in (degree, subject) if part)
+
+
+def _report_link_labels(profiles: Sequence[Mapping[str, Any]]) -> list[str]:
+    if len(profiles) <= 1:
+        return ["Open experience reports"]
+    labels = [_relation_hint(profile) or "Partner relation" for profile in profiles]
+    counts: dict[str, int] = {}
+    for label in labels:
+        counts[label] = counts.get(label, 0) + 1
+    seen: dict[str, int] = {}
+    rendered: list[str] = []
+    for label in labels:
+        if counts[label] > 1:
+            seen[label] = seen.get(label, 0) + 1
+            label = f"{label} ({seen[label]})"
+        rendered.append(f"Open experience reports · {label}")
+    return rendered
+
+
+def _further_row(label: str, body: str) -> str:
+    return (
+        "<div>"
+        f"<dt>{html.escape(label, quote=True)}</dt>"
+        f"<dd>{body}</dd>"
+        "</div>"
+    )
+
+
+def _fact(label: str, value: Any) -> str:
+    text = _display_metric(value)
+    if not text:
+        return ""
+    return f"{html.escape(label, quote=True)} {html.escape(text, quote=True)}"
+
+
+def _render_ranking_row(source: str, entry: Any, meta: Mapping[str, Any]) -> str:
+    title = _text(meta.get("name")).strip() or source.upper()
+    edition = _text(meta.get("edition")).strip()
+    label = f"{title} {edition}".strip()
+    if not isinstance(entry, Mapping):
+        link_label = "View QS rankings" if source == "qs" else "View THE rankings"
+        link = _external_anchor(meta.get("table_url"), link_label)
+        return _further_row(label, f"Not listed in this edition. {link}".strip())
+    if source == "qs":
+        facts = (
+            _fact("Overall", entry.get("score")),
+            _fact("Academic reputation", entry.get("academic")),
+            _fact("Employer reputation", entry.get("employer")),
+        )
+        link_label = "View on QS"
+    else:
+        facts = (
+            _fact("Overall", entry.get("score")),
+            _fact("Teaching", entry.get("teaching")),
+            _fact("Research quality", entry.get("research_quality")),
+            _fact("International outlook", entry.get("international")),
+        )
+        link_label = "View on THE"
+    link = _external_anchor(entry.get("url") or meta.get("table_url"), link_label)
+    world = _text(entry.get("world")).strip()
+    if world == "Reporter":
+        lead = "Reporter. Submitted data, but not given a rank in this edition."
+    else:
+        country_rank = _text(entry.get("country_rank")).strip()
+        country = _text(entry.get("country")).strip()
+        place = (
+            f"{html.escape(country_rank, quote=True)} in {html.escape(country, quote=True)}"
+            if country_rank and country
+            else ""
+        )
+        rank = html.escape(world or "Rank unavailable", quote=True)
+        lead = f"<strong>{rank}</strong>{', ' + place if place else ''}."
+    listed = _text(entry.get("listed_as")).strip()
+    listed_text = f"Listed as {html.escape(listed, quote=True)}." if listed else ""
+    detail = ". ".join(part for part in facts if part)
+    body = " ".join(part for part in (lead, f"{detail}." if detail else "", listed_text, link) if part)
+    return _further_row(label, body)
+
+
+def _render_report_counts(group: Mapping[str, Any], info: Mapping[str, Any]) -> str:
+    table = info.get("by_relation_id")
+    if not isinstance(table, Mapping):
+        return ""
+    matched: list[tuple[Mapping[str, Any], Mapping[str, Any]]] = []
+    seen: set[str] = set()
+    for profile in group.get("profiles") or []:
+        if not isinstance(profile, Mapping):
+            continue
+        relation_id = _text(profile.get("relation_id")).strip()
+        if not relation_id or relation_id in seen:
+            continue
+        seen.add(relation_id)
+        row = table.get(relation_id)
+        if isinstance(row, Mapping):
+            matched.append((profile, row))
+    if not matched:
+        return ""
+    meta = info.get("reports") if isinstance(info.get("reports"), Mapping) else {}
+    winter = sum(int(row.get("winter") or 0) for _profile, row in matched)
+    summer = sum(int(row.get("summer") or 0) for _profile, row in matched)
+    winter_label = _text(meta.get("winter_label")).strip() or "Winter semester"
+    summer_label = _text(meta.get("summer_label")).strip() or "Summer semester"
+    winter_window = _text(meta.get("winter_window")).strip()
+    summer_window = _text(meta.get("summer_window")).strip()
+    combined = (
+        "These totals combine the TUM partner relations on this page."
+        if len(matched) > 1
+        else ""
+    )
+    links = []
+    for (profile, row), label in zip(matched, _report_link_labels([profile for profile, _row in matched]), strict=True):
+        links.append(_external_anchor(row.get("details_url"), label))
+
+    def semester(label: str, window: str, count: int) -> str:
+        when = html.escape(label, quote=True)
+        if window:
+            when = f"{when}, {html.escape(window, quote=True)}"
+        return f"{when}: <strong>{html.escape(_places_phrase(count), quote=True)}</strong>."
+
+    body = " ".join(
+        part
+        for part in (
+            semester(winter_label, winter_window, winter),
+            semester(summer_label, summer_window, summer),
+            "Each Erfahrungsbericht was written by a student who received a place. The count is a lower bound for that semester, not the full number of places.",
+            combined,
+            " ".join(links),
+        )
+        if part
+    )
+    return _further_row("Experience reports", body)
+
+
+def _render_further_panel(group: Mapping[str, Any]) -> str:
+    """QS, THE, and last-academic-year experience reports for a known partner."""
+
+    info = _further_information()
+    universities = info.get("by_university")
+    university = _text(group.get("university")).strip()
+    entry = universities.get(university) if isinstance(universities, Mapping) else None
+    reports = _render_report_counts(group, info)
+    if not isinstance(entry, Mapping) and not reports:
+        return ""
+    qs_meta = info.get("qs") if isinstance(info.get("qs"), Mapping) else {}
+    the_meta = info.get("the") if isinstance(info.get("the"), Mapping) else {}
+    checked = _checked_label(info.get("checked"))
+    note = "Rankings are independent of TUMexchange placement."
+    if checked:
+        note = f"Checked {html.escape(checked, quote=True)}. {note}"
+    rows = ""
+    if isinstance(entry, Mapping):
+        rows = _render_ranking_row("qs", entry.get("qs"), qs_meta) + _render_ranking_row(
+            "the", entry.get("the"), the_meta
+        )
+    rows += reports
+    return f'''
+        <div class="profile-further">
+          <p class="profile-further-note">{note}</p>
+          <dl class="profile-further-rows">{rows}</dl>
+        </div>
+    '''
+
+
 def _wishes_label(score: float | None) -> str:
     """Read a bar as spots divided by first-round wishes."""
 
@@ -1564,6 +1863,29 @@ def _wishes_label(score: float | None) -> str:
     else:
         rendered = f"{ratio:.1f}"
     return f"about {rendered} wishes per spot"
+
+
+def _chances_document_note(group: Mapping[str, Any]) -> str:
+    """Say the bars omit a university that is absent from the newest chances PDF."""
+
+    if group.get("is_latest_roster", True):
+        return ""
+    release = group.get("latest_release_year")
+    years = [
+        year
+        for year in (item.get("year") for item in (group.get("records") or []))
+        if isinstance(year, int)
+    ]
+    if release is not None and years:
+        text = (
+            f"Not included in the {release} chances document. "
+            f"The bars stop at {max(years)}."
+        )
+    elif release is not None:
+        text = f"Not included in the {release} chances document."
+    else:
+        text = "Not included in the latest chances document."
+    return f'<p class="chances-gap">{html.escape(text, quote=True)}</p>'
 
 
 def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
@@ -1626,26 +1948,19 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
             '<div class="historical-empty"><strong>No historical data</strong>'
             '<p>This institution is present in the current partner catalogue, but no historical application records are available.</p></div>'
         )
-    roster_note = ""
     is_current = bool(group.get("is_latest_roster", True))
-    if not is_current:
-        latest_release = group.get("latest_release_year")
-        label = (
-            f"Not listed in release {latest_release}"
-            if latest_release is not None
-            else "Not listed in the latest release"
-        )
-        roster_note = f'<span class="roster-note">{html.escape(label, quote=True)}</span>'
-    hidden_attr = "" if is_current else " hidden"
+    offers_places = bool(group.get("offers_places", is_current))
+    hidden_attr = "" if offers_places else " hidden"
+    chances_note = _chances_document_note(group)
     return f"""
       <tr class="data-row university-row" data-group-index="{group_index}"{hidden_attr}>
-        <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{roster_note}{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
+        <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td class="country-cell" data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
         <td class="score-cell" data-label="Spots to wishes"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ', ' + score_unit) if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
-      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_map_panel(group, group_index)}{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Spots and first-round wishes by year</h3></div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
+      <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_map_panel(group, group_index)}{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Spots and first-round wishes by year</h3>{chances_note}</div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
     """
 
 
@@ -1826,6 +2141,7 @@ def _group_payload(group: Mapping[str, Any], index: int) -> dict[str, Any]:
         "scored_count": group.get("scored_count"),
         "total_count": group.get("total_count"),
         "is_latest_roster": bool(group.get("is_latest_roster", True)),
+        "offers_places": bool(group.get("offers_places", group.get("is_latest_roster", True))),
         "categories": list(group.get("categories") or []),
         "source_only": bool(group.get("source_only")),
         "profile_levels": list(group.get("profile_levels") or []),
@@ -1955,6 +2271,10 @@ def _build_html(
     }
     .filter-heading { margin-bottom: 10px; font-size: 1.05rem; font-weight: 650; }
     .lede { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: .98rem; }
+    .site-note {
+      max-width: 760px; margin: 14px 0 0; padding: 10px 12px;
+      background: var(--amber-soft); color: #6a4b08; font-size: .86rem; line-height: 1.4;
+    }
     .method-card {
       padding: 20px 22px; background: var(--ink); color: #fff;
       border-left: 4px solid #79b4df; box-shadow: var(--shadow);
@@ -2355,7 +2675,7 @@ def _build_html(
     tr.university-row { cursor: pointer; }
     .university-cell { width: 38%; color: var(--ink); }
     .university-name { display: block; color: var(--ink); font-weight: 680; }
-    .roster-note { display: block; margin-top: 3px; color: var(--amber); font-size: .7rem; font-weight: 650; }
+    .chances-gap { margin: 8px 0 0; max-width: 62ch; color: var(--muted); font-size: .82rem; }
     .profile-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; margin-top: 7px; color: var(--muted); font-size: .72rem; }
     .profile-badge { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 7px; border-radius: 999px; background: var(--blue-soft); color: var(--blue-deep); font-size: .68rem; font-weight: 700; white-space: nowrap; }
     .profile-badge-master { background: var(--green-soft); color: var(--green); }
@@ -2513,6 +2833,31 @@ def _build_html(
     .profile-field dd { margin: 0; color: #365264; font-size: .83rem; overflow-wrap: anywhere; }
     .profile-links { display: flex; flex-wrap: wrap; gap: 8px 15px; margin-top: 8px; font-size: .78rem; font-weight: 650; }
     .profile-empty { color: var(--muted); font-style: italic; }
+    .profile-further {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+    .profile-further-note {
+      max-width: 72ch;
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .profile-further-rows { display: grid; gap: 0; margin: 0; }
+    .profile-further-rows > div {
+      display: grid;
+      grid-template-columns: minmax(9.5rem, 14rem) minmax(0, 1fr);
+      gap: 2px 16px;
+      align-items: baseline;
+      padding-top: 8px;
+      border-top: 1px solid #e6eef5;
+    }
+    .profile-further-rows > div:first-child { padding-top: 0; border-top: 0; }
+    .profile-further-rows dt { color: var(--muted); font-size: .72rem; font-weight: 700; }
+    .profile-further-rows dd { margin: 0; color: #365264; font-size: .83rem; }
+    .profile-further-rows strong { color: var(--blue-deep); font-weight: 650; }
+    .ranking-link { font-weight: 650; white-space: nowrap; }
     .location-panel {
       padding: 14px 16px 14px;
       border: 1px solid #c9dceb;
@@ -2930,6 +3275,8 @@ def _build_html(
       .map-zoom-btn { width: 40px; height: 40px; }
       .map-caption { align-items: flex-start; flex-direction: column; gap: 4px; }
       .profile-panel { padding: 14px 12px; }
+      .profile-further-rows > div { grid-template-columns: 1fr; gap: 2px; }
+      .ranking-link { white-space: normal; }
       .profile-panel-heading { align-items: flex-start; flex-direction: column; gap: 5px; }
       .profile-relation > summary { align-items: flex-start; flex-direction: column; gap: 8px; }
       .profile-relation-badges { justify-content: flex-start; }
@@ -3056,6 +3403,7 @@ def _build_html(
       .hero { padding: 16px 0 12px; gap: 14px; }
       .hero h1 { font-size: 1.7rem; line-height: 1.2; margin-bottom: 6px; }
       .hero .lede { font-size: .9rem; }
+      .hero .site-note { font-size: .8rem; margin-top: 10px; }
       .method-card { padding: 14px; border-radius: 6px; }
       .method-card h2 { font-size: 1.1rem; margin: 0 0 6px; }
       .method-card p { font-size: .8rem; line-height: 1.35; margin: 0 0 6px; }
@@ -3121,6 +3469,7 @@ def _build_html(
       <div>
         <h1>TUMexchange Acceptance Information</h1>
         <p class="lede">See how first-round wishes compared with available spots, and check partner university requirements. Filter by country, degree level, or subject area.</p>
+        @@SITE_NOTE@@
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
         <p class="eyebrow">How to read the bars</p>
@@ -3131,7 +3480,7 @@ def _build_html(
       </aside>
     </header>
     <dl class="summary" aria-label="Report summary">
-      <div><dt>Partner universities</dt><dd id="stat-universities">@@ACTIVE_UNIVERSITIES@@ <span class="stat-sub">active (@@UNIVERSITIES@@ total)</span></dd></div>
+      <div><dt>Partner universities</dt><dd id="stat-universities">@@ACTIVE_UNIVERSITIES@@ <span class="stat-sub">with places this year (@@UNIVERSITIES@@ total)</span></dd></div>
       <div><dt>Countries</dt><dd id="stat-countries">@@COUNTRIES@@</dd></div>
       <div><dt>Years covered</dt><dd id="stat-year-span">@@YEAR_SPAN@@</dd></div>
     </dl>
@@ -3150,7 +3499,7 @@ def _build_html(
           </span>
           <select id="status-filter">@@STATUS_OPTIONS@@</select>
         </div>
-        <div class="field"><label for="roster-filter">Application availability</label><select id="roster-filter"><option value="current" selected>Current exchange partners (Release 2027)</option><option value="all">All partners (including past agreements)</option></select></div>
+        <div class="field"><label for="roster-filter">Application availability</label><select id="roster-filter"><option value="current" selected>Places this year (listed on MoveON)</option><option value="all">All universities, including past agreements</option></select></div>
         <div class="field"><label for="degree-filter">Degree level</label><select id="degree-filter"><option value="">All degree levels</option><option value="bachelor">Bachelor</option><option value="master">Master</option><option value="unknown">Unknown</option></select></div>
         <div class="field"><label for="subject-filter">Subject area</label><select id="subject-filter">@@SUBJECT_OPTIONS@@</select></div>
         <button class="reset-button" type="button" id="reset-filters">Reset filters</button>
@@ -3177,7 +3526,7 @@ def _build_html(
           </div>
         </div>
       </div>
-      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@ACTIVE_UNIVERSITIES@@</strong> active partner universities (Release 2027)</span><span>Averages reflect years with active exchange data</span></div>
+      <div class="result-line" aria-live="polite"><span id="result-count"><strong>@@ACTIVE_UNIVERSITIES@@</strong> universities with places this year</span><span>Averages reflect years with active exchange data</span></div>
       <div class="mobile-sort" role="group" aria-label="Sort this list">
         <span class="mobile-sort-label">Sort</span>
         <button type="button" class="mobile-sort-button" data-sort-column="university" aria-pressed="false">University<span class="sort-indicator" aria-hidden="true"></span></button>
@@ -3375,7 +3724,7 @@ def _build_html(
         });
       };
       const matches = (group) => {
-        if (state.roster === "current" && !group.is_latest_roster) return false;
+        if (state.roster === "current" && !group.offers_places) return false;
         if (state.country && text(group.country) !== state.country) return false;
         if (state.status) {
           const cats = group.current_categories || group.categories || [];
@@ -3534,7 +3883,7 @@ def _build_html(
         });
         ensureEmptyRow(visibleCount === 0);
         if (state.roster === "current") {
-          resultCount.innerHTML = "<strong>" + visibleCount + "</strong> active partner universit" + (visibleCount === 1 ? "y" : "ies") + " (Release 2027)";
+          resultCount.innerHTML = "<strong>" + visibleCount + "</strong> universit" + (visibleCount === 1 ? "y" : "ies") + " with places this year";
         } else {
           resultCount.innerHTML = "<strong>" + visibleCount + "</strong> partner universit" + (visibleCount === 1 ? "y" : "ies") + " shown";
         }
@@ -4040,7 +4389,7 @@ def _build_html(
 </body>
 </html>
 """
-    active_groups_count = sum(1 for g in groups if g.get("is_latest_roster"))
+    active_groups_count = sum(1 for g in groups if g.get("offers_places"))
     replacements = {
         "@@ACTIVE_UNIVERSITIES@@": str(active_groups_count),
         "@@UNIVERSITIES@@": str(len(groups)),
@@ -4051,6 +4400,7 @@ def _build_html(
         "@@SUBJECT_OPTIONS@@": profile_subject_options,
         "@@INITIAL_ROWS@@": initial_rows,
         "@@REPORT_DATA@@": _safe_json(data_payload),
+        "@@SITE_NOTE@@": _site_disclaimer(profiles),
     }
     for marker, value in replacements.items():
         template = template.replace(marker, value)

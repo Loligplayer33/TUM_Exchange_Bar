@@ -193,6 +193,171 @@ class ProfileReportTests(unittest.TestCase):
         self.assertIn('addEventListener("wheel"', page)
         self.assertIn("campus-pin-name", page)
 
+    def test_further_information_uses_last_year_reports_and_both_rankings(self) -> None:
+        sjtu = report._render_further_panel(
+            {
+                "university": "Shanghai Jiao Tong University",
+                "country": "China",
+                "profiles": [
+                    {
+                        "relation_id": "10362",
+                        "name": "Shanghai Jiao Tong University",
+                        "levels": ["bachelor", "master"],
+                    }
+                ],
+            }
+        )
+        self.assertIn("QS World University Rankings", sjtu)
+        self.assertIn("#36", sjtu)
+        self.assertIn("4 of 85 in China (Mainland)", sjtu)
+        self.assertIn("THE World University Rankings", sjtu)
+        self.assertIn("#39", sjtu)
+        self.assertIn("5 of 102 in China", sjtu)
+        self.assertIn("Winter semester 2024/25", sjtu)
+        self.assertIn("1 September 2024", sjtu)
+        self.assertIn("at least 9 places", sjtu)
+        self.assertIn("Summer semester 2025", sjtu)
+        self.assertIn("1 April 2025", sjtu)
+        self.assertIn("at least 1 place", sjtu)
+        self.assertNotIn("Summer semester 2026", sjtu)
+        self.assertNotIn("just ended", sjtu)
+        self.assertIn("lower bound", sjtu)
+        self.assertIn("relation_id=10362", sjtu)
+        self.assertIn("Checked 4 October 2026", sjtu)
+        self.assertNotIn(">2024<", sjtu)
+        self.assertNotIn("2023", sjtu)
+
+        tokyo = report._render_further_panel(
+            {
+                "university": "The University of Tokyo",
+                "profiles": [
+                    {
+                        "relation_id": "10377",
+                        "levels": ["bachelor", "master"],
+                        "subject_areas": ["ED-Aerospace"],
+                    },
+                    {
+                        "relation_id": "10762",
+                        "levels": ["master"],
+                        "subject_areas": ["CIT-Informatics"],
+                    },
+                ],
+            }
+        )
+        self.assertIn("at least 7 places", tokyo)
+        self.assertIn("at least 6 places", tokyo)
+        self.assertIn("These totals combine the TUM partner relations", tokyo)
+        self.assertEqual(tokyo.count("Open experience reports"), 2)
+
+        itba = report._render_further_panel(
+            {"university": "Instituto Tecnológico de Buenos Aires (ITBA)", "profiles": []}
+        )
+        self.assertIn("Reporter", itba)
+        self.assertIn("not given a rank", itba)
+        self.assertNotIn(">n/a<", itba)
+
+        adelaide = report._render_further_panel(
+            {"university": "University of Adelaide", "profiles": []}
+        )
+        self.assertIn("Listed as Adelaide University.", adelaide)
+
+        sigs = report._render_further_panel(
+            {
+                "university": "Tsinghua Shenzhen International Graduate School (Tsinghua SIGS)",
+                "profiles": [],
+            }
+        )
+        self.assertIn("Not listed in this edition", sigs)
+        self.assertNotIn("#14", sigs)
+        self.assertNotIn("#11", sigs)
+
+        self.assertEqual(
+            report._render_further_panel({"university": "Example University", "profiles": []}),
+            "",
+        )
+        row = report._render_university_row(
+            {
+                "university": "Shanghai Jiao Tong University",
+                "country": "China",
+                "profiles": [
+                    {
+                        "relation_id": "10362",
+                        "name": "Shanghai Jiao Tong University",
+                        "levels": ["bachelor", "master"],
+                    }
+                ],
+            },
+            0,
+        )
+        self.assertLess(row.index("PARTNER PROFILE"), row.index("QS World University Rankings"))
+        self.assertLess(row.index("Experience reports"), row.index("HISTORICAL ADMISSION DATA"))
+        self.assertEqual(row.count('aria-label="University profile"'), 1)
+        self.assertNotIn("further-panel", row)
+        self.assertNotIn("Rankings and recent places", row)
+
+    def test_moveon_listing_keeps_a_university_visible_without_a_2027_chart(self) -> None:
+        catalog = _catalog(
+            _profile(
+                "sut",
+                "Swinburne University of Technology (SUT)",
+                levels=["bachelor", "master"],
+                subjects=["Engineering"],
+                city="Melbourne",
+            )
+        )
+        groups = report._attach_profile_catalog(
+            report._group_records(
+                [
+                    {
+                        "country": "Example",
+                        "university": "Swinburne University of Technology",
+                        "year": 2022,
+                        "status": "measured",
+                        "score_percent": 12.5,
+                        "source_release_year": 2022,
+                        "is_latest_roster": False,
+                    },
+                    {
+                        "country": "Example",
+                        "university": "Cardiff University",
+                        "year": 2026,
+                        "status": "measured",
+                        "score_percent": 40,
+                        "source_release_year": 2027,
+                        "is_latest_roster": True,
+                    },
+                ]
+            ),
+            catalog,
+        )
+        swinburne = next(group for group in groups if "Swinburne" in group["university"])
+        cardiff = next(group for group in groups if group["university"] == "Cardiff University")
+        self.assertTrue(swinburne["offers_places"])
+        self.assertFalse(swinburne["is_latest_roster"])
+        self.assertFalse(cardiff["offers_places"])
+        self.assertTrue(cardiff["is_latest_roster"])
+        swinburne_row = report._render_university_row(swinburne, 0)
+        cardiff_row = report._render_university_row(cardiff, 1)
+        self.assertNotIn(" hidden>", swinburne_row.split("</tr>", 1)[0])
+        self.assertNotIn("Not listed in release", swinburne_row)
+        self.assertIn("Not included in the 2027 chances document. The bars stop at 2022.", swinburne_row)
+        self.assertNotIn("Not on MoveON", swinburne_row)
+        self.assertIn(" hidden>", cardiff_row.split("</tr>", 1)[0])
+        self.assertIn("Not on MoveON", cardiff_row)
+        self.assertIn("no places to apply this year", cardiff_row)
+        self.assertNotIn("Not included in the 2027 chances document", cardiff_row)
+        page = report._build_html([], {}, catalog)
+        self.assertIn("Places this year (listed on MoveON)", page)
+        self.assertIn("if (state.roster === \"current\" && !group.offers_places) return false;", page)
+        self.assertIn(
+            "This Website is vibecoded - don't take everything for granted and double check with MoveOn.",
+            page,
+        )
+        self.assertIn("MoveOn was last fetched on 16 September 2026.", page)
+        without_catalog = report._build_html([], {})
+        self.assertIn("double check with MoveOn.", without_catalog)
+        self.assertNotIn("last fetched", without_catalog)
+
     def test_campus_field_splits_unnamed_faculties_without_coordinates(self) -> None:
         group = {
             "university": "Example University",

@@ -163,6 +163,28 @@ class ProfileCatalogTests(unittest.TestCase):
         self.assertNotIn("ED-Mechanical Engineering", enriched[0]["profile_subjects"])
         self.assertNotIn("CIT-Informatics", enriched[1]["profile_subjects"])
 
+    def test_explicit_school_match_is_not_copied_onto_the_generic_name(self) -> None:
+        catalog = _catalog(
+            _profile("science", "The University of Tokyo", institution_id="262", country="Japan"),
+            _profile("engineering", "The University of Tokyo", institution_id="262", country="Japan"),
+            matches={
+                "The University of Tokyo (Graduate School of Information, Science and Technology)": ["science"],
+                "The University of Tokyo (Graduate School of Engineering)": ["engineering"],
+            },
+        )
+        enriched = attach_profiles(
+            [
+                {"university": "The University of Tokyo", "country": "Japan", "search_text": ""},
+                {"university": "The University of Tokyo (Graduate School of Information, Science and Technology)", "country": "Japan", "search_text": ""},
+                {"university": "The University of Tokyo (Graduate School of Engineering)", "country": "Japan", "search_text": ""},
+            ],
+            catalog,
+        )
+        generic, science, engineering = enriched
+        self.assertEqual(generic["profiles"], [])
+        self.assertEqual([profile["relation_id"] for profile in science["profiles"]], ["science"])
+        self.assertEqual([profile["relation_id"] for profile in engineering["profiles"]], ["engineering"])
+
     def test_source_only_relations_are_retained_and_same_generic_identity_is_grouped(self) -> None:
         catalog = _catalog(
             _profile("new-1", "Deakin University", country="Australia", city="Geelong"),

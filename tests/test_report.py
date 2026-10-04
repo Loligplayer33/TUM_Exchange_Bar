@@ -225,7 +225,9 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(current["total_count"], 2)
         removed = next(group for group in groups if group["university"] == "Removed University")
         self.assertFalse(removed["is_latest_roster"])
-        self.assertIn("Not listed in release 2027", report._render_university_row(removed, 0))
+        removed_row = report._render_university_row(removed, 0)
+        self.assertIn("Not included in the 2027 chances document. The bars stop at 2023.", removed_row)
+        self.assertNotIn("Not listed in release", removed_row)
 
     def test_multi_calibration_html_labels_each_source_and_explains_scope(self) -> None:
         records = [
