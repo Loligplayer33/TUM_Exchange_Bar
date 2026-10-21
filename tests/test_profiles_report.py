@@ -351,7 +351,7 @@ class ProfileReportTests(unittest.TestCase):
         self.assertIn("if (state.roster === \"current\" && !group.offers_places) return false;", page)
         self.assertNotIn("vibecoded", page)
         self.assertNotIn("double check with MoveOn", page)
-        self.assertIn("MoveOn was last fetched on 16 September 2026.", page)
+        self.assertNotIn("last fetched", page)
         without_catalog = report._build_html([], {})
         self.assertNotIn('<p class="site-note">', without_catalog)
         self.assertNotIn("last fetched", without_catalog)

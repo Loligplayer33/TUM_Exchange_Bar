@@ -431,22 +431,6 @@ def _profile_catalog_meta(catalog: Any) -> Mapping[str, Any]:
     return catalog if isinstance(catalog, Mapping) else {}
 
 
-def _site_note(catalog: Any) -> str:
-    """Show the date of the latest MoveON fetch when available."""
-
-    fetched = ""
-    if isinstance(catalog, Mapping):
-        raw = _text(catalog.get("retrieved_at")).strip()
-        if len(raw) >= 10:
-            fetched = _checked_label(raw[:10])
-    if not fetched:
-        return ""
-    return (
-        '<p class="site-note">MoveOn was last fetched on '
-        f"{html.escape(fetched, quote=True)}.</p>"
-    )
-
-
 def _profile_records(catalog: Any) -> list[Mapping[str, Any]]:
     if isinstance(catalog, Mapping):
         catalog = catalog.get("profiles")
@@ -1002,7 +986,7 @@ def _render_row(record: Mapping[str, Any], index: int) -> str:
         <td>{_escaped(normalized.get("country"))}</td>
         <td class="numeric">{_escaped(normalized.get("year"))}</td>
         <td><span class="status-pill {_score_class(normalized, score)}">{html.escape(_CATEGORY_LABELS[category], quote=True)}</span></td>
-        <td class="score-cell"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_label, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+        <td class="score-cell"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span></div><div role="img" class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape(track_label, quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="source-cell">{_source_cell(normalized)}</td>
         <td class="details-cell"><button class="detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View details</button></td>
       </tr>
@@ -1031,7 +1015,7 @@ def _render_score_display(
             f'<div class="score-line"><span class="score-value">100%</span>'
             f'<span class="basis-badge basis-assigned" tabindex="0" role="note" title="No first-round wishes. Shown as a full bar because spots were left over.">No applicants'
             f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">No first-round wishes</strong><span class="basis-tooltip-body">TUM recorded no wishes that year, so the bar is full: spots were left over.</span></span></span></div>'
-            f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<div role="img" class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
             f'<span class="score-fill" style="width: 100%"></span></div></div>'
         )
 
@@ -1039,7 +1023,7 @@ def _render_score_display(
         return (
             f'<div class="score-stack">'
             f'<div class="score-line"><span class="score-na">—</span></div>'
-            f'<div class="score-track is-empty" aria-label="{html.escape(track_text, quote=True)}"></div></div>'
+            f'<div role="img" class="score-track is-empty" aria-label="{html.escape(track_text, quote=True)}"></div></div>'
         )
 
     # 1. 4-tier Traffic Light Quartile
@@ -1071,7 +1055,7 @@ def _render_score_display(
             f'<span class="tier-label">{html.escape(range_label, quote=True)}</span></span>'
             f'<span class="basis-badge basis-tier" tabindex="0" role="note" title="Quartile Tier (Releases 2018–2022): 4-tier placement rating published in historical TUM tables (≤25%, 26–50%, 51–75%, ≥76%).">Quartile'
             f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Quartile Tier (Releases 2018–2022)</strong><span class="basis-tooltip-body">4-tier placement rating from historical TUM tables: ≤25% (Red), 26–50% (Yellow), 51–75% (Light Green), or ≥76% (Dark Green).</span></span></span></div>'
-            f'<div class="score-track is-tier" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<div role="img" class="score-track is-tier" aria-label="{html.escape(track_text, quote=True)}">'
             f'<span class="score-fill tier-{tier}-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
         )
 
@@ -1082,7 +1066,7 @@ def _render_score_display(
             f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
             f'<span class="basis-badge basis-exact" tabindex="0" role="note" title="Exact % (Release 2017): Spots divided by first-round wishes, published as a number in the 2016/17 release.">Exact %'
             f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Exact published % (Release 2017)</strong><span class="basis-tooltip-body">Spots divided by first-round wishes, published as a number in TUM’s 2016/17 release.</span></span></span></div>'
-            f'<div class="score-track is-exact" aria-label="{html.escape(track_text, quote=True)}">'
+            f'<div role="img" class="score-track is-exact" aria-label="{html.escape(track_text, quote=True)}">'
             f'<span class="score-fill is-exact-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
         )
 
@@ -1092,7 +1076,7 @@ def _render_score_display(
         f'<div class="score-line"><span class="score-value">{score:.1f}%</span>'
         f'<span class="basis-badge basis-bar" tabindex="0" role="note" title="Visual bar (Releases 2025–2027): Spots divided by first-round wishes, measured from the length of TUM\'s bar.">Visual Bar'
         f'<span class="basis-tooltip" role="tooltip"><strong class="basis-tooltip-title">Visual bar (Releases 2025–2027)</strong><span class="basis-tooltip-body">Spots divided by first-round wishes, measured from the length of TUM’s bar.</span></span></span></div>'
-        f'<div class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
+        f'<div role="img" class="score-track" aria-label="{html.escape(track_text, quote=True)}">'
         f'<span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div>'
     )
 
@@ -1954,7 +1938,7 @@ def _render_university_row(group: Mapping[str, Any], group_index: int) -> str:
         <td class="university-cell" data-label="University"><button class="university-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span><span class="university-name">{_escaped(group.get("university"), "Unnamed university")}</span>{_render_profile_summary(group)}</span><span class="expand-label">View profile &amp; history</span></button></td>
         <td class="country-cell" data-label="Country">{_escaped(group.get("country"))}</td>
         <td class="numeric years-cell" data-label="Years recorded"><strong>{scored} of {total}</strong><span>years recorded</span></td>
-        <td class="score-cell" data-label="Spots to wishes"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ', ' + score_unit) if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
+        <td class="score-cell" data-label="Spots to wishes"><div class="score-stack"><div class="score-line"><span class="score-value">{score_label}</span><span class="score-unit">{score_unit}</span></div><div role="img" class="score-track{' is-empty' if score is None else ''}" aria-label="{html.escape((score_label + ', ' + score_unit) if score is not None else 'N/A; no recorded data', quote=True)}"><span class="score-fill" style="width: {_score_for_width(score):.4f}%"></span></div></div></td>
         <td class="details-cell" data-label="Profile and history"><button class="detail-toggle university-detail-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}">View profile &amp; history</button></td>
       </tr>
       <tr id="{detail_id}" class="university-detail-row" data-group-detail="{group_index}" hidden><td colspan="5"><div class="detail-card-shell">{_render_map_panel(group, group_index)}{_render_profile_panel(group, group_index)}<section class="annual-panel" aria-label="Historical annual data"><div class="annual-heading"><div><span class="panel-eyebrow">HISTORICAL ADMISSION DATA</span><h3>Spots and first-round wishes by year</h3>{chances_note}</div><span class="annual-count-badge">{scored} of {total} years with active exchange data</span></div>{annual_content}</section></div></td></tr>
@@ -2197,7 +2181,7 @@ def _build_html(
     }
     profile_subject_options = _profile_subject_options(groups)
     template = r"""<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="workspace">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -2268,10 +2252,6 @@ def _build_html(
     }
     .filter-heading { margin-bottom: 10px; font-size: 1.05rem; font-weight: 650; }
     .lede { max-width: 760px; margin-bottom: 0; color: var(--muted); font-size: .98rem; }
-    .site-note {
-      max-width: 760px; margin: 14px 0 0; padding: 10px 12px;
-      background: var(--amber-soft); color: #6a4b08; font-size: .86rem; line-height: 1.4;
-    }
     .method-card {
       padding: 20px 22px; background: var(--ink); color: #fff;
       border-left: 4px solid #79b4df; box-shadow: var(--shadow);
@@ -2676,7 +2656,7 @@ def _build_html(
     .profile-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 7px; margin-top: 7px; color: var(--muted); font-size: .72rem; }
     .profile-badge { display: inline-flex; align-items: center; min-height: 22px; padding: 2px 7px; border-radius: 999px; background: var(--blue-soft); color: var(--blue-deep); font-size: .68rem; font-weight: 700; white-space: nowrap; }
     .profile-badge-master { background: var(--green-soft); color: var(--green); }
-    .profile-badge-unknown { background: #edf1f3; color: #60717b; }
+    .profile-badge-unknown { background: #edf1f3; color: #52616b; }
     .profile-city, .profile-subject-count { color: var(--muted); }
     .profile-missing { color: var(--muted); font-style: italic; }
     .university-toggle {
@@ -3400,7 +3380,6 @@ def _build_html(
       .hero { padding: 16px 0 12px; gap: 14px; }
       .hero h1 { font-size: 1.7rem; line-height: 1.2; margin-bottom: 6px; }
       .hero .lede { font-size: .9rem; }
-      .hero .site-note { font-size: .8rem; margin-top: 10px; }
       .method-card { padding: 14px; border-radius: 6px; }
       .method-card h2 { font-size: 1.1rem; margin: 0 0 6px; }
       .method-card p { font-size: .8rem; line-height: 1.35; margin: 0 0 6px; }
@@ -3454,6 +3433,231 @@ def _build_html(
       table { min-width: 0; }
       .university-detail-row[hidden] { display: table-row !important; }
     }
+
+    /* Violet workspace layout, including responsive and sticky-filter behavior. */
+:root { --shadow:none; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; font-size:16px; }
+body { line-height:1.5; }
+h1 { font-family:inherit; font-weight:650; font-size:clamp(1.8rem,3vw,2.65rem); line-height:1.15; letter-spacing:-.035em; max-width:720px; }
+.shell { width:min(1456px,calc(100% - 64px)); }
+.utility { min-height:76px; font-size:.875rem; }
+.brand { font-weight:650; font-size:.95rem; }
+.brand-mark { width:32px;height:32px;border:0;border-radius:6px;background:var(--blue);color:var(--paper);font:700 18px/1 inherit; }
+.downloads a { color:var(--blue-deep); font-weight:550; }
+.hero { padding:36px 0 26px; gap:40px; grid-template-columns:minmax(0,1.25fr) minmax(320px,1fr); align-items:start; }
+.lede { max-width:65ch; font-size:1rem;line-height:1.6; }
+.eyebrow { display:none; }
+.detail-kicker,.summary dt,.year-filter-label,th { letter-spacing:0; text-transform:none; }
+.method-card { background:var(--paper); color:var(--ink); border:1px solid var(--line); border-left:3px solid var(--blue); box-shadow:none; padding:18px 22px; }
+.method-card h2 { color:var(--ink); font-size:1rem; margin:0 0 8px; }
+.method-card p { color:var(--muted); font-size:.83rem; line-height:1.55; }
+.method-card strong { color:var(--ink); }
+.method-note { font-style:normal; }
+.summary { background:transparent; border:0;border-bottom:1px solid var(--line); margin:0 0 26px; gap:0; grid-template-columns:1.5fr 1fr 1fr; }
+.summary div { padding:0 22px 20px; background:transparent; border-right:1px solid var(--line); }
+.summary div:first-child { padding-left:0; }
+.summary div:last-child { border-right:0; }
+.summary dt { font-size:.8rem; font-weight:500; }
+.summary dd { font-size:1.5rem; margin-top:6px; line-height:1.3; font-weight:650; overflow:visible; white-space:normal; }
+.summary dd .stat-sub { display:block; margin:3px 0 0; font-size:.78rem; }
+.filter-heading { font-size:1.15rem; margin-bottom:16px; }
+.controls { gap:16px; }
+.field label { color:var(--ink);font-size:.82rem;font-weight:550; }
+.field input,.field select { border-color:var(--line);min-height:46px;border-radius:5px;font-size:.95rem;padding:10px 12px; }
+.field input::placeholder { color:var(--muted); }
+.field input:focus,.field select:focus { outline:2px solid var(--blue);outline-offset:2px; }
+.reset-button { border-color:var(--line);border-radius:5px;min-height:46px; }
+.year-filter-section { margin:4px 0 0;padding:18px 20px;border-radius:6px;box-shadow:none;background:var(--paper); }
+.year-filter-label { font-size:.85rem; }
+.preset-btn { border-color:var(--line);border-radius:4px;background:var(--paper);color:var(--blue-deep);min-height:36px; }
+.preset-btn:hover { background:var(--blue-soft);border-color:var(--blue); }
+.year-pill { min-height:40px;border-radius:5px;background:var(--paper);border-color:var(--line);color:var(--muted);padding:6px 12px;box-shadow:none; }
+.year-pill:hover { background:var(--blue-soft); }
+.year-pill[aria-pressed="true"] { background:var(--blue-deep);border-color:var(--blue-deep);color:#fff;box-shadow:none; }
+.year-era-tag { background:var(--wash);color:var(--muted);font-weight:500; }
+.result-line { color:var(--muted);font-size:.83rem;margin:20px 0 14px; }
+.table-frame { border:1px solid var(--line);box-shadow:none; }
+th { background:var(--wash);font-size:.8rem;color:var(--muted); }
+td { color:var(--ink);border-color:var(--line);font-size:.9rem; }
+.university-name { font-weight:600;line-height:1.4; }
+.university-toggle { flex-wrap:wrap;gap:5px; }
+.expand-label { color:var(--blue-deep);font-size:.75rem; }
+.profile-badge { font-size:.73rem; font-weight:550; }
+.profile-summary,.years-cell span,.score-unit { font-size:.78rem; }
+.detail-toggle { background:var(--paper);border-color:var(--line);min-height:40px;border-radius:5px;box-shadow:none; }
+.score-track { background:var(--line);height:7px; }
+.score-value { font-weight:650; }
+tr.university-row.is-expanded, tr.university-row.is-expanded td { background:var(--blue-soft) !important; }
+tr.university-detail-row > td { background:var(--wash); }
+tr.university-detail-row:not([hidden]) { box-shadow:inset 3px 0 0 var(--blue); }
+footer { font-size:.82rem;color:var(--muted); }
+:focus-visible { outline:3px solid var(--blue);outline-offset:3px; }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important;animation:none !important;scroll-behavior:auto !important; } }
+
+[data-theme="workspace"] { --ink:#282742;--muted:#62627a;--line:#d5d5e3;--paper:#fff;--wash:#f5f5fa;--blue:#6454bd;--blue-deep:#51419e;--blue-soft:#f0edff;--green:#31644a;--green-soft:#eaf4ed;font-family:"Helvetica Neue",Arial,sans-serif; }
+[data-theme="workspace"] .brand-mark { border-radius:9px; }
+[data-theme="workspace"] .hero { padding:28px 0 22px; }
+[data-theme="workspace"] h1 { font-size:clamp(1.8rem,2.5vw,2.25rem); }
+[data-theme="workspace"] .method-card { border-radius:8px; }
+[data-theme="workspace"] .table-frame { border-radius:8px; }
+[data-theme="workspace"] .summary { margin-bottom:22px; }
+[data-theme="workspace"] tbody tr.data-row:hover { background:var(--blue-soft); }
+@media(min-width:1150px) {
+ [data-theme="workspace"] .shell { display:grid;grid-template-columns:272px minmax(0,1fr);column-gap:28px;grid-template-areas:"nav nav" "hero hero" "summary summary" "filtertitle results" "filters table" "footer footer";align-items:start; }
+ [data-theme="workspace"] .utility { grid-area:nav; }
+ [data-theme="workspace"] .hero { grid-area:hero; }
+ [data-theme="workspace"] .summary { grid-area:summary; }
+ [data-theme="workspace"] .shell > section { display:contents; }
+ [data-theme="workspace"] .filter-heading { grid-area:filtertitle;margin:0;padding:10px 0 18px; }
+ [data-theme="workspace"] .controls { grid-area:filters;display:flex;flex-direction:column;align-items:stretch;gap:15px;background:var(--paper);padding:18px;border:1px solid var(--line);border-radius:8px; }
+ [data-theme="workspace"] .result-line { grid-area:results; margin:8px 0 18px; }
+ [data-theme="workspace"] .table-frame { grid-area:table;min-width:0; }
+ [data-theme="workspace"] .year-filter-section { border:0;border-top:1px solid var(--line);padding:18px 0 0;margin:0; }
+ [data-theme="workspace"] .year-filter-header { gap:12px; }
+ [data-theme="workspace"] .year-filter-presets { display:grid;grid-template-columns:1fr; width:100%; }
+ [data-theme="workspace"] .year-pills { gap:7px; }
+ [data-theme="workspace"] .year-pill { padding:6px 9px;font-size:.8rem; }
+ [data-theme="workspace"] table { min-width:760px; }
+ [data-theme="workspace"] .score-cell { min-width:145px; }
+ [data-theme="workspace"] footer { grid-area:footer; }
+}
+
+@media(max-width:900px) {
+ .shell { width:calc(100% - 36px); }
+ .utility { min-height:68px;gap:14px; }
+ .brand { font-size:.85rem; }
+ .hero { grid-template-columns:1fr;gap:18px;padding:26px 0 22px; }
+ .hero h1 { font-size:2rem; }
+ .summary { grid-template-columns:1.5fr .75fr 1fr; }
+ .controls { gap:14px; }
+ .summary dd { font-size:1.2rem; }
+ .summary dd .stat-sub { font-size:.73rem; }
+}
+@media(max-width:640px) {
+ .shell { width:calc(100% - 28px); }
+ .utility { min-height:76px;align-items:center; }
+ .brand { max-width:220px;gap:9px;line-height:1.35; }
+ .brand-mark { flex-shrink:0; }
+ .downloads a { font-size:.78rem; }
+ .hero h1 { font-size:1.8rem;line-height:1.2; }
+ .hero .lede { font-size:.95rem; }
+ .method-card { padding:16px; }
+ .method-card p { font-size:.84rem; }
+ .summary { display:grid;grid-template-columns:1fr 1fr;row-gap:18px;padding:0 0 18px; }
+ .summary div { padding:0 12px 0 0;border:0; }
+ .summary div:first-child { grid-column:1/-1; }
+ .summary dd .stat-sub { display:inline;margin-left:6px; }
+ .year-filter-section { padding:16px;margin:4px 0 0; }
+ .year-filter-presets { gap:6px; }
+ .year-pill { min-height:40px; }
+ .table-frame { border:0;border-radius:0 !important;background:transparent; }
+ tr.university-row { background:var(--paper);border:1px solid var(--line);border-radius:8px;box-shadow:none;margin-bottom:14px; }
+ tr.university-row > td { padding:0; }
+ .result-line { font-size:.8rem; }
+ .result-line > span:last-child { font-size:.76rem; }
+ .mobile-sort { margin:16px 0; }
+}
+
+:root { color-scheme:light; }
+.year-pill,.preset-btn,.detail-toggle,tr.university-row { transition:none; }
+@media(min-width:901px) {
+ .utility { min-height:64px; }
+ .hero { padding:26px 0 22px; }
+ .summary div { padding-bottom:14px; }
+ .summary { margin-bottom:22px; }
+ .controls { position:relative; }
+ .reset-button { position:absolute;right:0;top:-49px;min-height:36px;padding:6px 12px;font-size:.8rem; }
+ .filter-heading { padding-right:150px; }
+}
+@media(min-width:1150px) {
+ [data-theme="workspace"] .reset-button { position:static;min-height:44px; }
+ [data-theme="workspace"] .filter-heading { padding-right:0; }
+}
+
+.profile-panel-heading h3 { font-family:inherit;font-weight:600; }
+.panel-eyebrow { letter-spacing:0;text-transform:none;font-size:.76rem; }
+.profile-panel,.location-panel,.history-panel { box-shadow:none;border-color:var(--line); }
+.profile-relation { background:var(--paper);border-color:var(--line); }
+.profile-relation > summary:hover { background:var(--blue-soft); }
+.profile-field dd { color:var(--ink); }
+.profile-further-rows dd { color:var(--ink); }
+.location-heading h3,.history-heading h3,.empty-state strong { font-family:inherit;font-weight:600; }
+.location-name,.annual-heading h3 { font-family:inherit;font-weight:600; }
+.annual-panel { box-shadow:none;border-color:var(--line); }
+.annual-table { border-color:var(--line); }
+.annual-table th { background:var(--wash);color:var(--muted);border-color:var(--line);text-transform:none;letter-spacing:0;font-size:.78rem; }
+.annual-table td { border-color:var(--line); }
+.annual-count-badge { background:var(--blue-soft);border-color:var(--line); }
+
+@media(min-width:1150px) {
+ [data-theme="workspace"] body { overflow-x:clip; }
+ [data-theme="workspace"] .controls {
+   position:sticky;top:16px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);
+   overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;overscroll-behavior-y:auto;
+ }
+ [data-theme="workspace"] #report-table { table-layout:fixed;min-width:0;width:100%; }
+ [data-theme="workspace"] #report-table > thead th:nth-child(1) { width:36%; }
+ [data-theme="workspace"] #report-table > thead th:nth-child(2) { width:11%; }
+ [data-theme="workspace"] #report-table > thead th:nth-child(3) { width:13%; }
+ [data-theme="workspace"] #report-table > thead th:nth-child(4) { width:23%; }
+ [data-theme="workspace"] #report-table > thead th:nth-child(5) { width:17%; }
+ [data-theme="workspace"] #report-table > thead .sort-button { white-space:normal; }
+ [data-theme="workspace"] .university-toggle > span:first-child { min-width:0;max-width:100%; }
+ [data-theme="workspace"] .university-name { overflow-wrap:anywhere; }
+ [data-theme="workspace"] .score-cell { min-width:0; }
+ [data-theme="workspace"] .detail-toggle { max-width:100%; }
+}
+@media(min-width:1150px) {
+ [data-theme="workspace"] .university-toggle { flex-direction:column;align-items:flex-start;gap:6px; }
+}
+
+[data-theme="workspace"] .label-with-help { position:relative; }
+[data-theme="workspace"] .label-with-help .help { position:static; }
+[data-theme="workspace"] .label-with-help .help-tooltip { left:0;right:auto;top:calc(100% + 8px);width:100%;max-width:none;z-index:6; }
+
+@media(min-width:1150px) {
+ [data-theme="workspace"] .detail-card-shell { min-width:0;grid-template-columns:minmax(0,1fr); }
+ [data-theme="workspace"] .detail-card-shell > * { min-width:0; }
+ [data-theme="workspace"] .annual-table { min-width:0;table-layout:fixed; }
+ [data-theme="workspace"] .annual-table th,[data-theme="workspace"] .annual-table td { overflow-wrap:anywhere;white-space:normal; }
+ [data-theme="workspace"] .annual-heading,[data-theme="workspace"] .profile-panel-heading,[data-theme="workspace"] .location-bar { flex-wrap:wrap; }
+}
+
+@media(max-width:768px) {
+ [data-theme="workspace"] .label-with-help .help-tooltip { position:fixed;top:auto;bottom:24px;left:16px;right:16px;width:auto;max-width:none;z-index:1000; }
+}
+@media(max-width:640px) {
+ [data-theme="workspace"] .year-pills { grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;min-width:0; }
+ [data-theme="workspace"] .year-pill { min-width:0;padding:4px 1px;gap:2px;font-size:.76rem;min-height:44px; }
+ [data-theme="workspace"] .year-check { font-size:.7rem; }
+}
+
+@media(min-width:1150px) {
+ [data-theme="workspace"] .shell { grid-template-areas:"nav nav" "hero hero" "summary summary" "filtertitle results" "filters table" ". footer"; }
+ [data-theme="workspace"] .controls { gap:11px;padding:14px;overflow-anchor:none; }
+ [data-theme="workspace"] .field label { margin-bottom:5px; }
+ [data-theme="workspace"] .label-with-help label { margin-bottom:0; }
+ [data-theme="workspace"] .field input,[data-theme="workspace"] .field select { min-height:44px;padding:8px 10px; }
+ [data-theme="workspace"] .reset-button { min-height:40px; }
+ [data-theme="workspace"] .year-filter-section { padding-top:12px; }
+ [data-theme="workspace"] .year-filter-header { gap:10px;margin-bottom:10px; }
+ [data-theme="workspace"] .year-filter-label { font-size:.8rem; }
+ [data-theme="workspace"] .year-filter-presets { grid-template-columns:repeat(3,minmax(0,1fr));gap:5px; }
+ [data-theme="workspace"] .preset-full { display:none; }
+ [data-theme="workspace"] .preset-short { display:inline; }
+ [data-theme="workspace"] .preset-btn { min-width:0;padding:6px 2px;font-size:.7rem;min-height:40px; }
+ [data-theme="workspace"] .year-pills { display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px; }
+ [data-theme="workspace"] .year-pill { min-width:0;min-height:44px;padding:4px 1px;font-size:.75rem;gap:2px; }
+ [data-theme="workspace"] .year-check { font-size:.65rem; }
+ [data-theme="workspace"] .year-era-tag { display:none; }
+ [data-theme="workspace"] .table-frame { min-height:calc(100vh - 32px);min-height:calc(100dvh - 32px); }
+ [data-theme="workspace"] footer { min-width:0;flex-wrap:wrap;gap:12px;padding-top:20px; }
+}
+@media(min-width:1150px) {
+ [data-theme="workspace"] .table-frame { background:transparent;border:0;overflow:visible; }
+ [data-theme="workspace"] #report-table { background:var(--paper);border:1px solid var(--line);border-radius:8px;border-collapse:separate;border-spacing:0; }
+ [data-theme="workspace"] #report-table > thead th:first-child { border-top-left-radius:8px; }
+ [data-theme="workspace"] #report-table > thead th:last-child { border-top-right-radius:8px; }
+}
   </style>
 </head>
 <body>
@@ -3466,7 +3670,6 @@ def _build_html(
       <div>
         <h1>TUMexchange Acceptance Information</h1>
         <p class="lede">See how first-round wishes compared with available spots, and check partner university requirements. Filter by country, degree level, or subject area.</p>
-        @@SITE_NOTE@@
       </div>
       <aside class="method-card" aria-labelledby="method-heading">
         <p class="eyebrow">How to read the bars</p>
@@ -3509,7 +3712,7 @@ def _build_html(
               <button type="button" class="preset-btn" id="preset-recent" title="Focus strictly on latest 3 observation years (2024–2026)"><span class="preset-full">Recent 3y (2024–2026)</span><span class="preset-short">Recent 3y</span></button>
             </div>
           </div>
-          <div class="year-pills" id="year-pills" aria-label="Toggle observation years in average calculation">
+          <div class="year-pills" id="year-pills" role="group" aria-label="Toggle observation years in average calculation">
             <button type="button" class="year-pill" data-year="2026" aria-pressed="true"><span class="year-check">✓</span> 2026</button>
             <button type="button" class="year-pill" data-year="2025" aria-pressed="true"><span class="year-check">✓</span> 2025</button>
             <button type="button" class="year-pill" data-year="2024" aria-pressed="true"><span class="year-check">✓</span> 2024</button>
@@ -3863,6 +4066,13 @@ def _build_html(
         appliedSort = state.sort;
       };
       const render = () => {
+        const filterPanel = document.querySelector(".controls");
+        const filterStyle = filterPanel ? getComputedStyle(filterPanel) : null;
+        const stickyInset = filterStyle ? parseFloat(filterStyle.top) || 0 : 0;
+        const filtersPinned = filterStyle && filterStyle.position === "sticky"
+          && filterPanel.getBoundingClientRect().top <= stickyInset + 1;
+        const resultsFrame = body.closest(".table-frame");
+        const resultsTop = resultsFrame ? resultsFrame.getBoundingClientRect().top + window.scrollY : 0;
         if (state.sort !== appliedSort) reorderRows();
         let visibleCount = 0;
         groups.forEach((group) => {
@@ -3885,6 +4095,9 @@ def _build_html(
           resultCount.innerHTML = "<strong>" + visibleCount + "</strong> partner universit" + (visibleCount === 1 ? "y" : "ies") + " shown";
         }
         syncSortHeaders();
+        if (filtersPinned && resultsFrame) {
+          window.scrollTo({ top: Math.max(0, resultsTop - stickyInset), behavior: "instant" });
+        }
       };
       const yearPills = Array.from(document.querySelectorAll(".year-pill"));
       const presetCore = document.getElementById("preset-core");
@@ -4397,7 +4610,6 @@ def _build_html(
         "@@SUBJECT_OPTIONS@@": profile_subject_options,
         "@@INITIAL_ROWS@@": initial_rows,
         "@@REPORT_DATA@@": _safe_json(data_payload),
-        "@@SITE_NOTE@@": _site_note(profiles),
     }
     for marker, value in replacements.items():
         template = template.replace(marker, value)
