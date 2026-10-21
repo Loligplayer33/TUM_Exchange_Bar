@@ -349,13 +349,11 @@ class ProfileReportTests(unittest.TestCase):
         page = report._build_html([], {}, catalog)
         self.assertIn("Places this year (listed on MoveON)", page)
         self.assertIn("if (state.roster === \"current\" && !group.offers_places) return false;", page)
-        self.assertIn(
-            "This Website is vibecoded - don't take everything for granted and double check with MoveOn.",
-            page,
-        )
+        self.assertNotIn("vibecoded", page)
+        self.assertNotIn("double check with MoveOn", page)
         self.assertIn("MoveOn was last fetched on 16 September 2026.", page)
         without_catalog = report._build_html([], {})
-        self.assertIn("double check with MoveOn.", without_catalog)
+        self.assertNotIn('<p class="site-note">', without_catalog)
         self.assertNotIn("last fetched", without_catalog)
 
     def test_campus_field_splits_unnamed_faculties_without_coordinates(self) -> None:

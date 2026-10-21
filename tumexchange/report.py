@@ -431,22 +431,19 @@ def _profile_catalog_meta(catalog: Any) -> Mapping[str, Any]:
     return catalog if isinstance(catalog, Mapping) else {}
 
 
-def _site_disclaimer(catalog: Any) -> str:
-    """Student-facing caution, with the date of the latest MoveON fetch."""
+def _site_note(catalog: Any) -> str:
+    """Show the date of the latest MoveON fetch when available."""
 
     fetched = ""
     if isinstance(catalog, Mapping):
         raw = _text(catalog.get("retrieved_at")).strip()
         if len(raw) >= 10:
             fetched = _checked_label(raw[:10])
-    date_sentence = (
-        f" MoveOn was last fetched on {html.escape(fetched, quote=True)}."
-        if fetched
-        else ""
-    )
+    if not fetched:
+        return ""
     return (
-        '<p class="site-note">This Website is vibecoded - don\'t take everything for granted '
-        f"and double check with MoveOn.{date_sentence}</p>"
+        '<p class="site-note">MoveOn was last fetched on '
+        f"{html.escape(fetched, quote=True)}.</p>"
     )
 
 
@@ -4400,7 +4397,7 @@ def _build_html(
         "@@SUBJECT_OPTIONS@@": profile_subject_options,
         "@@INITIAL_ROWS@@": initial_rows,
         "@@REPORT_DATA@@": _safe_json(data_payload),
-        "@@SITE_NOTE@@": _site_disclaimer(profiles),
+        "@@SITE_NOTE@@": _site_note(profiles),
     }
     for marker, value in replacements.items():
         template = template.replace(marker, value)
