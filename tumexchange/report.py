@@ -3589,7 +3589,7 @@ footer { font-size:.82rem;color:var(--muted); }
 .annual-count-badge { background:var(--blue-soft);border-color:var(--line); }
 
 @media(min-width:1150px) {
- [data-theme="workspace"] body { overflow-x:clip; }
+ [data-theme="workspace"] body { overflow-x:clip;overflow-anchor:none; }
  [data-theme="workspace"] .controls {
    position:sticky;top:16px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);
    overflow-y:auto;overflow-x:hidden;scrollbar-gutter:stable;overscroll-behavior-y:auto;
@@ -4072,7 +4072,8 @@ footer { font-size:.82rem;color:var(--muted); }
         const filtersPinned = filterStyle && filterStyle.position === "sticky"
           && filterPanel.getBoundingClientRect().top <= stickyInset + 1;
         const resultsFrame = body.closest(".table-frame");
-        const resultsTop = resultsFrame ? resultsFrame.getBoundingClientRect().top + window.scrollY : 0;
+        const resultsHeading = resultCount.closest(".result-line") || resultsFrame;
+        const resultsTop = resultsHeading ? resultsHeading.getBoundingClientRect().top + window.scrollY : 0;
         if (state.sort !== appliedSort) reorderRows();
         let visibleCount = 0;
         groups.forEach((group) => {
