@@ -5461,12 +5461,6 @@
       "summer": 0,
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=233&relation_id=22019&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
-    "10339": {
-      "name": "Oklahoma State University - Stillwater",
-      "winter": 0,
-      "summer": 1,
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=244&relation_id=10339&openwhichtab=travelreports&hide_elements=true&whichtab=all"
-    },
     "12155": {
       "name": "Peking University",
       "winter": 2,
@@ -5611,23 +5605,17 @@
       "summer": 3,
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=930&relation_id=10389&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
-    "10762": {
-      "name": "The University of Tokyo",
-      "winter": 4,
-      "summer": 3,
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10762&openwhichtab=travelreports&hide_elements=true&whichtab=all"
-    },
     "10377": {
       "name": "The University of Tokyo",
       "winter": 3,
       "summer": 3,
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10377&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
-    "20224": {
-      "name": "The University of Waikato (UoW)",
-      "winter": 0,
-      "summer": 1,
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=3715&relation_id=20224&openwhichtab=travelreports&hide_elements=true&whichtab=all"
+    "10762": {
+      "name": "The University of Tokyo",
+      "winter": 4,
+      "summer": 3,
+      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=262&relation_id=10762&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
     "10391": {
       "name": "Tohoku University",
@@ -5698,7 +5686,7 @@
     "21315": {
       "name": "Universidad de Buenos Aires (UBA)",
       "winter": 0,
-      "summer": 0,
+      "summer": 1,
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=1428&relation_id=21315&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
     "14206": {
@@ -5856,18 +5844,6 @@
       "winter": 1,
       "summer": 1,
       "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=247&relation_id=10431&openwhichtab=travelreports&hide_elements=true&whichtab=all"
-    },
-    "10457": {
-      "name": "Victoria University of Wellington (VUW)",
-      "winter": 0,
-      "summer": 0,
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=368&relation_id=10457&openwhichtab=travelreports&hide_elements=true&whichtab=all"
-    },
-    "12152": {
-      "name": "Vietnam National University of Hanoi - University of Science (VNU)",
-      "winter": 2,
-      "summer": 0,
-      "details_url": "https://tum.adv-pub.moveon4.de/report-page-6940/?core_id=2475&relation_id=12152&openwhichtab=travelreports&hide_elements=true&whichtab=all"
     },
     "12481": {
       "name": "Virginia Polytechnic Institute and State University (Virginia Tech)",
