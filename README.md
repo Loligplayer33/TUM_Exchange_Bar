@@ -1,5 +1,7 @@
 # TUMexchange bar extraction
 
+Find the Website under: https://tum-exchange-bar.netlify.app/
+
 This project turns the historical bars in TUMexchange selection charts into
 queryable observations. It keeps the original PDF geometry, each document's
 own calibration, and the resulting normalized bar score so every conversion
